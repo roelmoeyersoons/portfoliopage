@@ -8,6 +8,8 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
+    "allowJs": true,
+    "checkJs": false,
     "noEmit": true,
     "jsx": "react-jsx",
     "strict": true,

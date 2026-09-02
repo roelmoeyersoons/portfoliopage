@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { ParticlesBackground } from './components/reactbits/ParticlesBackground';
 import { Navbar } from './components/navigation/Navbar';
 import { HeroSection } from './components/hero/HeroSection';
@@ -9,9 +10,32 @@ import { EducationSection } from './components/education/EducationSection';
 import { InteractiveTerminal } from './components/terminal/InteractiveTerminal';
 import { ContactSection } from './components/contact/ContactSection';
 import { Footer } from './components/footer/Footer';
+import { DemoLab } from './demo/DemoLab';
 
 export function App() {
   const [activeSection, setActiveSection] = useState<string>('hero');
+  const [labOpen, setLabOpen] = useState(() => window.location.hash.startsWith('#/reactbits'));
+  const [savedScrollY, setSavedScrollY] = useState(0);
+
+  // Sync lab state with hash changes
+  useEffect(() => {
+    const sync = () => setLabOpen(window.location.hash.startsWith('#/reactbits'));
+    window.addEventListener('hashchange', sync);
+    return () => window.removeEventListener('hashchange', sync);
+  }, []);
+
+  const openLab = useCallback(() => {
+    setSavedScrollY(window.scrollY);
+    window.location.hash = '#/reactbits';
+  }, []);
+
+  const closeLab = useCallback(() => {
+    window.location.hash = '';
+    // Restore scroll position on next frame
+    requestAnimationFrame(() => {
+      window.scrollTo(0, savedScrollY);
+    });
+  }, [savedScrollY]);
 
   // Scroll spy to update active navigation tab
   useEffect(() => {
@@ -57,19 +81,41 @@ export function App() {
       {/* Floating Navigation Header & Hamburger */}
       <Navbar activeSection={activeSection} onNavigate={handleNavigate} />
 
-      {/* Main Page Content Flow */}
-      <main className="relative z-10">
-        <HeroSection onNavigate={handleNavigate} />
-        <ExperienceSection />
-        <BentoProjects />
-        <SkillsSection />
-        <EducationSection />
-        <InteractiveTerminal />
-        <ContactSection />
-      </main>
+      {/* Main Page Content Flow — hidden when lab is open */}
+      {!labOpen && (
+        <main className="relative z-10">
+          <HeroSection onNavigate={handleNavigate} />
+          <ExperienceSection />
+          <BentoProjects />
+          <SkillsSection />
+          <EducationSection />
+          <InteractiveTerminal />
+          <ContactSection />
+        </main>
+      )}
 
       {/* Footer */}
-      <Footer onNavigate={handleNavigate} />
+      {!labOpen && <Footer onNavigate={handleNavigate} />}
+
+      {/* React Bits Lab Overlay */}
+      <AnimatePresence>
+        {labOpen && <DemoLab onExit={closeLab} />}
+      </AnimatePresence>
+
+      {/* Floating lab toggle button (always visible when lab is closed) */}
+      {!labOpen && (
+        <motion.button
+          onClick={openLab}
+          className="fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-full border border-white/10 bg-surface-100/80 px-4 py-2 text-xs font-medium text-cyan-400 shadow-lg backdrop-blur-xl transition hover:border-cyan-500/30 hover:bg-surface-50/80 hover:shadow-cyan-500/10"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          <span className="text-base">⚡</span>
+          <span>React Bits Lab</span>
+        </motion.button>
+      )}
     </div>
   );
 }

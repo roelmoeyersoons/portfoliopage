@@ -4,6 +4,43 @@ A futuristic, high-performance developer portfolio and experience showcase built
 
 ---
 
+## 🎨 Design Showcase (6 site concepts)
+
+The app now boots into a **showcase shell** (`src/sites/Showcase.tsx`) that mounts
+one full website concept at a time. A neutral toast at the bottom center
+(supported by keyboard shortcuts `1..6` and `←`/`→`) switches between concepts —
+the choice is remembered in `localStorage` and reflected in the URL
+(`#/site/<id>`).
+
+| # | Concept | Route | Identity |
+|---|---------|-------|----------|
+| 1 | **Aurora Glass** | `#/site/aurora-glass` | WebGL aurora, glass panels, Fraunces serif, violet→fuchsia→cyan |
+| 2 | **Galaxy Drift** | `#/site/galaxy` | Deep-space WebGL galaxy, decrypted headings, orbital skill rings |
+| 3 | **Noir Threads** | `#/site/noir-threads` | Editorial monochrome noir (rbp-portfolio inspired), web-thread canvas, accordion gallery |
+| 4 | **Plasma Bento** | `#/site/plasma-bento` | Magnetic bento grids with glow-follow cards over gradient blinds |
+| 5 | **Prism Ribbons** | `#/site/prism-ribbons` | Flowing WebGL ribbons, plasma-wave hero, card-swap project deck |
+| 6 | **Original v1** | `#/site/original` (or `#/original`) | The first version of the site from the earlier session (particles + terminal) |
+
+Every concept implements the same structure: **top tabs**
+(home · experience · skills · projects · about · contact) and — for
+experience/skills — a **left menu** that selects the item shown in the main pane
+(story paragraphs, generated artwork, bullets, tech stack, metrics, deep dives).
+
+Shared building blocks:
+
+- `src/sites/shared/content.ts` — the single content source (wraps
+  `src/data/portfolioData.ts`) used by all concepts.
+- `src/sites/shared/Artwork.tsx` — deterministic generated SVG artwork per item
+  (six styles, hue-driven; no binary assets needed).
+- `src/sites/shared/bits/` — ~35 raw ReactBits components (JSX + CSS, 1:1 from
+  the [react-bits repo](https://github.com/DavidHDev/react-bits)) behind a typed
+  barrel (`import { Aurora, Galaxy, MagicBento, … } from '@/sites/shared/bits'`).
+  Requires the added deps: `ogl`, `gsap` (3.13+ with free SplitText/Inertia),
+  `three`, `motion`, `@gsap/react`.
+- `SITES_SPEC.md` — the build spec + conventions for all concepts.
+
+---
+
 ## ✨ Features
 
 - ⚡ **100% Static & Serverless**: Zero backend or database required. Outputs static assets ready for GitHub Pages, Cloudflare Pages, Vercel, Netlify, or AWS S3/CloudFront.

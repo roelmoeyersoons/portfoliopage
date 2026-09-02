@@ -1,0 +1,103 @@
+/* ────────────────────────────────────────────────────────────────
+   Plasma Bento — misc local styles.
+   Re-themes the shared ReactBits Stepper (default ReactBits purple)
+   to the plasma orange→pink→violet palette, and provides the slow
+   drifting glow blobs used behind the page.
+   ──────────────────────────────────────────────────────────────── */
+
+/* ── Stepper (About tab timeline) ── */
+.pb-stepper .outer-container {
+  aspect-ratio: auto;
+  min-height: 0;
+  padding: 0;
+}
+
+.pb-stepper .step-circle-container {
+  max-width: none;
+  border-radius: 24px;
+  background: transparent;
+  box-shadow: none;
+}
+
+.pb-stepper .step-indicator-row {
+  padding: 1.5rem 1.6rem 0.6rem;
+}
+
+.pb-stepper .step-default {
+  padding-left: 1.6rem;
+  padding-right: 1.6rem;
+}
+
+.pb-stepper .footer-container {
+  padding: 0.4rem 1.6rem 1.6rem;
+}
+
+.pb-stepper .step-connector {
+  height: 3px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.09);
+}
+
+/* !important is required to beat the inline style framer-motion animates */
+.pb-stepper .step-connector-inner {
+  border-radius: 999px;
+  background: linear-gradient(90deg, #f97316, #ec4899) !important;
+}
+
+.pb-stepper .next-button {
+  background: linear-gradient(92deg, #f97316, #ec4899);
+  box-shadow: 0 10px 22px -10px rgba(236, 72, 153, 0.6);
+}
+
+.pb-stepper .next-button:hover,
+.pb-stepper .next-button:active {
+  background: linear-gradient(92deg, #fb923c, #f472b6);
+}
+
+.pb-stepper .back-button {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.pb-stepper .back-button:hover {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* ── Ambient glow blobs ── */
+@keyframes pb-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(0, -34px, 0) scale(1.09);
+  }
+}
+
+.pb-blob {
+  position: absolute;
+  border-radius: 9999px;
+  pointer-events: none;
+  filter: blur(110px);
+  animation: pb-drift 15s ease-in-out infinite;
+}
+
+/* ── Pulsing availability dot ── */
+@keyframes pb-ping {
+  0% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  80%,
+  100% {
+    transform: scale(2.6);
+    opacity: 0;
+  }
+}
+
+.pb-ping {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: currentColor;
+  animation: pb-ping 1.9s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
