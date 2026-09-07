@@ -106,14 +106,22 @@ const Hero: React.FC<{ onNavigate?: TabNavigate }> = ({ onNavigate }) => (
     </motion.div>
 
     <motion.div {...fadeUp} transition={{ delay: 0.7 }} className="mt-12">
-      <ShinyText className="text-xs uppercase tracking-[0.3em]" text="scroll to explore" speed={4} />
-      <motion.div
-        animate={{ y: [0, 6, 0] }}
-        transition={{ repeat: Infinity, duration: 1.8 }}
-        className="mt-2 flex justify-center text-zinc-500"
+      <button
+        type="button"
+        onClick={() => onNavigate?.('experience')}
+        aria-label="Go to the next chapter — Experience"
+        title="Jump to the next chapter"
+        className="group cursor-pointer rounded-full px-5 py-2.5 outline-none transition-transform duration-300 hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-fuchsia-400/60"
       >
-        <ArrowDown size={15} />
-      </motion.div>
+        <ShinyText className="text-xs uppercase tracking-[0.3em]" text="scroll to explore" speed={4} />
+        <motion.div
+          animate={{ y: [0, 6, 0] }}
+          transition={{ repeat: Infinity, duration: 1.8 }}
+          className="mt-2 flex justify-center text-zinc-500 transition-colors group-hover:text-fuchsia-200"
+        >
+          <ArrowDown size={15} />
+        </motion.div>
+      </button>
     </motion.div>
   </section>
 );

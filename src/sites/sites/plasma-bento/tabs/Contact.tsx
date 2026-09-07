@@ -32,8 +32,8 @@ const Contact: React.FC = () => (
       transition={{ delay: 0.14 }}
       className="mt-5 max-w-xl text-sm leading-relaxed text-white/50"
     >
-      Distributed systems that need to hold up under pressure, a GPU pipeline to push further, or a product that
-      deserves real engineering — my inbox is open.
+      A Dynamics 365 solution that needs to land well, an Azure platform that deserves proper engineering, or an AI
+      integration that has to do more than demo well — my inbox is open.
     </motion.p>
 
     <motion.div

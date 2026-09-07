@@ -59,7 +59,7 @@ const About: React.FC = () => (
         ))}
 
         <div className="flex flex-wrap gap-2 pt-2">
-          {['Distributed Systems', 'Embedded & Wireless', 'GPU / Graphics', 'Full-Stack', 'Cloud Architecture'].map(
+          {['Dynamics 365', 'C# / .NET', 'Azure', 'CI/CD', 'AI & LLMs'].map(
             (t) => (
               <Chip key={t} className="!bg-white/[0.04]">
                 {t}

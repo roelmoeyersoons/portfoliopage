@@ -2,15 +2,15 @@ import { ProfileData, ExperienceItem, ProjectItem, SkillCategory, EducationItem 
 
 export const profileData: ProfileData = {
   name: "Roel Moeyersoons",
-  title: "Software & Systems Engineer",
-  tagline: "Building high-performance distributed systems, low-level protocols, and modern web architectures.",
+  title: "Application Engineer & Azure Platform Specialist",
+  tagline: "Enterprise applications on the Microsoft stack — Dynamics 365 & Power Platform, C#/.NET engineering and Azure platform work, with AI woven in where it earns its keep.",
   bioParagraphs: [
-    "I am an engineer with a strong foundation in distributed protocols, high-concurrency architectures, and hardware-dependent software engineering. With a Master of Science in Informatics from Ghent University, my focus centers on solving complex engineering puzzles where performance, reliability, and precision are paramount.",
-    "From designing multi-radio MAC layer ranging protocols for ultra-wideband (UWB) embedded networks to architecting modern web platforms and graphical compute engines, I thrive at the intersection of deep systems software and clean user interfaces.",
-    "Driven by curiosity and craftsmanship, I explore algorithmic optimization, deterministic data pipelines, and scalable cloud engineering."
+    "I'm an application engineer from Ghent, Belgium, and my core work lives on the Microsoft stack: Dynamics 365/CRM and Power Platform, C#/.NET development, and the Azure platform — backed by solution architecture, CI/CD, and a growing focus on AI. I'd call myself an application engineer with platform knowledge branching out from it: I build the business application first, then make sure the platform underneath is engineered to last.",
+    "What drives me is technical quality. Concretely: elevating coding standards in teams (.editorconfig, .NET analysers, SDK-style projects), keeping dependencies and supply chains tight, discussing code architecture with developers, and wiring first-party Microsoft tooling together with solid CI/CD pipelines. The goal is always the least possible future risk for the project — be it technical bugs or cybersecurity exposure.",
+    "Thanks to my engineering degree I can branch into any corner of IT — networking, cybersecurity, low-level systems — and learning new skills is what keeps me going. Lately I'm deep into AI: LLM integrations, local models, and agentic coding tools like Claude Code used as a genuine productivity multiplier. Off-screen you'll find me dancing, training, and reading up on finance, history and geology."
   ],
-  location: "Belgium (Ghent / Flanders)",
-  email: "contact@roelmoeyersoons.dev",
+  location: "Ghent, Belgium",
+  email: "xyz@xyz.com",
   linkedinUrl: "https://www.linkedin.com/in/roel-moeyersoons/",
   githubUrl: "https://github.com/roelmoeyersoons",
   stats: [
@@ -18,197 +18,251 @@ export const profileData: ProfileData = {
       label: "Years Engineering",
       value: "6",
       suffix: "+",
-      description: "Systems, Full-Stack & Low-Level Development"
+      description: "Dynamics 365, C#/.NET & Azure"
     },
     {
-      label: "Master Thesis Score",
-      value: "M.Sc.",
+      label: "Core Platform",
+      value: "Azure",
       suffix: "",
-      description: "Industrial Sciences: Informatics (UGent)"
+      description: "Landing Zones · APIM · Terraform IaC"
     },
     {
-      label: "Research & Systems",
-      value: "UWB/MAC",
+      label: "Enterprise Apps",
+      value: "D365",
       suffix: "",
-      description: "Distributed Multi-Radio Protocols"
+      description: "CRM, Power Platform & Dataverse"
     },
     {
-      label: "Code Vault",
-      value: "2020",
-      suffix: "Archive",
-      description: "GitHub Arctic Code Vault Contributor"
+      label: "Graduation",
+      value: "Magna",
+      suffix: " cum laude",
+      description: "UGent M.Sc. — zero resits"
     }
   ]
 };
 
 export const experiencesData: ExperienceItem[] = [
   {
-    id: "gneiss-systems",
-    role: "Lead Software & Systems Engineer / Consultant",
-    company: "Gneiss (Independent Consulting & Engineering)",
-    period: "2023 — Present",
-    location: "Lede, Belgium",
-    type: "Contract",
-    domain: "Consulting & Architecture",
-    summary: "Architecting scalable data backends, modern enterprise solutions, and custom software systems for industrial and digital clients.",
+    id: "baloise-azure-dynamics",
+    role: "IT Consultant — Azure, Dynamics & DevOps",
+    company: "Baloise BE (Independent)",
+    period: "Aug 2025 — Present",
+    location: "Antwerp, Belgium",
+    type: "Self-employed",
+    domain: "Cloud & Enterprise Applications",
+    summary: "Independent IT consultant for Baloise BE: elevating coding standards, industrializing the Azure platform, and delivering Dynamics 365 features — with AI tooling as a day-to-day productivity multiplier.",
     paragraphs: [
-      "Providing specialized consulting and end-to-end software architecture for clients requiring resilient distributed workflows, optimized APIs, and modern frontend platforms.",
-      "Leading technical specifications, containerized deployments, automated CI/CD pipelines, and high-security compliance for business-critical software solutions.",
-      "Conducting deep-dive code reviews, performance audits, and system migrations with a focus on maintainability, type safety, and zero downtime."
+      "Working as an independent consultant inside Baloise's development teams, I focus on raising the technical bar: first-party enforced coding standards via .editorconfig, code quality control through .NET analysers with managed warning counts, and migrating MSBuild-style projects to modern .NET SDK-style projects — reducing build complexity tremendously. The team's git setup got the same treatment, together with a deliberate reduction of third-party tooling and nuget packages to remove supply-chain attack vectors.",
+      "On the platform side I migrate unmanaged Azure resources to Azure Landing Zones, move Azure Logic Apps from the consumption to the standard plan, and replace secret-based authentication with managed identities across APIM, Function Apps and Logic Apps. The whole estate is being rebuilt as a full Infrastructure-as-Code setup in Terraform from scratch.",
+      "Beyond the platform I deliver feature requests for Azure Cloud and Dynamics 365 applications, and develop and administer Dataverse environments — solution management and deployment with first-party tooling (PAC CLI, Configuration Migration Tool) plus XrmToolBox. I also migrated the unmanaged Azure API Management service to a centralized APIM using APIOps: heavy use of policies, OpenAPI specs, schemas, API versioning, backends, subscription keys and monitoring."
     ],
     bulletPoints: [
-      "Designed and deployed cloud-native service architectures handling complex data processing jobs.",
-      "Standardized development workflows across multi-disciplinary teams using TypeScript, Docker, and structured testing.",
-      "Authored clean architectural guidelines, reducing technical debt and onboarding overhead by 40%."
+      "Full Infrastructure-as-Code setup in Terraform, built from scratch",
+      "Centralized Azure API Management via APIOps — policies, OpenAPI specs, versioning, monitoring",
+      "Secret-based authentication replaced by managed identities (APIM, Function Apps, Logic Apps)",
+      "First-party quality control: .NET analysers, .editorconfig, managed warning counts, SDK-style migrations",
+      "Supply-chain risk reduction by cutting third-party nuget packages and reviewing the team's git setup",
+      "Claude Code development environment for the team: agents, automated checks and validation pipelines"
     ],
-    techStack: ["TypeScript", "Node.js", "React", "PostgreSQL", "Docker", "Linux", "TailwindCSS", "REST/gRPC"],
-    highlights: ["Enterprise System Architecture", "Data Pipeline Engineering", "Client Delivery & Strategy"],
+    techStack: ["Azure", "Dynamics 365", "Dataverse", "Terraform", "Azure APIM", "Logic Apps", "Managed Identities", "Azure DevOps", "C# / .NET", "Claude Code"],
+    highlights: ["Azure Platform Engineering", "Dynamics 365 Delivery", "AI-Augmented Development"],
     metrics: [
-      { label: "Uptime Target", value: "99.9%" },
-      { label: "Deployment Velocity", value: "3x faster" },
-      { label: "Test Coverage", value: "85%+" }
+      { label: "Foundation", value: "Landing Zones" },
+      { label: "IaC", value: "Terraform" },
+      { label: "AI Tooling", value: "Claude Code" }
     ],
     featured: true,
     tableData: {
-      systemScope: "Enterprise Cloud & Consulting",
-      keyDeliverable: "Resilient Microservices & UI Systems",
-      impactMetric: "Zero-downtime migrations & 3x velocity",
-      coreTech: "TypeScript / Node / Docker / React"
+      systemScope: "Azure Platform & Dynamics 365",
+      keyDeliverable: "Governed Azure estate & centralized APIM",
+      impactMetric: "Managed identities & full Terraform IaC",
+      coreTech: "Azure / Terraform / D365 / C#"
     },
     deepDive: {
-      architecturalChallenge: "Architecting modular, highly available services that remain decoupled while minimizing inter-service latency and operational overhead.",
-      solution: "Implemented event-driven messaging combined with strongly-typed API contracts, automated schema validations, and idempotent task queues.",
+      architecturalChallenge: "Years of organically grown, unmanaged Azure resources: inconsistent governance, secret-based authentication, manual deployments, and third-party tooling and packages that introduced supply-chain risk into business-critical applications.",
+      solution: "Rebuilt the estate on Azure Landing Zones with a full Terraform IaC setup from scratch, centralized API Management through APIOps (policies, OpenAPI specs, versioned APIs, backends, monitoring), and swapped secrets for managed identities wherever the platform allows it.",
       keyLearnings: [
-        "Contract-first API design prevents breaking downstream clients in distributed environments.",
-        "Deterministic local development environments (via Docker Compose) significantly reduce configuration friction.",
-        "Pragmatic observability and structured JSON logging are critical for pinpointing bottlenecks."
+        "First-party Microsoft tooling enforced at repository level (.editorconfig, .NET analysers) scales standards better than conventions alone.",
+        "Managed identities remove an entire class of credential risk — the migration cost is mostly one-off plumbing.",
+        "AI coding agents like Claude Code multiply a team's output only when the surrounding validation pipeline is strict."
       ]
     }
   },
   {
-    id: "ugent-research-mac",
-    role: "Research Engineer & Thesis Author",
-    company: "Ghent University (UGent / IDLab)",
-    period: "2019 — 2020",
-    location: "Ghent, Belgium",
-    type: "Research",
-    domain: "Distributed Systems",
-    summary: "Developed a distributed multi-radio MAC protocol combining sub-GHz (Long Range) and Ultra-Wideband (UWB) for real-time distance determination.",
-    paragraphs: [
-      "Conducted cutting-edge research under Prof. Dr. Ir. Eli De Poorter and Prof. Dr. Ir. Jeroen Hoebeke into hybrid wireless networking for dynamic sports tracking and distance estimation between triathletes.",
-      "Designed and implemented a custom distributed Medium Access Control (MAC) layer protocol that orchestrates sub-GHz signaling for network synchronization and UWB for sub-decimeter distance ranging.",
-      "Validated the protocol via extensive simulation models and physical hardware testbeds, overcoming severe multi-node contention, packet collisions, and radio duty-cycle limitations."
-    ],
-    bulletPoints: [
-      "Pioneered a dual-radio scheduling mechanism drastically lowering channel collision probability in dynamic athlete clusters.",
-      "Optimized energy consumption and hardware transceiver duty-cycles while maintaining continuous ranging accuracy.",
-      "Published and defended Master thesis: 'Gedistribueerd multi-radio MAC protocol voor afstandsbepaling tussen triatleten'."
-    ],
-    techStack: ["C / C++", "Embedded Systems", "UWB (Decawave)", "Sub-GHz Radios", "Network Protocols", "Python", "MATLAB", "Linux"],
-    highlights: ["Distributed Protocol Design", "Sub-decimeter UWB Ranging", "Hardware-Software Co-Design"],
-    metrics: [
-      { label: "Ranging Precision", value: "< 10 cm" },
-      { label: "Collision Reduction", value: "65%" },
-      { label: "Radio Types", value: "Dual (Sub-GHz + UWB)" }
-    ],
-    featured: true,
-    tableData: {
-      systemScope: "Embedded Wireless MAC Protocol",
-      keyDeliverable: "Multi-Radio Dynamic Ranging Engine",
-      impactMetric: "Sub-10cm precision with 65% less collision",
-      coreTech: "C / C++ / UWB / Sub-GHz / Embedded"
-    },
-    deepDive: {
-      architecturalChallenge: "Ultra-Wideband (UWB) provides exceptional distance accuracy via Two-Way Ranging (TWR), but suffers from extreme channel contention and high energy usage when dozens of mobile nodes simultaneously attempt ranging.",
-      solution: "Engineered an asynchronous hybrid architecture: low-power sub-GHz broadcast channels handle time-slot negotiation, neighbor discovery, and dynamic clustering, while UWB transceivers are awakened strictly for scheduled, collision-free ranging intervals.",
-      keyLearnings: [
-        "Hardware-dependent constraints must dictate software protocol abstractions, not the reverse.",
-        "Asynchronous distributed consensus with clock drift compensation requires robust fallback states.",
-        "Deterministic time-slotting outperforms purely randomized backoff mechanisms in dense mobile topologies."
-      ]
-    }
-  },
-  {
-    id: "fullstack-software-engineering",
-    role: "Full-Stack Software Engineer",
-    company: "High-Performance Web & Platform Projects",
-    period: "2020 — 2023",
-    location: "Flanders, Belgium",
+    id: "reimagine-ai-architect",
+    role: "AI/.NET Solution Architect & Sr. Cloud Engineer",
+    company: "REIMAGINE",
+    period: "Nov 2023 — Aug 2025",
+    location: "Brussels, Belgium",
     type: "Full-time",
-    domain: "Full Stack",
-    summary: "Built reactive web applications, high-throughput microservices, real-time communication tools, and developer utilities.",
+    domain: "AI & Solution Architecture",
+    summary: "Designed and implemented AI-driven solutions for real business problems as Sr. developer: from solution architecture and Azure platform setup to hands-on .NET/TypeScript/Python delivery and team-wide quality frameworks.",
     paragraphs: [
-      "Engineered full-stack web applications utilizing modern JavaScript/TypeScript ecosystems, responsive frontends, and performant backend services.",
-      "Created real-time integrations, websocket event streaming, database indexing optimizations, and robust API endpoints with automated test suites.",
-      "Implemented security best practices, OAuth authentication flows, role-based access control (RBAC), and server-side state machines."
+      "At REIMAGINE — a consultancy that designs and implements AI solutions — my job revolved around the technical design and implementation of solutions to real business problems. Each project required its own specific and optimal set of Azure & Microsoft services; I designed them, got the design and budget approved by the customer, and carried technical delivery as the senior developer, delegating tasks to team members.",
+      "I set up productive coding environments and frameworks that kept delivered quality high while balancing project needs: Azure DevOps setup, Azure subscription & resource group management, code dependencies, build tools and IDE choices. Each project also got its own CI/CD pipelines modeling the needed processes on Azure DevOps or GitHub, plus Infrastructure-as-Code projects using ARM templates and Terraform.",
+      "Hands-on delivery spanned Python, C#/.NET Core and TypeScript with a focus on integrating AI and LLM tools — such as GPT-4 — into websites and backends, using Azure OpenAI Studio, Ollama and FastAPI alongside Blazor frontends. Beyond projects, I took up business/functional analysis from stakeholder meetings, played a strategic role in reducing technical debt company-wide, and set up internal initiatives to transfer technical skills between colleagues."
     ],
     bulletPoints: [
-      "Delivered performant single-page applications (SPAs) with sub-second page loads and fluid 60fps animations.",
-      "Implemented resilient data synchronization layers handling offline capabilities and eventual consistency.",
-      "Mentored junior developers on software patterns, clean code principles, and git workflows."
+      "Solution architecture per project: optimal Azure/Microsoft service mix, designed and budgeted with the customer",
+      "Platform engineering: scalable, reusable Azure DevOps setups, subscriptions and resource group management",
+      "AI/LLM integration (GPT-4, Azure OpenAI Studio, Ollama) into production websites and backends",
+      "DevOps engineering: project-specific CI/CD pipelines on Azure DevOps and GitHub; IaC via ARM and Terraform",
+      "Business/functional analysis from stakeholder meetings, feeding straight into technical design",
+      "Company-wide technical-debt reduction and internal skill-sharing initiatives"
     ],
-    techStack: ["React", "TypeScript", "Node.js", "C# / .NET", "PostgreSQL", "Redis", "Tailwind CSS", "Git"],
-    highlights: ["State Management", "Real-Time WebSockets", "Performance Optimization"],
+    techStack: ["Azure", "Azure OpenAI / GPT-4", "Ollama", "C# / .NET Core", "TypeScript", "Python", "FastAPI", "Blazor", "Terraform", "ARM Templates", "Azure DevOps", "Docker"],
+    highlights: ["AI Solution Architecture", "Platform Engineering", "Sr. Technical Delivery"],
     metrics: [
-      { label: "API Latency", value: "< 25ms" },
-      { label: "Client Bundle", value: "< 90kb" },
-      { label: "CI Pipeline", value: "< 2 mins" }
+      { label: "Role", value: "Sr. Dev / Architect" },
+      { label: "AI Delivery", value: "GPT-4 in prod" },
+      { label: "IaC", value: "Terraform / ARM" }
     ],
-    featured: false,
+    featured: true,
     tableData: {
-      systemScope: "Full-Stack Web Applications",
-      keyDeliverable: "Real-Time Platforms & APIs",
-      impactMetric: "< 25ms response time & high reliability",
-      coreTech: "React / TypeScript / Node / C# / SQL"
+      systemScope: "AI-Driven Customer Solutions",
+      keyDeliverable: "Solution architecture & technical delivery",
+      impactMetric: "Business-first AI on reusable platforms",
+      coreTech: "Azure / GPT-4 / .NET / TypeScript / Python"
     },
     deepDive: {
-      architecturalChallenge: "Maintaining rapid UI responsiveness and state synchronization during high-frequency real-time event bursts from backend servers.",
-      solution: "Employed optimistic UI updates with debounced batching, normalized client stores, and WebSocket connection backoff reconnect protocols.",
+      architecturalChallenge: "Every customer project needed a different optimal mix of Azure services, delivery pipelines and AI integration patterns — without turning each engagement into a one-off snowball of technical debt, and without letting the technology outrun the business need.",
+      solution: "Reusable platform building blocks (DevOps setup, IaC, dependency and IDE standards) combined with per-project solution design. AI components were isolated behind clean service boundaries so models and providers could be swapped as the landscape evolved.",
       keyLearnings: [
-        "Client-side normalization prevents cascading re-renders in deep component hierarchies.",
-        "Strict TypeScript types across the entire stack drastically reduce runtime exceptions."
+        "Any technological change must always serve the business — not the other way around.",
+        "A productive, standardized development environment is a feature you deliver to the team, not a personal preference.",
+        "LLM features age quickly; isolating them behind service boundaries keeps the eventual swap-out cheap."
       ]
     }
   },
   {
-    id: "systems-graphics-tooling",
-    role: "Systems & Low-Level Graphics Developer",
-    company: "Independent Open Source & Systems Engineering",
-    period: "2021 — 2023",
-    location: "Remote / Belgium",
-    type: "Freelance",
-    domain: "Low-Level & Graphics",
-    summary: "Explored GPU pipeline rendering, fractal compute kernels in OpenGL / C, Linux desktop automation, and bot systems.",
+    id: "netit-dynamics-consultant",
+    role: "Dynamics 365 & Power Platform Consultant · SCRUM Master",
+    company: "Net IT nv (incl. Mutualités Libres)",
+    period: "Sep 2020 — Oct 2023",
+    location: "Zottegem / Brussels, Belgium",
+    type: "Full-time",
+    domain: "Dynamics & Power Platform",
+    summary: "Consultant at a Microsoft Gold Partner delivering Dynamics 365, Power Platform and Azure solutions — from junior consultant to Lead Developer & SCRUM Master within two years, including a major CRM transformation at Mutualités Libres.",
     paragraphs: [
-      "Authored custom OpenGL rendering software in pure C to compute and interactively navigate complex Mandelbrot fractals with real-time zooming, color palette interpolation, and GPU shader acceleration.",
-      "Constructed custom Linux configuration frameworks (ArchConfig) and automated development environment provisioning via Python and Bash.",
-      "Developed interactive C# bot architectures incorporating decentralized state concepts, object-oriented design patterns, and asynchronous API interactions."
+      "Net IT is a Microsoft Gold Partner specializing in Dynamics 365, Power Platform and Cloud solutions. I combined Power Platform, .NET development and Azure cloud technologies to deliver impactful solutions for clients — starting as a junior consultant and advancing to Lead Developer and SCRUM Master within two years, leading a substantial enterprise project exceeding 1,000 mandays with ownership of code architecture, system design and best practices for minimizing technical debt.",
+      "My primary consulting engagement was at Mutualités Libres (Onafhankelijke Ziekenfondsen), central to two significant Dynamics CRM/Azure projects as part of a major business transformation. As Lead Developer and SCRUM Master of the second project — modernizing tools for over 1,000 end-users — we migrated 600+ users to the new CRM by the end of the engagement, empowering the customer service team to manage public website communications and support tickets effectively.",
+      "Leading a cross-functional team of 10, I implemented SCRUM with monthly sprints (planning, backlog refinement, release reviews), defined the code architecture prioritizing low technical debt, built automated testing frameworks (xUnit, Playwright) and enhanced the CI/CD pipeline for smoother deployments. I mentored developers, was the main point of contact between the technical team and stakeholders, and collaborated with solution and enterprise architects on the project's technical roadmap. As one of Net IT's internal .NET technical experts, I also explored and selected new technologies and provided developer guidelines company-wide."
     ],
     bulletPoints: [
-      "Wrote custom GLSL fragment shaders for high-precision arbitrary zoom iteration and smooth coloring.",
-      "Implemented memory-safe native C abstractions for window management, input handling, and OpenGL context lifecycle.",
-      "Actively contributed to technical forums and Stack Overflow regarding hash table optimizations and deterministic algorithms."
+      "Lead Developer & SCRUM Master on a 1,000+ mandays enterprise project within two years of starting",
+      "600+ users migrated to a new CRM modernizing tooling for 1,000+ end-users at Mutualités Libres",
+      "Full-stack delivery: C# and TypeScript applying SOLID principles and Test-Driven Development",
+      "Scalable CI/CD pipelines and Infrastructure as Code to optimize deployment workflows",
+      "Model-driven apps, Power Automate flows and seamless Dynamics 365 & Azure integrations",
+      "Azure across the stack: Web Apps, Functions, Logic Apps, Service Bus and Virtual Networks"
     ],
-    techStack: ["C", "OpenGL", "GLSL", "C# / .NET", "Python", "Linux / Arch", "Bash", "Make / CMake"],
-    highlights: ["GPU Shaders", "Fractal Mathematics", "Memory Management"],
+    techStack: ["Dynamics 365", "Power Platform", "Power Automate", "C# / .NET", "TypeScript", "React", "ASP.NET", "Azure Functions", "Logic Apps", "Service Bus", "Azure DevOps", "xUnit", "Playwright"],
+    highlights: ["Dynamics 365 & CRM", "SCRUM Leadership", "Enterprise Delivery"],
     metrics: [
-      { label: "Rendering FPS", value: "60+ FPS" },
-      { label: "Zoom Depth", value: "10^14" },
-      { label: "Memory Footprint", value: "< 35MB" }
+      { label: "Users Migrated", value: "600+" },
+      { label: "Project Scale", value: "1,000+ mandays" },
+      { label: "Team Led", value: "10 people" }
+    ],
+    featured: true,
+    tableData: {
+      systemScope: "Dynamics CRM & Power Platform",
+      keyDeliverable: "CRM transformation for 1,000+ end-users",
+      impactMetric: "600+ users migrated · monthly sprint cadence",
+      coreTech: "D365 / Power Platform / C# / TypeScript"
+    },
+    deepDive: {
+      architecturalChallenge: "Modernize the tooling of 1,000+ end-users mid-operation: the customer service team had to keep working while a new CRM, its integrations and public-website communication flows were rolled out across 600+ users.",
+      solution: "Monthly SCRUM delivery with a cross-functional team of ten, a code architecture designed for low technical debt, automated testing frameworks (xUnit, Playwright) and an enhanced CI/CD pipeline for smooth, repeatable deployments.",
+      keyLearnings: [
+        "Being the main contact between the technical team and stakeholders is as decisive for delivery as the code itself.",
+        "Mentoring developers into shared standards beats enforcing them alone — the codebase stays healthy after you leave.",
+        "Test automation is what makes a long CRM migration auditable and reversible."
+      ]
+    }
+  },
+  {
+    id: "imec-iot-network-engineer",
+    role: "IoT Network Engineer — Summer Job",
+    company: "imec",
+    period: "Jul 2020 — Aug 2020",
+    location: "Zwijnaarde (Ghent), Belgium",
+    type: "Internship",
+    domain: "IoT & Hardware",
+    summary: "Two-month summer job at imec: converting an existing IoT network architecture to a modern adapter framework connecting IoT networks to a central virtual network operator.",
+    paragraphs: [
+      "A brief but instructive summer job at imec in Zwijnaarde: an existing network architecture for connecting IoT devices was already documented and needed to be implemented. I reviewed and modified the existing C++ codebase and added newer Python scripts, hosting all components with Dockerfiles and Kubernetes.",
+      "The goal of these developments was to enable an adapter framework where IoT networks can be connected to a central virtual network operator — and to enable IPv6 communication between standalone IoT devices within the network."
+    ],
+    bulletPoints: [
+      "Reviewed and modified an existing C++ codebase against a documented target architecture",
+      "Added Python tooling and containerized all components with Dockerfiles and Kubernetes",
+      "Enabled IPv6 communication between standalone IoT devices"
+    ],
+    techStack: ["C++", "Python", "Docker", "Kubernetes", "IPv6", "IoT Networking"],
+    highlights: ["IoT Networking", "Containerization"],
+    metrics: [
+      { label: "Duration", value: "2 months" },
+      { label: "Focus", value: "IoT Networking" }
     ],
     featured: false,
     tableData: {
-      systemScope: "GPU Compute & Systems Tooling",
-      keyDeliverable: "OpenGL Mandelbrot Engine & Automation",
-      impactMetric: "Real-time 60fps deep zoom fractal rendering",
-      coreTech: "C / OpenGL / GLSL / Python / Linux"
+      systemScope: "IoT Adapter Framework",
+      keyDeliverable: "IPv6-enabled virtual network operator",
+      impactMetric: "Containerized components on Kubernetes",
+      coreTech: "C++ / Python / Docker / K8s"
     },
     deepDive: {
-      architecturalChallenge: "Precision degradation and GPU floating point limitations (32-bit single precision) when zooming into deep coordinates of mathematical fractals.",
-      solution: "Implemented emulated double-precision split arithmetic inside GLSL fragment shaders alongside CPU-coordinated tile bounding box calculations.",
+      architecturalChallenge: "Connecting heterogeneous IoT networks to a central virtual network operator while switching standalone devices to IPv6 — without breaking the already-documented reference architecture.",
+      solution: "Implemented the documented adapter framework: C++ review and modification, new Python tooling, and containerized deployment of every component via Dockerfiles and Kubernetes.",
       keyLearnings: [
-        "Direct shader programming offers deep insights into GPU vector units and cache line coherence.",
-        "Profiling native code with Valgrind and GDB reinforces rigorous memory discipline."
+        "Container-first hosting makes even research-grade IoT setups reproducible.",
+        "A short, well-scoped assignment can still leave a codebase measurably better off."
+      ]
+    }
+  },
+  {
+    id: "ugent-informatics-degree",
+    role: "B.Sc. + M.Sc. Industrial Sciences: Informatics",
+    company: "Ghent University (Universiteit Gent)",
+    period: "2016 — 2020",
+    location: "Ghent, Belgium",
+    type: "Education",
+    domain: "Education & Research",
+    summary: "Engineering degree giving broad knowledge across the whole IT domain — completed magna cum laude, without a single resit — and capped by a master's thesis on distributed multi-radio MAC protocols.",
+    paragraphs: [
+      "Four years at Ghent University gave me broad theoretical and practical knowledge across the whole IT domain: software engineering, networking, electronics, operating systems, databases and information security. That breadth is exactly what lets me learn any new skill quickly and see beyond the boundaries of a single technology stack — the foundation everything above is built on.",
+      "The master's thesis, written at IDLab under Prof. Dr. Ir. Eli De Poorter and Prof. Dr. Ir. Jeroen Hoebeke, designed a distributed multi-radio MAC protocol combining sub-GHz and Ultra-Wideband radios for sub-decimeter distance determination between triathletes. It was my first end-to-end experience owning a system from protocol design to hardware validation — and it still shapes how I approach architecture today.",
+      "I graduated magna cum laude, on both degrees, without any resits throughout the whole program. Along the way I picked up a 2nd place in the .NET Challenge Belgium 2022 (professional category), a 2nd place in the Big Data Challenge Belgium 2022 by De Lijn, and Microsoft certifications spanning Azure (AZ-104, AZ-305) and Dynamics 365 (Sales, Marketing, Power Apps + D365 Developer)."
+    ],
+    bulletPoints: [
+      "Magna cum laude on both degrees — zero resits across the entire program",
+      "Master thesis: distributed multi-radio MAC protocol (sub-GHz + UWB) for distance determination",
+      "Broad IT-domain foundation: software engineering, networking, electronics, security, databases",
+      "Microsoft certified: AZ-305 Azure Solutions Architect Expert · AZ-104 Azure Administrator Associate",
+      "Dynamics 365 certified: Sales & Marketing Functional Consultant · Power Apps + D365 Developer",
+      "2nd place .NET Challenge Belgium 2022 (professional) · 2nd place Big Data Challenge Belgium 2022"
+    ],
+    techStack: ["C / C++", "UWB & Sub-GHz Radios", "Python", "MATLAB", "Networking", "Linux"],
+    highlights: ["Magna cum laude", "IDLab Master Thesis", "Broad IT Foundation"],
+    metrics: [
+      { label: "Graduation", value: "Magna cum laude" },
+      { label: "Resits", value: "0" },
+      { label: "Thesis Precision", value: "< 10 cm" }
+    ],
+    featured: true,
+    tableData: {
+      systemScope: "Engineering Degree (B.Sc. + M.Sc.)",
+      keyDeliverable: "Distributed multi-radio MAC thesis",
+      impactMetric: "Magna cum laude — zero resits",
+      coreTech: "C/C++ / UWB / Sub-GHz / Networking"
+    },
+    deepDive: {
+      architecturalChallenge: "Ultra-Wideband delivers sub-decimeter ranging accuracy via two-way ranging, but dozens of simultaneously ranging mobile nodes collapse the channel into contention, packet collisions and extreme energy drain.",
+      solution: "An asynchronous hybrid protocol: low-power sub-GHz broadcasts handle synchronization, neighbor discovery and time-slot negotiation, while UWB transceivers wake strictly for scheduled, collision-free ranging intervals.",
+      keyLearnings: [
+        "Hardware constraints must shape the protocol abstraction — not the other way around.",
+        "Deterministic time-slotting beats randomized backoff in dense mobile topologies.",
+        "A broad engineering curriculum pays off immediately when switching domains professionally."
       ]
     }
   }
@@ -303,56 +357,66 @@ export const projectsData: ProjectItem[] = [
 
 export const skillCategoriesData: SkillCategory[] = [
   {
-    title: "Languages & Core",
+    title: "Dynamics 365 & Power Platform",
+    iconName: "Briefcase",
+    description: "Enterprise applications first: CRM, model-driven apps and Dataverse — extended with C# exactly where the platform ends.",
+    skills: [
+      { name: "Dynamics 365 CE / CRM", level: 90, experienceYears: "5+ yrs", badge: "Core" },
+      { name: "Power Platform (Model-Driven & Canvas Apps)", level: 88, experienceYears: "5+ yrs", badge: "Core" },
+      { name: "Dataverse: solutions, environments & deployment", level: 90, experienceYears: "5+ yrs", badge: "Platform" },
+      { name: "Power Automate & Integrations", level: 87, experienceYears: "4+ yrs", badge: "Flows" },
+      { name: "PAC CLI · Configuration Migration Tool · XrmToolBox", level: 85, experienceYears: "4+ yrs", badge: "First-party" }
+    ]
+  },
+  {
+    title: "Azure & Cloud Platform",
+    iconName: "Cloud",
+    description: "Platform engineering on Azure — governed, automated, and first-party wherever possible.",
+    skills: [
+      { name: "Azure DevOps & GitHub CI/CD", level: 92, experienceYears: "5+ yrs", badge: "Pipelines" },
+      { name: "Infrastructure as Code (Terraform, ARM)", level: 90, experienceYears: "4+ yrs", badge: "IaC" },
+      { name: "Azure Landing Zones & Governance", level: 88, experienceYears: "3+ yrs", badge: "Platform" },
+      { name: "Functions · Logic Apps · Service Bus · Web Apps", level: 90, experienceYears: "5+ yrs", badge: "Services" },
+      { name: "Azure API Management & APIOps", level: 85, experienceYears: "2+ yrs", badge: "APIs" },
+      { name: "Managed Identities & Cloud Security", level: 85, experienceYears: "3+ yrs", badge: "Security" },
+      { name: "Docker & Kubernetes", level: 80, experienceYears: "4+ yrs", badge: "Containers" }
+    ]
+  },
+  {
+    title: "Languages",
     iconName: "Code2",
-    description: "Primary programming languages used across low-level, backend, and frontend development.",
+    description: "The languages I think in — application code first, scripting and data close behind.",
     skills: [
-      { name: "TypeScript / JavaScript", level: 95, experienceYears: "5+ yrs", badge: "Primary" },
-      { name: "C / C++", level: 88, experienceYears: "4+ yrs", badge: "Low-Level" },
-      { name: "C# / .NET", level: 85, experienceYears: "4+ yrs", badge: "Backend" },
-      { name: "Python", level: 88, experienceYears: "5+ yrs", badge: "Scripting & ML" },
-      { name: "SQL (PostgreSQL / SQLite)", level: 90, experienceYears: "5+ yrs", badge: "Databases" },
-      { name: "GLSL / Shaders", level: 78, experienceYears: "2+ yrs", badge: "Graphics" },
-      { name: "Bash / Shell", level: 92, experienceYears: "6+ yrs", badge: "DevOps" }
+      { name: "C# / .NET (Framework & Core)", level: 93, experienceYears: "6+ yrs", badge: "Primary" },
+      { name: "TypeScript / JavaScript", level: 90, experienceYears: "6+ yrs", badge: "Primary" },
+      { name: "SQL", level: 88, experienceYears: "6+ yrs", badge: "Data" },
+      { name: "Python", level: 85, experienceYears: "5+ yrs", badge: "AI & Scripting" },
+      { name: "React & Modern Frontend", level: 85, experienceYears: "5+ yrs", badge: "UI" },
+      { name: "Bash / Shell", level: 82, experienceYears: "6+ yrs", badge: "DevOps" }
     ]
   },
   {
-    title: "Distributed Systems & Low-Level",
+    title: "AI & Applied LLMs",
+    iconName: "Bot",
+    description: "My current passion: integrating AI where it genuinely multiplies a team's output. (Section still growing.)",
+    skills: [
+      { name: "LLM Integration (GPT-4, Azure OpenAI)", level: 85, experienceYears: "3+ yrs", badge: "Production" },
+      { name: "Claude Code & Agentic Dev Workflows", level: 82, experienceYears: "1+ yr", badge: "Daily" },
+      { name: "Local Models (Ollama) & FastAPI Serving", level: 75, experienceYears: "2+ yrs", badge: "Exploring" },
+      { name: "AI-Assisted Quality Gates & Validation Pipelines", level: 78, experienceYears: "1+ yr", badge: "Emerging" }
+    ]
+  },
+  {
+    title: "Other & Low-Level",
     iconName: "Cpu",
-    description: "Protocols, memory architectures, concurrent pipelines, and embedded wireless systems.",
+    description: "The long tail from my engineering degree and research — systems, wireless and graphics work that sharpened the fundamentals.",
     skills: [
-      { name: "Distributed Protocols & MAC Layer", level: 92, badge: "Master Thesis" },
-      { name: "Ultra-Wideband (UWB) & Sub-GHz", level: 90, badge: "Hardware" },
-      { name: "OpenGL / GPU Pipeline", level: 82, badge: "Graphics" },
-      { name: "Concurrency & Async Systems", level: 92, badge: "Architecture" },
-      { name: "Algorithmic Optimization", level: 90, badge: "Performance" },
-      { name: "Deterministic Pick / Hash Algorithms", level: 88, badge: "StackOverflow" }
-    ]
-  },
-  {
-    title: "Web & Frontend Architecture",
-    iconName: "Layout",
-    description: "Modern client-side frameworks, reactive UI/UX, and component libraries.",
-    skills: [
-      { name: "React / Next.js", level: 94, badge: "Frontend Core" },
-      { name: "Tailwind CSS", level: 96, badge: "UI / Styling" },
-      { name: "Framer Motion & Animations", level: 90, badge: "Motion" },
-      { name: "State Management (Zustand / Redux)", level: 92, badge: "State" },
-      { name: "Canvas & WebGL", level: 80, badge: "Interactive" },
-      { name: "Responsive & Accessible Design", level: 95, badge: "UX" }
-    ]
-  },
-  {
-    title: "Backend, Cloud & Tooling",
-    iconName: "Server",
-    description: "Server architectures, containerization, deployment pipelines, and developer tooling.",
-    skills: [
-      { name: "Node.js & Express / Fastify", level: 92, badge: "Backend" },
-      { name: "Docker & Containerization", level: 90, badge: "DevOps" },
-      { name: "REST & WebSocket APIs", level: 95, badge: "Networking" },
-      { name: "Linux Workstation & Server Admin", level: 95, badge: "OS" },
-      { name: "Git / CI/CD Workflows", level: 94, badge: "VCS" },
-      { name: "Vite / Modern Bundlers", level: 92, badge: "Tooling" }
+      { name: "Distributed MAC Protocols & UWB Ranging", level: 88, badge: "M.Sc. Thesis" },
+      { name: "Linux / Arch & Systems Tooling", level: 85, badge: "OS" },
+      { name: "C / C++ & Embedded Systems", level: 80, badge: "Low-Level" },
+      { name: "OpenGL / GLSL & GPU Compute", level: 78, badge: "Graphics" },
+      { name: "IoT Networking (IPv6, MQTT)", level: 75, badge: "imec" },
+      { name: "MATLAB & Simulation", level: 72, badge: "Research" }
     ]
   }
 ];
@@ -361,8 +425,8 @@ export const educationData: EducationItem = {
   degree: "Master of Science in Industrial Sciences: Informatics",
   institution: "Ghent University (Universiteit Gent - UGent)",
   location: "Ghent, Belgium",
-  period: "2019 — 2020",
-  grade: "Distinction / Master Degree",
+  period: "2016 — 2020 (B.Sc. + M.Sc.)",
+  grade: "Magna cum laude — no resits",
   thesis: {
     title: "Gedistribueerd multi-radio MAC protocol voor afstandsbepaling tussen triatleten (Distributed multi-radio MAC protocol for distance determination between triathletes)",
     supervisors: [
@@ -384,8 +448,8 @@ export const educationData: EducationItem = {
 };
 
 export const marqueeTechList = [
-  "TypeScript", "React", "C / C++", "C# .NET", "Distributed Systems",
-  "OpenGL", "Tailwind CSS", "Docker", "Python", "Node.js",
-  "UWB Ranging", "Linux / Arch", "GLSL Shaders", "PostgreSQL",
-  "Framer Motion", "Git", "REST / WebSockets", "Vite"
+  "C# / .NET", "Dynamics 365", "Azure", "TypeScript", "Power Platform",
+  "Terraform", "Azure DevOps", "APIM / APIOps", "Dataverse", "Docker",
+  "Python", "Azure OpenAI", "Claude Code", "React", "SQL", "Kubernetes",
+  "Linux", "Playwright"
 ];

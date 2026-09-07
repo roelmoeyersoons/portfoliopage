@@ -168,21 +168,29 @@ const Hero: React.FC<{ onNavigate?: TabNavigate }> = ({ onNavigate }) => (
         ))}
       </motion.div>
 
-      {/* scroll cue */}
+      {/* scroll cue — jumps to the next chapter */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.9, duration: 0.6 }}
-        className="mt-14 flex items-center justify-center gap-3 font-mono text-[9px] uppercase tracking-[0.3em] text-[#525252]"
+        className="mt-14 flex justify-center"
       >
-        <motion.span
-          animate={{ y: [0, 5, 0] }}
-          transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
-          className="flex"
+        <button
+          type="button"
+          onClick={() => onNavigate?.('experience')}
+          aria-label="Go to the next chapter — Experience"
+          title="Jump to the next chapter"
+          className="group flex cursor-pointer items-center gap-3 rounded-full px-4 py-2 font-mono text-[9px] uppercase tracking-[0.3em] text-[#525252] outline-none transition-colors duration-300 hover:text-[#a3a3a3] focus-visible:ring-2 focus-visible:ring-[#3b82f6]/60"
         >
-          <ArrowDown size={12} />
-        </motion.span>
-        Scroll
+          <motion.span
+            animate={{ y: [0, 5, 0] }}
+            transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
+            className="flex transition-colors group-hover:text-[#3b82f6]"
+          >
+            <ArrowDown size={12} />
+          </motion.span>
+          Scroll
+        </button>
       </motion.div>
     </div>
   </section>

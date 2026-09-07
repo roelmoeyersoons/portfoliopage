@@ -69,10 +69,11 @@ export interface ExperienceEntry {
 }
 
 const artForExperience: Record<string, ArtSpec> = {
-  'gneiss-systems': { style: 'mesh', hue: 262 },
-  'ugent-research-mac': { style: 'constellation', hue: 190 },
-  'fullstack-software-engineering': { style: 'strata', hue: 330 },
-  'systems-graphics-tooling': { style: 'orbits', hue: 145 },
+  'baloise-azure-dynamics': { style: 'grid', hue: 205 },
+  'reimagine-ai-architect': { style: 'mesh', hue: 262 },
+  'netit-dynamics-consultant': { style: 'waves', hue: 330 },
+  'imec-iot-network-engineer': { style: 'orbits', hue: 145 },
+  'ugent-informatics-degree': { style: 'constellation', hue: 190 },
 };
 
 export const experiences: ExperienceEntry[] = experiencesData.map((e, i) => ({
@@ -111,10 +112,11 @@ export interface SkillGroupEntry {
 }
 
 const artForSkillGroup: Record<string, ArtSpec> = {
-  'languages-core': { style: 'strata', hue: 262 },
-  'distributed-systems': { style: 'orbits', hue: 190 },
-  'web-frontend': { style: 'waves', hue: 330 },
-  'backend-cloud': { style: 'grid', hue: 205 },
+  'dynamics-365-power-platform': { style: 'mesh', hue: 330 },
+  'azure-cloud-platform': { style: 'grid', hue: 205 },
+  'languages': { style: 'strata', hue: 262 },
+  'ai-applied-llms': { style: 'constellation', hue: 285 },
+  'other-low-level': { style: 'orbits', hue: 145 },
 };
 
 const skillGroupId = (title: string) =>
@@ -198,9 +200,9 @@ export const techMarquee = marqueeTechList;
 
 /** RotatingText role suggestions derived from title + domains */
 export const rotatingRoles = [
-  'Systems Engineer',
-  'Distributed Protocols',
-  'Full-Stack Developer',
-  'GPU & Graphics',
-  'Cloud Architect',
+  'Application Engineering',
+  'Dynamics 365 & CRM',
+  'C# / .NET Development',
+  'Azure Platform',
+  'AI & LLM Integration',
 ];

@@ -116,7 +116,7 @@ export const BentoProjects: React.FC = () => {
                   {projectsData[1].category}
                 </span>
                 <span className="text-xs font-mono text-emerald-400 border border-emerald-500/30 rounded px-2 py-0.5 bg-emerald-500/10">
-                  UGent IDLab
+                  M.Sc. Thesis · UGent
                 </span>
               </div>
 

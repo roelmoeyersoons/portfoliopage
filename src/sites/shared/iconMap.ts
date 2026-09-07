@@ -10,6 +10,8 @@ import {
   Briefcase,
   FolderGit2,
   Mail,
+  Cloud,
+  Bot,
   type LucideIcon,
 } from 'lucide-react';
 
@@ -22,6 +24,8 @@ export const iconMap: Record<string, LucideIcon> = {
   Briefcase,
   FolderGit2,
   Mail,
+  Cloud,
+  Bot,
 };
 
 export function resolveIcon(name: string): LucideIcon {

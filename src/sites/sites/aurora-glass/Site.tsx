@@ -6,7 +6,7 @@
  * Palette inspired by the rbp-portfolio template (dark, soft borders,
  * generous rounding, editorial serif) combined with ReactBits motion.
  */
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Aurora, GradualBlur } from '@/sites/shared/bits';
 
@@ -34,6 +34,27 @@ const Site: React.FC = () => {
   const [tab, setTab] = useState<TabId>('home');
   const ActiveView = TAB_VIEWS[tab];
 
+  // Each tab is its own page: reset the scroll position when it changes.
+  // Without this, the viewport can stay parked past the new tab's content
+  // (concept switches already reset scroll in Showcase — tab switches must too).
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [tab]);
+
+  // AnimatePresence mode="wait" can strand <main> (blank view) when the tab
+  // key changes while an exit animation is still running. Serialize swaps:
+  // ignore tab clicks until the running exit has fully completed. (Clicks
+  // during the enter phase are fine — that exit runs to completion normally.)
+  const swapLockRef = useRef(false);
+  const navigate = (next: TabId) => {
+    if (swapLockRef.current || next === tab) return;
+    swapLockRef.current = true;
+    setTab(next);
+  };
+  const settleSwap = () => {
+    swapLockRef.current = false;
+  };
+
   return (
     <div className="relative min-h-screen overflow-x-hidden bg-[#0a0a10] font-sans text-zinc-100 selection:bg-violet-500/30">
       {/* ── Backdrop ── */}
@@ -48,10 +69,10 @@ const Site: React.FC = () => {
       </div>
 
       {/* ── Top bar with tabs ── */}
-      <header className="fixed inset-x-0 top-0 z-40">
+      <header className="fixed inset-x-0 top-7 z-40">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-4">
           <button
-            onClick={() => setTab('home')}
+            onClick={() => navigate('home')}
             className="group flex items-baseline gap-2"
             aria-label="Home"
           >
@@ -59,7 +80,7 @@ const Site: React.FC = () => {
               Roel<span className="bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">.</span>
             </span>
             <span className="hidden text-[10px] font-medium uppercase tracking-[0.22em] text-zinc-500 transition group-hover:text-zinc-300 sm:block">
-              Systems Engineer
+              Application Engineer
             </span>
           </button>
 
@@ -67,7 +88,7 @@ const Site: React.FC = () => {
             {siteTabs.map((t) => (
               <button
                 key={t.id}
-                onClick={() => setTab(t.id)}
+                onClick={() => navigate(t.id)}
                 className={cn(
                   'relative rounded-full px-3 py-1.5 text-[12.5px] font-medium transition-colors sm:px-4',
                   tab === t.id ? 'text-zinc-50' : 'text-zinc-400 hover:text-zinc-200'
@@ -89,7 +110,7 @@ const Site: React.FC = () => {
 
       {/* ── Active tab view ── */}
       <main className="relative z-10">
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="wait" onExitComplete={settleSwap}>
           <motion.div
             key={tab}
             initial={{ opacity: 0, y: 18, filter: 'blur(6px)' }}
@@ -97,7 +118,7 @@ const Site: React.FC = () => {
             exit={{ opacity: 0, y: -14, filter: 'blur(6px)' }}
             transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
           >
-            <ActiveView onNavigate={setTab} />
+            <ActiveView onNavigate={navigate} />
           </motion.div>
         </AnimatePresence>
       </main>

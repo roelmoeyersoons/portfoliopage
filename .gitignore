@@ -34,3 +34,9 @@ Thumbs.db
 *.njsproj
 *.sln
 *.sw?
+
+
+.dsh/
+.npm-cache/
+.pw-browsers/
+.pw-debs/

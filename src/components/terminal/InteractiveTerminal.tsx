@@ -27,11 +27,16 @@ export const InteractiveTerminal: React.FC = () => {
   const [commandHistory, setCommandHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState<number>(-1);
 
-  const terminalEndRef = useRef<HTMLDivElement>(null);
+  const outputRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  // Keep the latest output in view inside the terminal's own scroll box.
+  // IMPORTANT: never scrollIntoView() here — it also scrolls every scrollable
+  // ancestor (i.e. the whole page), jumping the site to the bottom on mount
+  // and on every command. Setting scrollTop only scrolls the output box.
   useEffect(() => {
-    terminalEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    const el = outputRef.current;
+    if (el) el.scrollTop = el.scrollHeight;
   }, [history]);
 
   const handleCommand = (cmd: string) => {
@@ -100,14 +105,15 @@ export const InteractiveTerminal: React.FC = () => {
           <div className="space-y-2 text-[11px] font-mono text-slate-300 overflow-x-auto">
             <div className="text-cyan-400 font-bold mb-1">EXPERIENCE MATRIX TABLE:</div>
             <pre className="text-slate-300 leading-tight">
-{`+----------------+--------------------------+------------------------------+---------------------------+
-| TIMELINE       | COMPANY / CLIENT         | ROLE & SYSTEM SCOPE          | CORE TECH                 |
-+----------------+--------------------------+------------------------------+---------------------------+
-| 2023 — Present | Gneiss Consulting        | Lead Systems Architect       | TypeScript, Node, Docker  |
-| 2019 — 2020    | Ghent Univ. (IDLab)      | Research Engineer (UWB MAC)  | C, C++, UWB, Sub-GHz      |
-| 2020 — 2023    | Web & Platform Projects  | Full-Stack Software Engineer | React, Node, C#, Postgres |
-| 2021 — 2023    | Systems & Open Source    | Low-Level Graphics Dev       | C, OpenGL, GLSL, Python   |
-+----------------+--------------------------+------------------------------+---------------------------+`}
+{`+----------------+-----------------------------+--------------------------------+-------------------------------+
+| TIMELINE       | COMPANY / CLIENT            | ROLE & SYSTEM SCOPE            | CORE TECH                     |
++----------------+-----------------------------+--------------------------------+-------------------------------+
+| 2025 — Present | Baloise BE (Independent)    | IT Consultant (Azure / D365)   | Azure, Terraform, D365, C#    |
+| 2023 — 2025    | REIMAGINE                   | AI/.NET Solution Architect     | GPT-4, .NET, TS, Python       |
+| 2020 — 2023    | Net IT nv                   | D365 / Power Platform Consult. | D365, Power Platform, C#      |
+| Jul — Aug 2020 | imec                        | IoT Network Engineer           | C++, Python, Docker, K8s      |
+| 2016 — 2020    | Ghent University            | M.Sc. Informatics · Magna      | C/C++, UWB, Networking        |
++----------------+-----------------------------+--------------------------------+-------------------------------+`}
             </pre>
           </div>
         );
@@ -235,7 +241,7 @@ export const InteractiveTerminal: React.FC = () => {
 
         {/* Terminal Window */}
         <div
-          onClick={() => inputRef.current?.focus()}
+          onClick={() => inputRef.current?.focus({ preventScroll: true })}
           className="cursor-text rounded-2xl border border-white/15 bg-[#090b12]/95 shadow-2xl backdrop-blur-2xl overflow-hidden"
         >
           {/* Top Title Bar */}
@@ -263,7 +269,10 @@ export const InteractiveTerminal: React.FC = () => {
           </div>
 
           {/* Terminal Output Area */}
-          <div className="p-4 sm:p-6 font-mono text-xs space-y-4 max-h-96 overflow-y-auto scrollbar-thin">
+          <div
+            ref={outputRef}
+            className="p-4 sm:p-6 font-mono text-xs space-y-4 max-h-96 overflow-y-auto scrollbar-thin"
+          >
             {history.map((item, idx) => (
               <div key={idx} className="space-y-1.5">
                 <div className="flex items-center gap-2 text-cyan-400">
@@ -293,7 +302,6 @@ export const InteractiveTerminal: React.FC = () => {
               <CornerDownLeft className="h-3 w-3 text-slate-500 shrink-0" />
             </div>
 
-            <div ref={terminalEndRef} />
           </div>
         </div>
       </div>

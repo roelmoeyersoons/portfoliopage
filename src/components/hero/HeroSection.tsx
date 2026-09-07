@@ -154,15 +154,15 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
                     <span className="text-cyan-300">"Ghent University (UGent)"</span>,
                   </div>
                   <div>
-                    <span className="text-slate-500">researchFocus:</span>{" "}
-                    <span className="text-purple-300">"Distributed Multi-Radio MAC Protocols (UWB)"</span>,
+                    <span className="text-slate-500">focus:</span>{" "}
+                    <span className="text-purple-300">"Dynamics 365 · C#/.NET · Azure"</span>,
                   </div>
                   <div>
                     <span className="text-slate-500">specialties:</span> [
-                    <span className="text-amber-300">"Distributed Systems"</span>,{" "}
-                    <span className="text-amber-300">"C/C++"</span>,{" "}
-                    <span className="text-amber-300">"React"</span>,{" "}
-                    <span className="text-amber-300">"OpenGL"</span>],
+                    <span className="text-amber-300">"Dynamics 365"</span>,{" "}
+                    <span className="text-amber-300">"C#/.NET"</span>,{" "}
+                    <span className="text-amber-300">"Azure"</span>,{" "}
+                    <span className="text-amber-300">"TypeScript"</span>],
                   </div>
                   <div>
                     <span className="text-slate-500">status:</span>{" "}
@@ -184,9 +184,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
 
                 <div className="rounded-xl border border-white/5 bg-white/[0.03] p-3 text-center">
                   <div className="text-xl font-bold font-mono text-purple-400">
-                    &lt; 10 cm
+                    AZ-305
                   </div>
-                  <div className="text-[11px] text-slate-400 mt-0.5">UWB Ranging Precision</div>
+                  <div className="text-[11px] text-slate-400 mt-0.5">Azure Solutions Architect Expert</div>
                 </div>
               </div>
             </SpotlightCard>

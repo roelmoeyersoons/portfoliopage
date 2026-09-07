@@ -41,8 +41,8 @@ const Contact: React.FC = () => (
       transition={{ delay: 0.14 }}
       className="mt-5 max-w-xl text-sm leading-relaxed text-slate-400"
     >
-      Whether it's a protocol that has to hold up under pressure, a GPU pipeline to push further, or a product that
-      deserves real engineering — send a signal, and it will be heard.
+      Whether it's an architecture that has to hold up in production, a platform that needs proper guardrails, or a
+      product that deserves real engineering — send a signal, and it will be heard.
     </motion.p>
 
     <motion.div

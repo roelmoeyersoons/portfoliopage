@@ -61,6 +61,12 @@ export const Showcase: React.FC = () => {
 
   return (
     <>
+      {/* Concept banner — this build is a set of design concepts, not the live site */}
+      <div className="fixed inset-x-0 top-0 z-[45] flex h-7 items-center justify-center overflow-hidden bg-yellow-300 px-4 text-center shadow-[0_1px_0_rgba(0,0,0,0.35)]">
+        <p className="truncate text-[10.5px] font-semibold uppercase tracking-[0.24em] text-yellow-950">
+          This is a concept website — design exploration
+        </p>
+      </div>
       <SiteErrorBoundary key={site.id} siteName={site.name}>
         <Suspense fallback={<Loading name={site.name} />}>
           <SiteComponent key={site.id} />

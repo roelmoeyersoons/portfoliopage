@@ -7,10 +7,10 @@ interface ScrollStackProps {
 }
 
 const cards = [
-  { title: 'Gneiss Systems', period: '2023 — Now', desc: 'Consulting & architecture', color: 'from-cyan-500/15 to-blue-500/15' },
-  { title: 'UGent IDLab', period: '2019 — 2020', desc: 'Multi-radio MAC thesis', color: 'from-purple-500/15 to-pink-500/15' },
-  { title: 'Full-Stack Dev', period: '2020 — 2023', desc: 'React microservices', color: 'from-emerald-500/15 to-cyan-500/15' },
-  { title: 'Graphics Hacker', period: '2021 — 2023', desc: 'OpenGL & GLSL', color: 'from-amber-500/15 to-red-500/15' },
+  { title: 'Baloise BE', period: '2025 — Now', desc: 'Azure & Dynamics consulting', color: 'from-cyan-500/15 to-blue-500/15' },
+  { title: 'REIMAGINE', period: '2023 — 2025', desc: 'AI/.NET solution architecture', color: 'from-purple-500/15 to-pink-500/15' },
+  { title: 'Net IT nv', period: '2020 — 2023', desc: 'D365 & Power Platform', color: 'from-emerald-500/15 to-cyan-500/15' },
+  { title: 'Ghent University', period: '2016 — 2020', desc: 'M.Sc. Informatics · magna cum laude', color: 'from-amber-500/15 to-red-500/15' },
 ];
 
 /** Framer-powered ScrollStack — cards overlay as you scroll the demo strip */

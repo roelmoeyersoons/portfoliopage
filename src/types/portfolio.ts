@@ -4,8 +4,17 @@ export interface ExperienceItem {
   company: string;
   period: string;
   location: string;
-  type: 'Full-time' | 'Contract' | 'Research' | 'Freelance';
-  domain: 'Distributed Systems' | 'Full Stack' | 'Low-Level & Graphics' | 'IoT & Hardware' | 'Consulting & Architecture';
+  type: 'Full-time' | 'Contract' | 'Research' | 'Freelance' | 'Self-employed' | 'Internship' | 'Education';
+  domain:
+    | 'Distributed Systems'
+    | 'Full Stack'
+    | 'Low-Level & Graphics'
+    | 'IoT & Hardware'
+    | 'Consulting & Architecture'
+    | 'Cloud & Enterprise Applications'
+    | 'AI & Solution Architecture'
+    | 'Dynamics & Power Platform'
+    | 'Education & Research';
   summary: string;
   paragraphs: string[];
   bulletPoints: string[];

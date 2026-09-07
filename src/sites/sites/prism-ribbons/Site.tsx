@@ -6,7 +6,7 @@
  * carrying the identity: capsule tab indicator, level bars, buttons,
  * serif italic accents.
  */
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { GradualBlur } from '@/sites/shared/bits';
 
@@ -35,6 +35,27 @@ const Site: React.FC = () => {
   const [tab, setTab] = useState<TabId>('home');
   const ActiveView = TAB_VIEWS[tab];
 
+  // Each tab is its own page: reset the scroll position when it changes.
+  // Without this, the viewport can stay parked past the new tab's content
+  // (concept switches already reset scroll in Showcase — tab switches must too).
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [tab]);
+
+  // AnimatePresence mode="wait" can strand <main> (blank view) when the tab
+  // key changes while an exit animation is still running. Serialize swaps:
+  // ignore tab clicks until the running exit has fully completed. (Clicks
+  // during the enter phase are fine — that exit runs to completion normally.)
+  const swapLockRef = useRef(false);
+  const navigate = (next: TabId) => {
+    if (swapLockRef.current || next === tab) return;
+    swapLockRef.current = true;
+    setTab(next);
+  };
+  const settleSwap = () => {
+    swapLockRef.current = false;
+  };
+
   return (
     <div className="relative min-h-screen overflow-x-hidden bg-[#07080d] font-sans text-slate-200 selection:bg-cyan-400/30">
       {/* ── Backdrop: flowing ribbons ── */}
@@ -47,9 +68,9 @@ const Site: React.FC = () => {
       </div>
 
       {/* ── Top bar: wordmark + floating capsule tabs ── */}
-      <header className="fixed inset-x-0 top-0 z-40">
+      <header className="fixed inset-x-0 top-7 z-40">
         <div className="mx-auto flex max-w-6xl flex-col items-center gap-2 px-5 py-4 sm:flex-row sm:justify-between">
-          <button onClick={() => setTab('home')} className="group flex items-baseline gap-2" aria-label="Home">
+          <button onClick={() => navigate('home')} className="group flex items-baseline gap-2" aria-label="Home">
             <span className="font-serif text-xl font-semibold tracking-tight text-slate-50">
               {profile.firstName}
               <span
@@ -71,7 +92,7 @@ const Site: React.FC = () => {
             {siteTabs.map((t) => (
               <motion.button
                 key={t.id}
-                onClick={() => setTab(t.id)}
+                onClick={() => navigate(t.id)}
                 whileHover={{ rotate: -1.5, y: -1 }}
                 whileTap={{ scale: 0.95 }}
                 className={cn(
@@ -96,7 +117,7 @@ const Site: React.FC = () => {
 
       {/* ── Active tab view ── */}
       <main className="relative z-10">
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="wait" onExitComplete={settleSwap}>
           <motion.div
             key={tab}
             initial={{ opacity: 0, y: 18, filter: 'blur(6px)' }}
@@ -104,7 +125,7 @@ const Site: React.FC = () => {
             exit={{ opacity: 0, y: -14, filter: 'blur(6px)' }}
             transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
           >
-            <ActiveView onNavigate={setTab} />
+            <ActiveView onNavigate={navigate} />
           </motion.div>
         </AnimatePresence>
 
