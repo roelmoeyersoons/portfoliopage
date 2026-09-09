@@ -1,7 +1,33 @@
 import React from 'react';
-import { Layers, Github, ExternalLink } from 'lucide-react';
-import { projectsData } from '../../data/portfolioData';
+import { Layers, Github, ExternalLink, Zap } from 'lucide-react';
+import { projectsData, coreSkillsData } from '../../data/portfolioData';
+import { gotoSkill } from '../../lib/skillNav';
 import { SpotlightCard } from '../reactbits/SpotlightCard';
+
+/** Skill chips row shared by all project cards — click-through to skills. */
+const SkillLinks: React.FC<{ projectId: string }> = ({ projectId }) => {
+  const project = projectsData.find((p) => p.id === projectId);
+  const skills = (project?.skillIds ?? [])
+    .map((sid) => coreSkillsData.find((s) => s.id === sid))
+    .filter((s): s is NonNullable<typeof s> => Boolean(s));
+  if (skills.length === 0) return null;
+  return (
+    <div className="mt-3 flex flex-wrap items-center gap-2">
+      <span className="inline-flex items-center gap-1 text-[11px] font-mono text-slate-500">
+        <Zap className="h-3 w-3" /> Skills:
+      </span>
+      {skills.map((skill) => (
+        <button
+          key={skill.id}
+          onClick={() => gotoSkill(skill.id)}
+          className="rounded-lg border border-cyan-500/25 bg-cyan-500/10 px-2 py-0.5 text-[11px] font-mono text-cyan-200 transition-all hover:border-cyan-400/60 hover:bg-cyan-500/20"
+        >
+          {skill.title}
+        </button>
+      ))}
+    </div>
+  );
+};
 
 export const BentoProjects: React.FC = () => {
   return (
@@ -44,9 +70,10 @@ export const BentoProjects: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6">
           {/* Project 1: OpenGL Mandelbrot (Span 7 cols) */}
           <SpotlightCard
+            id={`proj-${projectsData[0].id}`}
             spotlightColor="rgba(0, 242, 254, 0.15)"
             borderColor="rgba(0, 242, 254, 0.4)"
-            className="lg:col-span-7 p-6 sm:p-8 flex flex-col justify-between"
+            className="lg:col-span-7 p-6 sm:p-8 flex flex-col justify-between scroll-mt-24"
           >
             <div>
               <div className="flex items-center justify-between gap-4 mb-4">
@@ -102,13 +129,15 @@ export const BentoProjects: React.FC = () => {
                 <span>GLSL Shaders</span>
               </div>
             </div>
+            <SkillLinks projectId={projectsData[0].id} />
           </SpotlightCard>
 
           {/* Project 2: Distributed Multi-Radio MAC Protocol (Span 5 cols) */}
           <SpotlightCard
+            id={`proj-${projectsData[1].id}`}
             spotlightColor="rgba(121, 40, 202, 0.18)"
             borderColor="rgba(121, 40, 202, 0.4)"
-            className="lg:col-span-5 p-6 sm:p-8 flex flex-col justify-between"
+            className="lg:col-span-5 p-6 sm:p-8 flex flex-col justify-between scroll-mt-24"
           >
             <div>
               <div className="flex items-center justify-between gap-4 mb-4">
@@ -151,13 +180,15 @@ export const BentoProjects: React.FC = () => {
               </div>
               <span className="text-xs font-mono text-purple-300">&lt; 10cm Ranging</span>
             </div>
+            <SkillLinks projectId={projectsData[1].id} />
           </SpotlightCard>
 
           {/* Project 3: Discord SongBot (Span 6 cols) */}
           <SpotlightCard
+            id={`proj-${projectsData[2].id}`}
             spotlightColor="rgba(245, 158, 11, 0.15)"
             borderColor="rgba(245, 158, 11, 0.4)"
-            className="lg:col-span-6 p-6 sm:p-8 flex flex-col justify-between"
+            className="lg:col-span-6 p-6 sm:p-8 flex flex-col justify-between scroll-mt-24"
           >
             <div>
               <div className="flex items-center justify-between gap-4 mb-4">
@@ -198,13 +229,15 @@ export const BentoProjects: React.FC = () => {
               </div>
               <span className="text-xs font-mono text-amber-300">C# / .NET Core</span>
             </div>
+            <SkillLinks projectId={projectsData[2].id} />
           </SpotlightCard>
 
           {/* Project 4: ArchConfig Tooling (Span 6 cols) */}
           <SpotlightCard
+            id={`proj-${projectsData[3].id}`}
             spotlightColor="rgba(16, 185, 129, 0.15)"
             borderColor="rgba(16, 185, 129, 0.4)"
-            className="lg:col-span-6 p-6 sm:p-8 flex flex-col justify-between"
+            className="lg:col-span-6 p-6 sm:p-8 flex flex-col justify-between scroll-mt-24"
           >
             <div>
               <div className="flex items-center justify-between gap-4 mb-4">
@@ -245,6 +278,7 @@ export const BentoProjects: React.FC = () => {
               </div>
               <span className="text-xs font-mono text-emerald-300">Python + Arch Linux</span>
             </div>
+            <SkillLinks projectId={projectsData[3].id} />
           </SpotlightCard>
         </div>
       </div>

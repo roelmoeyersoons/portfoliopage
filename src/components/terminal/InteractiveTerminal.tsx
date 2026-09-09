@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Terminal as TerminalIcon, CornerDownLeft, RotateCcw } from 'lucide-react';
-import { profileData, experiencesData, projectsData, skillCategoriesData, educationData } from '../../data/portfolioData';
+import { profileData, experiencesData, projectsData, coreSkillsData, otherSkillsData, educationData } from '../../data/portfolioData';
 
 interface HistoryEntry {
   command: string;
@@ -139,19 +139,23 @@ export const InteractiveTerminal: React.FC = () => {
       case 'skills':
         output = (
           <div className="space-y-3 text-xs text-slate-300">
-            <div className="text-cyan-400 font-bold mb-1">Core Competency Matrix:</div>
-            {skillCategoriesData.map((cat, idx) => (
-              <div key={idx} className="space-y-1">
-                <div className="font-semibold text-purple-300">{cat.title}:</div>
-                <div className="flex flex-wrap gap-1.5 pl-2">
-                  {cat.skills.map((s, sIdx) => (
-                    <span key={sIdx} className="rounded bg-white/10 px-2 py-0.5 text-[11px] font-mono text-slate-200">
-                      {s.name} ({s.level}%)
-                    </span>
-                  ))}
+            <div className="text-cyan-400 font-bold mb-1">Core skills:</div>
+            {coreSkillsData.map((skill, idx) => (
+              <div key={skill.id} className="space-y-1">
+                <div className="font-semibold text-purple-300">
+                  {String(idx + 1).padStart(2, '0')}. {skill.title}
                 </div>
+                <div className="pl-2 text-slate-400">{skill.tagline}</div>
               </div>
             ))}
+            <div className="pt-2 text-cyan-400 font-bold">Also used along the way:</div>
+            <div className="flex flex-wrap gap-1.5 pl-2">
+              {otherSkillsData.map((s, sIdx) => (
+                <span key={sIdx} className="rounded bg-white/10 px-2 py-0.5 text-[11px] font-mono text-slate-200">
+                  {s.name}
+                </span>
+              ))}
+            </div>
           </div>
         );
         break;

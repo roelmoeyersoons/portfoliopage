@@ -1,17 +1,42 @@
 /**
  * Plasma Bento — Skills tab
- * LEFT menu of skill categories + MAIN pane: description card with artwork
- * on top, then a bento grid — one card per skill with an animated level ring.
+ *
+ * Selector + stage: a compact tile grid lists the six core skills (plus a
+ * slim bar for the "Other" toolbox) — clicking one opens its dossier in the
+ * stage below: artwork banner, narrative, proof points, and click-through
+ * links into Experience/Projects. Cross-tab focus (from Experience/Projects)
+ * opens the requested skill and flashes the stage.
  */
-import React, { useId, useState } from 'react';
+import React, { useEffect, useId, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { skillGroups, type SkillGroupEntry } from '@/sites/shared/content';
+import { Briefcase, CheckCircle2, FolderGit2 } from 'lucide-react';
+import {
+  coreSkills,
+  otherSkills,
+  type OtherSkillsGroup,
+  type TabFocus,
+  type TabNavigate,
+} from '@/sites/shared/content';
 import { resolveIcon } from '@/sites/shared/iconMap';
 import { CountUp } from '@/sites/shared/bits';
 import Artwork from '@/sites/shared/Artwork';
 import { BentoCard, BentoGrid } from '../ui/BentoCard';
 import { Chip, GLOW, SectionHeading, TEXT_GRADIENT } from '../ui';
 import { cn } from '@/demo/helpers';
+
+export interface SkillsTabProps {
+  onNavigate?: TabNavigate;
+  focus?: TabFocus;
+}
+
+const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+const SECTION_GLOWS = [GLOW.orange, GLOW.pink, GLOW.violet] as const;
+
+/** Renders a data-driven lucide icon from content (iconMap name). */
+const DataIcon: React.FC<{ name: string; size?: number }> = ({ name, size = 17 }) => {
+  const Icon = resolveIcon(name);
+  return <Icon size={size} />;
+};
 
 /** Circular level ring with gradient stroke + counting percentage */
 const LevelRing: React.FC<{ level: number; delay?: number }> = ({ level, delay = 0 }) => {
@@ -54,135 +79,296 @@ const LevelRing: React.FC<{ level: number; delay?: number }> = ({ level, delay =
   );
 };
 
-const RING_GLOWS = [GLOW.orange, GLOW.pink, GLOW.violet] as const;
-
 /**
- * content.ts declares skill items as `years?`, but the underlying shared
+ * content.ts types other-skill items as `years?`, but the underlying shared
  * portfolio data actually carries `experienceYears` — read both defensively.
  */
-const yearsOf = (s: SkillGroupEntry['items'][number]): string | undefined =>
-  (s as { experienceYears?: string }).experienceYears ?? s.years;
+const yearsOf = (s: OtherSkillsGroup['items'][number]): string | undefined =>
+  s.years ?? (s as { experienceYears?: string }).experienceYears;
 
-const Skills: React.FC = () => {
-  const [activeId, setActiveId] = useState(skillGroups[0].id);
-  const active = skillGroups.find((s) => s.id === activeId) ?? skillGroups[0];
-  const Icon = resolveIcon(active.icon);
+const Skills: React.FC<SkillsTabProps> = ({ onNavigate, focus }) => {
+  const [activeId, setActiveId] = useState(coreSkills[0].id);
+  const [flash, setFlash] = useState(false);
+  const stageRef = useRef<HTMLDivElement>(null);
+
+  const activeIndex = coreSkills.findIndex((s) => s.id === activeId);
+  const activeSkill = activeIndex >= 0 ? coreSkills[activeIndex] : null;
+  const isOther = activeId === otherSkills.id;
+  const stageGlow = activeSkill ? SECTION_GLOWS[activeIndex % SECTION_GLOWS.length] : GLOW.violet;
+
+  // Cross-tab focus (from Experience/Projects): open that skill and flash
+  // the stage. Site resets scroll on tab switch; a gentle nudge keeps the
+  // stage in view on small screens.
+  useEffect(() => {
+    if (!focus) return;
+    if (focus.id !== otherSkills.id && !coreSkills.some((s) => s.id === focus.id)) return;
+    setActiveId(focus.id);
+    setFlash(true);
+    const t = window.setTimeout(() => {
+      stageRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 150);
+    const clear = window.setTimeout(() => setFlash(false), 4000);
+    return () => {
+      window.clearTimeout(t);
+      window.clearTimeout(clear);
+    };
+  }, [focus?.nonce, focus?.id]);
 
   return (
     <section className="mx-auto max-w-6xl px-5 pb-28 pt-28">
-      <SectionHeading kicker="Toolkit" title="Skills & proficiency" />
+      <SectionHeading kicker="Toolkit" title="Skills" />
 
-      <div className="grid gap-5 lg:grid-cols-[290px_1fr]">
-        {/* ── Left menu ── */}
-        <div className="h-max overflow-hidden rounded-3xl border border-white/[0.08] bg-white/[0.035] shadow-[0_18px_40px_-24px_rgba(0,0,0,0.6)] backdrop-blur-xl lg:sticky lg:top-24">
-          <div className="border-b border-white/[0.07] px-5 pb-3 pt-4">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.26em] text-white/40">Select a category</p>
-          </div>
-          <ul className="flex gap-1 overflow-x-auto p-2.5 lg:flex-col lg:overflow-visible">
-            {skillGroups.map((g) => {
-              const GIcon = resolveIcon(g.icon);
-              const isActive = g.id === activeId;
-              return (
-                <li key={g.id} className="shrink-0 lg:shrink">
-                  <button
-                    onClick={() => setActiveId(g.id)}
-                    className={cn(
-                      'group relative flex w-full min-w-[230px] items-center gap-3 rounded-2xl px-4 py-3.5 text-left transition-colors lg:min-w-0',
-                      isActive ? 'text-white' : 'text-white/55 hover:text-white/85'
-                    )}
-                  >
-                    {isActive && (
-                      <motion.span
-                        layoutId="pb-skill-active"
-                        className="absolute inset-0 rounded-2xl border border-white/[0.12] bg-white/[0.07] shadow-[0_10px_26px_-12px_rgba(236,72,153,0.45)]"
-                        transition={{ type: 'spring', stiffness: 400, damping: 34 }}
-                      />
-                    )}
-                    {isActive && (
-                      <motion.span
-                        layoutId="pb-skill-bar"
-                        className="absolute inset-y-2.5 left-0 w-1 rounded-full"
-                        style={{ background: 'linear-gradient(180deg,#f97316,#ec4899)' }}
-                        transition={{ type: 'spring', stiffness: 400, damping: 34 }}
-                      />
-                    )}
-                    <span
-                      className={cn(
-                        'relative z-10 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border transition-colors',
-                        isActive
-                          ? 'border-orange-400/30 bg-gradient-to-br from-orange-500/25 to-pink-500/15 text-orange-200'
-                          : 'border-white/[0.08] bg-white/[0.03] text-white/45 group-hover:text-white/70'
-                      )}
-                    >
-                      <GIcon size={15} />
-                    </span>
-                    <span className="relative z-10 min-w-0">
-                      <span className="block truncate font-display text-[13px] font-semibold leading-tight">{g.title}</span>
-                      <span className="mt-0.5 block font-mono text-[10.5px] text-white/40">{g.items.length} skills</span>
-                    </span>
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
+      <motion.p
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+        className="-mt-2 mb-8 max-w-2xl text-sm leading-relaxed text-white/55"
+      >
+        Six core skills — each linked to the roles and projects where it was applied. Select one for the detail.
+      </motion.p>
 
-        {/* ── Detail pane ── */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={active.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -12 }}
-            transition={{ duration: 0.36, ease: [0.22, 1, 0.36, 1] }}
-            className="min-w-0"
-          >
-            <BentoGrid glowColor={GLOW.violet} className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {/* description card with artwork */}
-              <BentoCard glowColor={GLOW.orange} className="col-span-1 p-0 sm:col-span-2 lg:col-span-3">
-                <div className="relative flex h-full flex-col sm:flex-row">
-                  <div className="relative h-36 w-full shrink-0 sm:h-auto sm:min-h-[150px] sm:w-2/5">
-                    <Artwork spec={active.art} seed={active.id} className="absolute inset-0 h-full w-full" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#100b18] via-transparent to-transparent sm:bg-gradient-to-r sm:from-transparent sm:via-[#100b18]/10 sm:to-[#100b18]" />
-                  </div>
-                  <div className="flex flex-1 flex-col justify-center gap-2.5 px-6 py-5">
-                    <div className="flex flex-wrap items-center gap-3">
-                      <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-orange-400/30 bg-gradient-to-br from-orange-500/25 to-pink-500/15 text-orange-200">
-                        <Icon size={17} />
-                      </span>
-                      <h3 className="font-display text-xl font-bold text-white sm:text-2xl">{active.title}</h3>
-                      <Chip className="font-mono !text-[10px] text-white/50">{active.index}</Chip>
-                    </div>
-                    <p className="text-[13.5px] leading-relaxed text-white/55">{active.description}</p>
-                  </div>
-                </div>
-              </BentoCard>
-
-              {/* one card per skill */}
-              {active.items.map((s, i) => (
-                <BentoCard
-                  key={s.name}
-                  glowColor={RING_GLOWS[i % 3]}
-                  className="items-center px-5 py-6 text-center"
-                >
-                  <LevelRing level={s.level} delay={0.15 + i * 0.06} />
-                  <p className="mt-3.5 font-display text-[13.5px] font-semibold leading-tight text-white/90">{s.name}</p>
-                  <div className="mt-2 flex flex-wrap items-center justify-center gap-1.5">
-                    {s.badge && (
-                      <Chip className="!border-violet-400/25 !bg-violet-500/10 !px-2 !py-0.5 !text-[10px] text-violet-200">
-                        {s.badge}
-                      </Chip>
-                    )}
-                    {yearsOf(s) && (
-                      <span className="font-mono text-[10px] text-white/40">{yearsOf(s)}</span>
-                    )}
-                  </div>
-                </BentoCard>
-              ))}
-            </BentoGrid>
-          </motion.div>
-        </AnimatePresence>
+      {/* ── Selector: one tile per core skill ── */}
+      <div className="mb-3 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+        {coreSkills.map((skill) => {
+          const isActive = skill.id === activeId;
+          return (
+            <button
+              key={skill.id}
+              type="button"
+              onClick={() => setActiveId(skill.id)}
+              aria-pressed={isActive}
+              className={cn(
+                'group relative overflow-hidden rounded-3xl border p-4 text-left outline-none transition-colors duration-300 focus-visible:ring-2 focus-visible:ring-pink-400/50',
+                isActive
+                  ? 'border-white/[0.12] bg-white/[0.07]'
+                  : 'border-white/[0.08] bg-white/[0.035] hover:border-white/[0.12] hover:bg-white/[0.05]'
+              )}
+            >
+              {isActive && (
+                <motion.span
+                  layoutId="pb-skill-bar"
+                  className="absolute inset-y-0 left-0 w-1"
+                  style={{ background: 'linear-gradient(180deg,#f97316,#ec4899)' }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 34 }}
+                />
+              )}
+              <span
+                className={cn(
+                  'flex h-9 w-9 items-center justify-center rounded-xl border transition-colors',
+                  isActive
+                    ? 'border-orange-400/30 bg-gradient-to-br from-orange-500/25 to-pink-500/15 text-orange-200'
+                    : 'border-white/[0.08] bg-white/[0.03] text-white/45 group-hover:text-white/70'
+                )}
+              >
+                <DataIcon name={skill.icon} size={15} />
+              </span>
+              <p
+                className={cn(
+                  'mt-3 font-display text-[12.5px] font-semibold leading-tight',
+                  isActive ? 'text-white' : 'text-white/70 group-hover:text-white/90'
+                )}
+              >
+                {skill.title}
+              </p>
+              <p className="mt-1 font-mono text-[10px] text-white/35">{skill.index}</p>
+            </button>
+          );
+        })}
       </div>
+
+      {/* ── Selector: the "Other" toolbox as a slim bar ── */}
+      <button
+        type="button"
+        onClick={() => setActiveId(otherSkills.id)}
+        aria-pressed={isOther}
+        className={cn(
+          'relative mb-4 flex w-full items-center gap-3 overflow-hidden rounded-3xl border px-5 py-3.5 text-left outline-none transition-colors duration-300 focus-visible:ring-2 focus-visible:ring-pink-400/50',
+          isOther
+            ? 'border-white/[0.12] bg-white/[0.07]'
+            : 'border-white/[0.08] bg-white/[0.035] hover:border-white/[0.12] hover:bg-white/[0.05]'
+        )}
+      >
+        {isOther && (
+          <motion.span
+            layoutId="pb-skill-bar"
+            className="absolute inset-y-0 left-0 w-1"
+            style={{ background: 'linear-gradient(180deg,#f97316,#ec4899)' }}
+            transition={{ type: 'spring', stiffness: 400, damping: 34 }}
+          />
+        )}
+        <span
+          className={cn(
+            'flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border transition-colors',
+            isOther
+              ? 'border-violet-400/30 bg-gradient-to-br from-violet-500/25 to-pink-500/15 text-violet-200'
+              : 'border-white/[0.08] bg-white/[0.03] text-white/45'
+          )}
+        >
+          <DataIcon name={otherSkills.icon} size={15} />
+        </span>
+        <span
+          className={cn(
+            'min-w-0 flex-1 truncate font-display text-[13px] font-semibold',
+            isOther ? 'text-white' : 'text-white/70'
+          )}
+        >
+          {otherSkills.title}
+        </span>
+        <span className="shrink-0 font-mono text-[10px] text-white/35">
+          {otherSkills.items.length} tools
+        </span>
+      </button>
+
+      {/* ── Stage: the dossier of the selection ── */}
+      <BentoGrid glowColor={GLOW.violet}>
+        <div ref={stageRef}>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeId}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -12 }}
+              transition={{ duration: 0.36, ease: EASE }}
+              className="min-w-0"
+            >
+              <BentoCard
+                glowColor={stageGlow}
+                className={cn(
+                  'p-0',
+                  flash && 'ring-2 ring-pink-400/60 shadow-[0_0_70px_-18px_rgba(236,72,153,0.65)]'
+                )}
+              >
+                {activeSkill ? (
+                  <>
+                    {/* art banner */}
+                    <div className="relative h-32 sm:h-40">
+                      <Artwork
+                        spec={activeSkill.art}
+                        seed={activeSkill.id}
+                        className="absolute inset-0 h-full w-full"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#100b18] to-transparent" />
+                      <div className="absolute bottom-4 left-5 flex items-center gap-3 sm:left-6">
+                        <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-orange-400/30 bg-black/40 text-orange-200 backdrop-blur">
+                          <DataIcon name={activeSkill.icon} />
+                        </span>
+                        <div>
+                          <h3 className="font-display text-xl font-bold text-white sm:text-2xl">
+                            {activeSkill.title}
+                          </h3>
+                          <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-white/45">
+                            {activeSkill.index} / {String(coreSkills.length).padStart(2, '0')} · skill
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="px-5 py-5 sm:px-6">
+                      {/* tagline */}
+                      <p className="text-[14px] font-medium leading-relaxed text-pink-200/90">
+                        {activeSkill.tagline}
+                      </p>
+
+                      {/* narrative */}
+                      <div className="mt-4 space-y-3.5">
+                        {activeSkill.paragraphs.map((p, j) => (
+                          <p
+                            key={j}
+                            className={cn('text-[13px] leading-relaxed', j === 0 ? 'text-white/80' : 'text-white/55')}
+                          >
+                            {p}
+                          </p>
+                        ))}
+                      </div>
+
+                      {/* proof points */}
+                      <div className="mt-5 grid gap-2.5 md:grid-cols-3">
+                        {activeSkill.proofPoints.map((proof, j) => (
+                          <div
+                            key={j}
+                            className="flex items-start gap-2 rounded-2xl border border-white/[0.08] bg-white/[0.03] px-3.5 py-3"
+                          >
+                            <CheckCircle2 size={14} className="mt-0.5 shrink-0 text-orange-300" />
+                            <span className="text-xs leading-relaxed text-white/70">{proof}</span>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* click-through evidence */}
+                      {(activeSkill.experiences.length > 0 || activeSkill.projects.length > 0) && (
+                        <div className="mt-5 border-t border-white/[0.07] pt-4">
+                          <p className="mb-3 font-mono text-[10px] font-semibold uppercase tracking-[0.26em] text-white/40">
+                            Where this shows up
+                          </p>
+                          <div className="flex flex-wrap gap-2">
+                            {activeSkill.experiences.map((exp) => (
+                              <button
+                                key={exp.id}
+                                onClick={() => onNavigate?.('experience', exp.id)}
+                                className="inline-flex items-center gap-2 rounded-full border border-orange-400/25 bg-orange-500/10 px-3.5 py-1.5 text-[11.5px] font-medium text-orange-200 transition-colors hover:border-orange-400/50 hover:bg-orange-500/20"
+                              >
+                                <Briefcase size={12} />
+                                <span>{exp.label}</span>
+                                <span className="font-mono text-[10px] text-orange-300/60">{exp.sublabel}</span>
+                              </button>
+                            ))}
+                            {activeSkill.projects.map((proj) => (
+                              <button
+                                key={proj.id}
+                                onClick={() => onNavigate?.('projects', proj.id)}
+                                className="inline-flex items-center gap-2 rounded-full border border-violet-400/25 bg-violet-500/10 px-3.5 py-1.5 text-[11.5px] font-medium text-violet-200 transition-colors hover:border-violet-400/50 hover:bg-violet-500/20"
+                              >
+                                <FolderGit2 size={12} />
+                                <span>{proj.label}</span>
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </>
+                ) : (
+                  /* ── Other: the long tail, kept as a toolbox ── */
+                  <div className="px-5 py-6 sm:px-6">
+                    <div className="flex flex-wrap items-center gap-3">
+                      <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-violet-400/30 bg-gradient-to-br from-violet-500/25 to-pink-500/15 text-violet-200">
+                        <DataIcon name={otherSkills.icon} />
+                      </span>
+                      <h3 className="font-display text-xl font-bold text-white sm:text-2xl">
+                        {otherSkills.title}
+                      </h3>
+                    </div>
+                    <p className="mt-4 max-w-2xl text-[13.5px] leading-relaxed text-white/55">
+                      {otherSkills.description}
+                    </p>
+                    <div className="mt-6 grid grid-cols-3 gap-x-3 gap-y-6 sm:grid-cols-4">
+                      {otherSkills.items.map((s, i) => {
+                        const years = yearsOf(s);
+                        return (
+                          <div key={s.name} className="flex flex-col items-center gap-2 text-center">
+                            <LevelRing level={s.level} delay={0.1 + i * 0.05} />
+                            <p className="font-display text-[12px] font-semibold leading-tight text-white/85">
+                              {s.name}
+                            </p>
+                            <div className="flex flex-col items-center gap-1">
+                              {s.badge && (
+                                <Chip className="!border-violet-400/25 !bg-violet-500/10 !px-2 !py-0.5 !text-[9.5px] text-violet-200">
+                                  {s.badge}
+                                </Chip>
+                              )}
+                              {years && <span className="font-mono text-[9.5px] text-white/40">{years}</span>}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+              </BentoCard>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      </BentoGrid>
     </section>
   );
 };

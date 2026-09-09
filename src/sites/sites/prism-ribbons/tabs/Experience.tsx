@@ -7,13 +7,13 @@
  */
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown, ChevronRight, MapPin, Sparkles } from 'lucide-react';
-import { experiences } from '@/sites/shared/content';
+import { ChevronDown, ChevronRight, MapPin, Sparkles, Zap } from 'lucide-react';
+import { coreSkills, experiences, type TabNavigate } from '@/sites/shared/content';
 import Artwork from '@/sites/shared/Artwork';
 import { Chip, Metric, Panel, SectionHeading } from '../ui';
 import { cn } from '@/demo/helpers';
 
-const Experience: React.FC = () => {
+const Experience: React.FC<{ onNavigate?: TabNavigate }> = ({ onNavigate }) => {
   const [activeId, setActiveId] = useState(experiences[0].id);
   const [openDeepDive, setOpenDeepDive] = useState(false);
   const active = experiences.find((e) => e.id === activeId) ?? experiences[0];
@@ -170,6 +170,27 @@ const Experience: React.FC = () => {
                   </Panel>
                 </div>
               </div>
+
+              {/* skills demonstrated — click-through to the skills page */}
+              {active.skillIds.length > 0 && (
+                <Panel className="flex flex-wrap items-center gap-2 px-5 py-4">
+                  <span className="inline-flex items-center gap-1 font-mono text-[10px] uppercase tracking-[0.18em] text-slate-500">
+                    <Zap size={11} className="text-cyan-300/70" /> skills demonstrated
+                  </span>
+                  {active.skillIds
+                    .map((sid) => coreSkills.find((s) => s.id === sid))
+                    .filter((s): s is NonNullable<typeof s> => Boolean(s))
+                    .map((skill) => (
+                      <button
+                        key={skill.id}
+                        onClick={() => onNavigate?.('skills', skill.id)}
+                        className="rounded-full border border-cyan-400/25 bg-cyan-500/10 px-3 py-1 text-[11px] font-medium text-cyan-200 transition-colors hover:border-cyan-400/50 hover:bg-cyan-500/20"
+                      >
+                        {skill.title}
+                      </button>
+                    ))}
+                </Panel>
+              )}
 
               {/* deep dive */}
               <Panel className="overflow-hidden">

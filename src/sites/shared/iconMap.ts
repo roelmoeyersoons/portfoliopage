@@ -12,6 +12,8 @@ import {
   Mail,
   Cloud,
   Bot,
+  Compass,
+  GitBranch,
   type LucideIcon,
 } from 'lucide-react';
 
@@ -26,6 +28,8 @@ export const iconMap: Record<string, LucideIcon> = {
   Mail,
   Cloud,
   Bot,
+  Compass,
+  GitBranch,
 };
 
 export function resolveIcon(name: string): LucideIcon {

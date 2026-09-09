@@ -7,13 +7,18 @@
  */
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown, MapPin, Sparkles } from 'lucide-react';
-import { experiences } from '@/sites/shared/content';
+import { ChevronDown, MapPin, Sparkles, Zap } from 'lucide-react';
+import { coreSkills, experiences, type TabFocus, type TabNavigate } from '@/sites/shared/content';
 import Artwork from '@/sites/shared/Artwork';
 import { Chip, Metric, Panel, SectionHeading } from '../ui';
 import { cn } from '@/demo/helpers';
 
-const Experience: React.FC = () => {
+export interface ExperienceTabProps {
+  onNavigate?: TabNavigate;
+  focus?: TabFocus;
+}
+
+const Experience: React.FC<ExperienceTabProps> = ({ onNavigate }) => {
   const [activeId, setActiveId] = useState(experiences[0].id);
   const [openDeepDive, setOpenDeepDive] = useState(false);
   const active = experiences.find((e) => e.id === activeId) ?? experiences[0];
@@ -145,6 +150,29 @@ const Experience: React.FC = () => {
                   </Panel>
                 </div>
               </div>
+
+              {/* skills demonstrated — click-through to the skills page */}
+              {active.skillIds.length > 0 && (
+                <Panel className="px-5 py-5">
+                  <h4 className="mb-3 flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-zinc-400">
+                    <Zap size={12} className="text-violet-300" /> Skills demonstrated
+                  </h4>
+                  <div className="flex flex-wrap gap-2">
+                    {active.skillIds
+                      .map((sid) => coreSkills.find((s) => s.id === sid))
+                      .filter((s): s is NonNullable<typeof s> => Boolean(s))
+                      .map((skill) => (
+                        <button
+                          key={skill.id}
+                          onClick={() => onNavigate?.('skills', skill.id)}
+                          className="rounded-full border border-violet-400/25 bg-violet-500/10 px-3 py-1.5 text-[11.5px] font-medium text-violet-200 transition-colors hover:border-violet-400/50 hover:bg-violet-500/20"
+                        >
+                          {skill.title}
+                        </button>
+                      ))}
+                  </div>
+                </Panel>
+              )}
 
               {/* deep dive */}
               <Panel className="overflow-hidden">

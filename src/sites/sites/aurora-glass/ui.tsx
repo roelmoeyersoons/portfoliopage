@@ -54,10 +54,11 @@ export const SectionHeading: React.FC<{
 );
 
 /** Animated skill level bar with gradient fill */
-export const LevelBar: React.FC<{ name: string; level: number; badge?: string; delay?: number }> = ({
+export const LevelBar: React.FC<{ name: string; level: number; badge?: string; years?: string; delay?: number }> = ({
   name,
   level,
   badge,
+  years,
   delay = 0,
 }) => (
   <div>
@@ -65,6 +66,7 @@ export const LevelBar: React.FC<{ name: string; level: number; badge?: string; d
       <span className="text-sm font-medium text-zinc-200">{name}</span>
       <span className="flex items-center gap-2">
         {badge && <Chip className="!px-2 !py-0.5 !text-[10px] text-violet-300/90">{badge}</Chip>}
+        {years && <span className="font-mono text-[10px] text-zinc-500">{years}</span>}
         <span className="font-mono text-[11px] text-zinc-500">{level}%</span>
       </span>
     </div>

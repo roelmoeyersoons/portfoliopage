@@ -1,4 +1,4 @@
-import { ProfileData, ExperienceItem, ProjectItem, SkillCategory, EducationItem } from '../types/portfolio';
+import { ProfileData, ExperienceItem, ProjectItem, CoreSkill, OtherSkill, EducationItem } from '../types/portfolio';
 
 export const profileData: ProfileData = {
   name: "Roel Moeyersoons",
@@ -44,6 +44,7 @@ export const profileData: ProfileData = {
 export const experiencesData: ExperienceItem[] = [
   {
     id: "baloise-azure-dynamics",
+    skillIds: ["azure-platform", "dynamics-365-power-platform", "applied-ai", "csharp-dotnet", "devops-cicd-iac"],
     role: "IT Consultant — Azure, Dynamics & DevOps",
     company: "Baloise BE (Independent)",
     period: "Aug 2025 — Present",
@@ -90,6 +91,7 @@ export const experiencesData: ExperienceItem[] = [
   },
   {
     id: "reimagine-ai-architect",
+    skillIds: ["applied-ai", "solution-architecture", "azure-platform", "devops-cicd-iac", "csharp-dotnet"],
     role: "AI/.NET Solution Architect & Sr. Cloud Engineer",
     company: "REIMAGINE",
     period: "Nov 2023 — Aug 2025",
@@ -136,6 +138,7 @@ export const experiencesData: ExperienceItem[] = [
   },
   {
     id: "netit-dynamics-consultant",
+    skillIds: ["dynamics-365-power-platform", "csharp-dotnet", "azure-platform", "devops-cicd-iac", "solution-architecture"],
     role: "Dynamics 365 & Power Platform Consultant · SCRUM Master",
     company: "Net IT nv (incl. Mutualités Libres)",
     period: "Sep 2020 — Oct 2023",
@@ -182,6 +185,7 @@ export const experiencesData: ExperienceItem[] = [
   },
   {
     id: "imec-iot-network-engineer",
+    skillIds: [],
     role: "IoT Network Engineer — Summer Job",
     company: "imec",
     period: "Jul 2020 — Aug 2020",
@@ -222,6 +226,7 @@ export const experiencesData: ExperienceItem[] = [
   },
   {
     id: "ugent-informatics-degree",
+    skillIds: ["solution-architecture"],
     role: "B.Sc. + M.Sc. Industrial Sciences: Informatics",
     company: "Ghent University (Universiteit Gent)",
     period: "2016 — 2020",
@@ -271,6 +276,7 @@ export const experiencesData: ExperienceItem[] = [
 export const projectsData: ProjectItem[] = [
   {
     id: "opengl-mandelbrot",
+    skillIds: [],
     title: "OpenGL Mandelbrot Interactive Engine",
     category: "Graphics & GPU Computing",
     tagline: "High-performance fractal visualizer and OpenGL rendering system built in C and GLSL.",
@@ -293,6 +299,7 @@ export const projectsData: ProjectItem[] = [
   },
   {
     id: "multi-radio-mac-protocol",
+    skillIds: ["solution-architecture"],
     title: "Distributed Multi-Radio MAC Protocol",
     category: "Distributed Systems & IoT",
     tagline: "Hybrid Sub-GHz + Ultra-Wideband (UWB) distance determination protocol for dense athlete tracking.",
@@ -313,6 +320,7 @@ export const projectsData: ProjectItem[] = [
   },
   {
     id: "discord-songbot",
+    skillIds: ["csharp-dotnet"],
     title: "Discord SongBot (OGP & Blockchain Bot)",
     category: "Backend & Systems Design",
     tagline: "Object-oriented discord service tracking track ownership using custom blockchain state mechanics.",
@@ -334,6 +342,7 @@ export const projectsData: ProjectItem[] = [
   },
   {
     id: "archconfig",
+    skillIds: ["devops-cicd-iac"],
     title: "ArchConfig Automation Suite",
     category: "DevOps & Tooling",
     tagline: "Automated configuration manager and reproducible dotfiles orchestrator for Linux workstations.",
@@ -355,70 +364,143 @@ export const projectsData: ProjectItem[] = [
   }
 ];
 
-export const skillCategoriesData: SkillCategory[] = [
+/**
+ * The six real skills, ordered by how I want to profile myself:
+ * a Dynamics — Azure — AI technical guy. Each one gets its own section on
+ * the page with a story and linked evidence — no invented percentages.
+ * Everything goes through relatedExperienceIds / relatedProjectIds so the
+ * whole site cross-links: skills ↔ experiences ↔ projects.
+ */
+export const coreSkillsData: CoreSkill[] = [
   {
+    id: "dynamics-365-power-platform",
     title: "Dynamics 365 & Power Platform",
     iconName: "Briefcase",
-    description: "Enterprise applications first: CRM, model-driven apps and Dataverse — extended with C# exactly where the platform ends.",
-    skills: [
-      { name: "Dynamics 365 CE / CRM", level: 90, experienceYears: "5+ yrs", badge: "Core" },
-      { name: "Power Platform (Model-Driven & Canvas Apps)", level: 88, experienceYears: "5+ yrs", badge: "Core" },
-      { name: "Dataverse: solutions, environments & deployment", level: 90, experienceYears: "5+ yrs", badge: "Platform" },
-      { name: "Power Automate & Integrations", level: 87, experienceYears: "4+ yrs", badge: "Flows" },
-      { name: "PAC CLI · Configuration Migration Tool · XrmToolBox", level: 85, experienceYears: "4+ yrs", badge: "First-party" }
-    ]
+    tagline: "Business applications first: CRM people actually use, built properly on Dataverse.",
+    paragraphs: [
+      "This is where I'm most at home. Dynamics 365 CE, model-driven apps, Power Automate, Dataverse — not as demo-ware but as systems that real end-users depend on every day. At Net IT, a Microsoft Gold Partner, I went from junior consultant to Lead Developer & SCRUM Master within two years, owning the code architecture of an enterprise project exceeding 1,000 mandays.",
+      "The proof is in production. At Mutualités Libres we modernized the tooling for over 1,000 end-users and migrated more than 600 of them onto the new CRM — while the customer service team kept working through the whole rollout. Integrations with Dynamics 365 and Azure, automated testing (xUnit, Playwright) and a solid CI/CD pipeline are what made that migration auditable instead of heroic.",
+      "Today at Baloise I still live in this world: delivering feature requests for Azure Cloud and Dynamics 365 applications, developing and administering Dataverse environments, and running solution management and deployment with first-party tooling — PAC CLI, Configuration Migration Tool — plus XrmToolBox where it helps.",
+    ],
+    proofPoints: [
+      "Lead Developer & SCRUM Master on a 1,000+ mandays enterprise project",
+      "600+ users migrated to a new CRM at Mutualités Libres",
+      "4 Dynamics 365 certifications: Sales & Marketing Functional Consultant, Power Apps + D365 Developer Associate",
+    ],
+    relatedExperienceIds: ["netit-dynamics-consultant", "baloise-azure-dynamics"],
+    relatedProjectIds: [],
   },
   {
-    title: "Azure & Cloud Platform",
+    id: "azure-platform",
+    title: "Azure — Platform Engineering",
     iconName: "Cloud",
-    description: "Platform engineering on Azure — governed, automated, and first-party wherever possible.",
-    skills: [
-      { name: "Azure DevOps & GitHub CI/CD", level: 92, experienceYears: "5+ yrs", badge: "Pipelines" },
-      { name: "Infrastructure as Code (Terraform, ARM)", level: 90, experienceYears: "4+ yrs", badge: "IaC" },
-      { name: "Azure Landing Zones & Governance", level: 88, experienceYears: "3+ yrs", badge: "Platform" },
-      { name: "Functions · Logic Apps · Service Bus · Web Apps", level: 90, experienceYears: "5+ yrs", badge: "Services" },
-      { name: "Azure API Management & APIOps", level: 85, experienceYears: "2+ yrs", badge: "APIs" },
-      { name: "Managed Identities & Cloud Security", level: 85, experienceYears: "3+ yrs", badge: "Security" },
-      { name: "Docker & Kubernetes", level: 80, experienceYears: "4+ yrs", badge: "Containers" }
-    ]
+    tagline: "Governed, automated, first-party wherever possible. Certified on it twice over.",
+    paragraphs: [
+      "Azure is my platform — and my focus is the layer underneath the apps: Landing Zones, governance, identity, networking, API management. I hold both AZ-104 (Azure Administrator Associate) and AZ-305 (Azure Solutions Architect Expert), and the second one is the honest job title for what I actually do.",
+      "At Baloise I'm rebuilding years of organically grown resources into a governed estate: migrating unmanaged Azure resources into Azure Landing Zones, moving Logic Apps from consumption to the standard plan, replacing secret-based authentication with managed identities across APIM, Function Apps and Logic Apps, and centralizing Azure API Management through APIOps — heavy use of policies, OpenAPI specs, schemas, API versioning, backends and monitoring.",
+      "At Reimagine it was the same instinct at smaller scale: subscription and resource group management, and picking the right Azure services per project — Web Apps, Functions, Logic Apps, Service Bus, Virtual Networks — rather than defaulting to whatever I knew best last year.",
+    ],
+    proofPoints: [
+      "AZ-305 Azure Solutions Architect Expert · AZ-104 Azure Administrator Associate",
+      "Full Azure Landing Zones migration & centralized APIM via APIOps at Baloise",
+      "Managed identities everywhere the platform allows — no more secret sprawl",
+    ],
+    relatedExperienceIds: ["baloise-azure-dynamics", "reimagine-ai-architect", "netit-dynamics-consultant"],
+    relatedProjectIds: [],
   },
   {
-    title: "Languages",
-    iconName: "Code2",
-    description: "The languages I think in — application code first, scripting and data close behind.",
-    skills: [
-      { name: "C# / .NET (Framework & Core)", level: 93, experienceYears: "6+ yrs", badge: "Primary" },
-      { name: "TypeScript / JavaScript", level: 90, experienceYears: "6+ yrs", badge: "Primary" },
-      { name: "SQL", level: 88, experienceYears: "6+ yrs", badge: "Data" },
-      { name: "Python", level: 85, experienceYears: "5+ yrs", badge: "AI & Scripting" },
-      { name: "React & Modern Frontend", level: 85, experienceYears: "5+ yrs", badge: "UI" },
-      { name: "Bash / Shell", level: 82, experienceYears: "6+ yrs", badge: "DevOps" }
-    ]
-  },
-  {
-    title: "AI & Applied LLMs",
+    id: "applied-ai",
+    title: "AI — Applied, Not Hyped",
     iconName: "Bot",
-    description: "My current passion: integrating AI where it genuinely multiplies a team's output. (Section still growing.)",
-    skills: [
-      { name: "LLM Integration (GPT-4, Azure OpenAI)", level: 85, experienceYears: "3+ yrs", badge: "Production" },
-      { name: "Claude Code & Agentic Dev Workflows", level: 82, experienceYears: "1+ yr", badge: "Daily" },
-      { name: "Local Models (Ollama) & FastAPI Serving", level: 75, experienceYears: "2+ yrs", badge: "Exploring" },
-      { name: "AI-Assisted Quality Gates & Validation Pipelines", level: 78, experienceYears: "1+ yr", badge: "Emerging" }
-    ]
+    tagline: "LLM features that survive contact with a business, and agentic tooling that multiplies a team.",
+    paragraphs: [
+      "I'm not an AI researcher — I'm the engineer who ships AI where it earns its keep. At Reimagine, a consultancy that designs AI solutions, that was literally the job: integrating GPT-4 into production websites and backends using Azure OpenAI Studio, Ollama and FastAPI, across Python, C#/.NET Core and TypeScript codebases. One rule I kept everywhere: isolate the model behind a clean service boundary, because today's best model is next year's legacy dependency.",
+      "The newer chapter is agentic. At Baloise I set up the team's Claude Code development environment — implementing agents, automated checks and validation pipelines — and I use it daily as a genuine productivity multiplier. What makes it work is not the model; it's the strictness of the validation pipeline around it.",
+      "That's my honest position on AI: it is worth exactly what the surrounding engineering makes of it. Passionate about it, yes — but I measure it in working features and saved hours, not demos.",
+    ],
+    proofPoints: [
+      "GPT-4 integrated into production customer solutions (Azure OpenAI, Ollama, FastAPI)",
+      "Team-wide Claude Code environment: agents, automated checks, validation pipelines",
+      "AI features designed for swap-out — isolated behind service boundaries",
+    ],
+    relatedExperienceIds: ["reimagine-ai-architect", "baloise-azure-dynamics"],
+    relatedProjectIds: [],
   },
   {
-    title: "Other & Low-Level",
-    iconName: "Cpu",
-    description: "The long tail from my engineering degree and research — systems, wireless and graphics work that sharpened the fundamentals.",
-    skills: [
-      { name: "Distributed MAC Protocols & UWB Ranging", level: 88, badge: "M.Sc. Thesis" },
-      { name: "Linux / Arch & Systems Tooling", level: 85, badge: "OS" },
-      { name: "C / C++ & Embedded Systems", level: 80, badge: "Low-Level" },
-      { name: "OpenGL / GLSL & GPU Compute", level: 78, badge: "Graphics" },
-      { name: "IoT Networking (IPv6, MQTT)", level: 75, badge: "imec" },
-      { name: "MATLAB & Simulation", level: 72, badge: "Research" }
-    ]
-  }
+    id: "csharp-dotnet",
+    title: "C# / .NET Engineering",
+    iconName: "Code2",
+    tagline: "The language I think in — written for the next maintainer, not just for the demo.",
+    paragraphs: [
+      "Six-plus years of C# across .NET Framework and .NET Core: ASP.NET backends, Azure Functions, Dynamics plugin work, and the occasional side project with deliberately strict SOLID design. At Net IT I applied SOLID principles and Test-Driven Development daily, in C# and TypeScript side by side.",
+      "What distinguishes my .NET work lately is quality enforcement at team scale. At Baloise I introduced first-party coding standards: .editorconfig enforced at repository level, .NET analyzers with a managed warning count, migration of MSBuild-style projects to SDK-style — which reduced build complexity tremendously — plus a deliberate reduction of third-party nuget packages to shrink the supply-chain attack surface. Conventions are opinions; tooling is policy.",
+      "Back in 2022 this craft got external validation: 2nd place in the .NET Challenge Belgium, professional category.",
+    ],
+    proofPoints: [
+      "First-party quality control: .editorconfig, .NET analysers, SDK-style migrations",
+      "2nd place .NET Challenge Belgium 2022 (professional category)",
+      "SOLID + TDD on enterprise delivery (xUnit, Playwright test frameworks)",
+    ],
+    relatedExperienceIds: ["baloise-azure-dynamics", "reimagine-ai-architect", "netit-dynamics-consultant"],
+    relatedProjectIds: ["discord-songbot"],
+  },
+  {
+    id: "devops-cicd-iac",
+    title: "DevOps, CI/CD & Infrastructure as Code",
+    iconName: "GitBranch",
+    tagline: "If it isn't reproducible, it isn't done. My LinkedIn top skills — IaC and Terraform — agree.",
+    paragraphs: [
+      "DevOps is how quality scales beyond one careful developer. Every project I've led got its own CI/CD pipelines modeling its actual process — on Azure DevOps or GitHub — instead of a copy-pasted template nobody reads.",
+      "Infrastructure as Code is the strongest thread through my last three roles: Terraform and ARM templates at Reimagine, test automation and pipeline work at Net IT, and at Baloise the full monty — a complete Infrastructure-as-Code setup in Terraform built from scratch, a reviewed git setup, and supply-chain risk reduced by cutting third-party tooling. Even my hobby automation (dotfiles and machine provisioning for Arch Linux) is the same instinct at kitchen-table scale: declare the end state, script the path there.",
+      "I care about this because deployments are where architecture gets honest. A pipeline that can't rebuild the environment is a liability, not a convenience.",
+    ],
+    proofPoints: [
+      "Full Terraform IaC estate built from scratch at Baloise",
+      "Project-specific CI/CD on Azure DevOps & GitHub (Reimagine, Net IT)",
+      "Automated testing frameworks (xUnit, Playwright) wired into delivery pipelines",
+    ],
+    relatedExperienceIds: ["baloise-azure-dynamics", "reimagine-ai-architect", "netit-dynamics-consultant"],
+    relatedProjectIds: ["archconfig"],
+  },
+  {
+    id: "solution-architecture",
+    title: "Solution Architecture",
+    iconName: "Compass",
+    tagline: "The fewest moving parts that solve the business problem — designed with the customer, approved with the budget.",
+    paragraphs: [
+      "Architecture, to me, is choosing what not to build. At Reimagine every project needed its own optimal set of Azure & Microsoft services; I designed each one, got the design and the budget approved by the customer, and then carried technical delivery as the senior developer. Business and functional analysis from stakeholder meetings fed straight into the technical design — the same conversation, not a game of telephone.",
+      "My engineering degree is the quiet advantage here. Networking, security, operating systems, electronics — the broad curriculum is why I can walk into an unfamiliar domain and still see the whole board. My master's thesis at IDLab went all the way from designing a distributed multi-radio MAC protocol to validating it on hardware: my first end-to-end ownership of a system, and still the reference point for how I approach architecture.",
+      "AZ-305 (Azure Solutions Architect Expert) certifies the practice; magna cum laude on the degree backs the foundation.",
+    ],
+    proofPoints: [
+      "Per-project solution designs approved by customers at Reimagine (design + budget)",
+      "AZ-305 Azure Solutions Architect Expert",
+      "Magna cum laude M.Sc. — thesis: distributed multi-radio MAC protocol (IDLab, UGent)",
+    ],
+    relatedExperienceIds: ["reimagine-ai-architect", "ugent-informatics-degree", "netit-dynamics-consultant"],
+    relatedProjectIds: ["multi-radio-mac-protocol"],
+  },
+];
+
+/**
+ * The long tail: technologies I've used at some point. Percentages kept
+ * (per request) — read them as "roughly how central this became in my
+ * work", not as a proficiency claim. This list is intentionally not
+ * profiled; the six skills above are.
+ */
+export const otherSkillsData: OtherSkill[] = [
+  { name: "TypeScript / JavaScript", level: 90, experienceYears: "6+ yrs", badge: "Pair of C#" },
+  { name: "Distributed MAC Protocols & UWB", level: 88, badge: "M.Sc. Thesis" },
+  { name: "SQL", level: 88, experienceYears: "6+ yrs" },
+  { name: "Python", level: 85, experienceYears: "5+ yrs", badge: "AI & Scripting" },
+  { name: "React & Modern Frontend", level: 85, experienceYears: "5+ yrs" },
+  { name: "Linux / Arch & Systems Tooling", level: 85, badge: "Daily driver" },
+  { name: "Bash / Shell", level: 82, experienceYears: "6+ yrs" },
+  { name: "Docker & Kubernetes", level: 80, experienceYears: "4+ yrs" },
+  { name: "C / C++ & Embedded", level: 80, badge: "Degree & imec" },
+  { name: "OpenGL / GLSL & GPU Compute", level: 78, badge: "Side project" },
+  { name: "IoT Networking (IPv6, MQTT)", level: 75, badge: "imec" },
+  { name: "MATLAB & Simulation", level: 72, badge: "Research" },
 ];
 
 export const educationData: EducationItem = {

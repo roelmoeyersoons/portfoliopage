@@ -1,151 +1,289 @@
 /**
- * Prism Ribbons — Skills tab.
+ * Prism Ribbons — Skills tab
  *
- * LEFT menu (same pattern as Experience) + MAIN pane: art banner, prism
- * gradient level bars and an AnimatedList of category highlights.
+ * Selector + stage: a compact prism tile grid lists the six core skills
+ * (plus a slim bar for the "Other" toolbox) — clicking one opens its
+ * dossier in the stage below: artwork banner, PrismText tagline, the
+ * narrative, proof points, and links into Experience/Projects. Cross-tab
+ * focus (from Experience/Projects) opens the requested skill and flashes
+ * the stage with the prism gradient ring.
  */
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Award } from 'lucide-react';
-import { AnimatedList } from '@/sites/shared/bits';
-import { skillGroups } from '@/sites/shared/content';
+import { Briefcase, CheckCircle2, FolderGit2 } from 'lucide-react';
+import {
+  coreSkills,
+  otherSkills,
+  type OtherSkillsGroup,
+  type TabFocus,
+  type TabNavigate,
+} from '@/sites/shared/content';
 import { resolveIcon } from '@/sites/shared/iconMap';
 import Artwork from '@/sites/shared/Artwork';
-import { Chip, LevelBar, Panel, PrismText, SectionHeading } from '../ui';
+import { LevelBar, Panel, PrismText, SectionHeading } from '../ui';
 import { cn } from '@/demo/helpers';
 
-/** content.ts types items as {name, level, years?, badge?} — the raw data
- *  actually carries `experienceYears`; read it defensively. */
-type SkillItem = { name: string; level: number; badge?: string; experienceYears?: string };
+export interface SkillsTabProps {
+  onNavigate?: TabNavigate;
+  focus?: TabFocus;
+}
 
-const Skills: React.FC = () => {
-  const [activeId, setActiveId] = useState(skillGroups[0].id);
-  const active = skillGroups.find((s) => s.id === activeId) ?? skillGroups[0];
-  const Icon = resolveIcon(active.icon);
+const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
-  const highlights = (active.items as SkillItem[])
-    .slice()
-    .sort((a, b) => b.level - a.level)
-    .slice(0, 4)
-    .map((s) => {
-      const bits = [`${s.name} — ${s.level}%`];
-      if (s.experienceYears) bits.push(s.experienceYears);
-      if (s.badge) bits.push(s.badge);
-      return bits.join('  ·  ');
-    });
+/** content.ts types other-skill items as `years?`; the shared data may carry `experienceYears`. */
+const yearsOf = (s: OtherSkillsGroup['items'][number]): string | undefined =>
+  s.years ?? (s as { experienceYears?: string }).experienceYears;
+
+const Skills: React.FC<SkillsTabProps> = ({ onNavigate, focus }) => {
+  const [activeId, setActiveId] = useState(coreSkills[0].id);
+  const [flash, setFlash] = useState(false);
+  const stageRef = useRef<HTMLDivElement>(null);
+
+  const activeSkill = coreSkills.find((s) => s.id === activeId) ?? null;
+  const isOther = activeId === otherSkills.id;
+
+  // Cross-tab focus (from Experience/Projects): open that skill and flash
+  // the stage. Site resets scroll on tab switch; a gentle nudge keeps the
+  // stage in view on small screens.
+  useEffect(() => {
+    if (!focus) return;
+    if (focus.id !== otherSkills.id && !coreSkills.some((s) => s.id === focus.id)) return;
+    setActiveId(focus.id);
+    setFlash(true);
+    const t = window.setTimeout(() => {
+      stageRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 150);
+    const clear = window.setTimeout(() => setFlash(false), 4000);
+    return () => {
+      window.clearTimeout(t);
+      window.clearTimeout(clear);
+    };
+  }, [focus?.nonce, focus?.id]);
 
   return (
     <section className="mx-auto max-w-6xl px-5 pb-28 pt-28">
-      <SectionHeading kicker="Toolkit" title="Skills, split into" accent="spectrum" />
+      <SectionHeading kicker="Toolkit" title="Skills" />
 
-      <div className="grid gap-5 lg:grid-cols-[320px_1fr]">
-        {/* ── Left menu ── */}
-        <Panel className="h-max overflow-hidden lg:sticky lg:top-24">
-          <div className="border-b border-white/[0.07] px-4 pb-3 pt-4">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-slate-500">Select a category</p>
-          </div>
-          <ul className="flex gap-1.5 overflow-x-auto p-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:flex-col lg:overflow-visible">
-            {skillGroups.map((g) => {
-              const GIcon = resolveIcon(g.icon);
-              const isActive = g.id === activeId;
-              return (
-                <li key={g.id} className="shrink-0 lg:shrink" style={{ perspective: '900px' }}>
-                  <motion.button
-                    onClick={() => setActiveId(g.id)}
-                    animate={{ rotateY: isActive ? 4 : 0, x: isActive ? 4 : 0 }}
-                    transition={{ type: 'spring', stiffness: 260, damping: 22 }}
-                    className={cn(
-                      'relative block w-full min-w-[232px] rounded-2xl p-[1px] text-left transition-[background] duration-300 lg:min-w-0',
-                      isActive
-                        ? 'bg-gradient-to-br from-cyan-400/70 via-violet-400/60 to-pink-400/70 shadow-[0_10px_32px_rgba(167,139,250,0.22)]'
-                        : 'bg-transparent hover:bg-white/[0.06]'
-                    )}
-                  >
-                    <span
-                      className={cn(
-                        'relative flex items-center gap-3 rounded-[15px] px-3.5 py-3 transition-colors duration-300',
-                        isActive ? 'bg-[#0b0d15]/95' : 'bg-transparent'
-                      )}
-                    >
-                      <span
-                        className={cn(
-                          'flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border transition-colors',
-                          isActive
-                            ? 'border-violet-400/30 bg-gradient-to-br from-cyan-500/25 via-violet-500/20 to-pink-500/15 text-violet-200'
-                            : 'border-white/[0.07] bg-white/[0.03] text-slate-500'
-                        )}
-                      >
-                        <GIcon size={14} />
-                      </span>
-                      <span className="min-w-0">
-                        <span
-                          className={cn(
-                            'block truncate text-[13px] font-medium leading-tight transition-colors',
-                            isActive ? 'text-white' : 'text-slate-400'
-                          )}
-                        >
-                          {g.title}
-                        </span>
-                        <span className="mt-0.5 block text-[11px] text-slate-500">{g.items.length} skills</span>
-                      </span>
-                    </span>
-                  </motion.button>
-                </li>
-              );
-            })}
-          </ul>
-        </Panel>
+      <motion.p
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+        className="-mt-2 mb-8 max-w-2xl text-sm leading-relaxed text-slate-400"
+      >
+        Six core skills — each linked to the roles and projects where it was applied. Select one for the detail.
+      </motion.p>
 
-        {/* ── Detail pane ── */}
+      {/* ── Selector: one prism tile per core skill ── */}
+      <div className="mb-3 grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-6">
+        {coreSkills.map((skill) => {
+          const isActive = skill.id === activeId;
+          const GIcon = resolveIcon(skill.icon);
+          return (
+            <button
+              key={skill.id}
+              type="button"
+              onClick={() => setActiveId(skill.id)}
+              aria-pressed={isActive}
+              className={cn(
+                'relative block w-full overflow-hidden rounded-2xl p-[1px] text-left outline-none transition-[background,box-shadow] duration-300 focus-visible:ring-2 focus-visible:ring-violet-400/50',
+                isActive
+                  ? 'bg-gradient-to-br from-cyan-400/70 via-violet-400/60 to-pink-400/70 shadow-[0_10px_32px_rgba(167,139,250,0.22)]'
+                  : 'bg-white/[0.07] hover:bg-white/[0.16]'
+              )}
+            >
+              <span className="relative flex flex-col rounded-[15px] bg-[#0b0d15]/95 p-3.5">
+                <span
+                  className={cn(
+                    'flex h-8 w-8 items-center justify-center rounded-lg border transition-colors',
+                    isActive
+                      ? 'border-violet-400/30 bg-gradient-to-br from-cyan-500/25 via-violet-500/20 to-pink-500/15 text-violet-200'
+                      : 'border-white/[0.07] bg-white/[0.03] text-slate-500'
+                  )}
+                >
+                  <GIcon size={14} />
+                </span>
+                <span
+                  className={cn(
+                    'mt-2.5 block text-[12px] font-medium leading-tight transition-colors',
+                    isActive ? 'text-white' : 'text-slate-400'
+                  )}
+                >
+                  {skill.title}
+                </span>
+                <span className="mt-1 block font-mono text-[9.5px] text-slate-500">{skill.index}</span>
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* ── Selector: the "Other" toolbox as a slim bar ── */}
+      <button
+        type="button"
+        onClick={() => setActiveId(otherSkills.id)}
+        aria-pressed={isOther}
+        className={cn(
+          'relative mb-4 block w-full overflow-hidden rounded-2xl p-[1px] text-left outline-none transition-[background,box-shadow] duration-300 focus-visible:ring-2 focus-visible:ring-violet-400/50',
+          isOther
+            ? 'bg-gradient-to-br from-cyan-400/70 via-violet-400/60 to-pink-400/70 shadow-[0_10px_32px_rgba(167,139,250,0.22)]'
+            : 'bg-white/[0.07] hover:bg-white/[0.16]'
+        )}
+      >
+        <span className="relative flex items-center gap-3 rounded-[15px] bg-[#0b0d15]/95 px-5 py-3">
+          <span
+            className={cn(
+              'flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border transition-colors',
+              isOther
+                ? 'border-violet-400/30 bg-gradient-to-br from-cyan-500/25 via-violet-500/20 to-pink-500/15 text-violet-200'
+                : 'border-white/[0.07] bg-white/[0.03] text-slate-500'
+            )}
+          >
+            {(() => {
+              const OIcon = resolveIcon(otherSkills.icon);
+              return <OIcon size={14} />;
+            })()}
+          </span>
+          <span
+            className={cn(
+              'min-w-0 flex-1 truncate text-[13px] font-medium',
+              isOther ? 'text-white' : 'text-slate-400'
+            )}
+          >
+            {otherSkills.title}
+          </span>
+          <span className="shrink-0 font-mono text-[10px] text-slate-500">
+            {otherSkills.items.length} tools
+          </span>
+        </span>
+      </button>
+
+      {/* ── Stage: the dossier of the selection ── */}
+      <div ref={stageRef}>
         <AnimatePresence mode="wait">
           <motion.div
-            key={active.id}
+            key={activeId}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -12 }}
-            transition={{ duration: 0.36, ease: [0.22, 1, 0.36, 1] }}
-            className="min-w-0 space-y-5"
+            transition={{ duration: 0.36, ease: EASE }}
+            className="min-w-0"
           >
-            <Panel className="overflow-hidden">
-              <div className="relative h-32 sm:h-40">
-                <Artwork spec={active.art} seed={active.id} className="absolute inset-0 h-full w-full" />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#07080d] to-transparent" />
-                <div className="absolute bottom-4 left-5 flex items-center gap-3">
-                  <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-cyan-400/30 bg-black/40 text-cyan-200 backdrop-blur">
-                    <Icon size={17} />
-                  </span>
-                  <div>
-                    <h3 className="font-serif text-xl font-medium text-white sm:text-2xl">{active.title}</h3>
-                    <p className="text-[11px] uppercase tracking-[0.18em] text-slate-400">
-                      {active.index} · spectrum band
+            <Panel
+              className={cn(
+                'overflow-hidden transition-shadow duration-500',
+                flash && 'ring-2 ring-violet-400/50 shadow-[0_0_70px_-18px_rgba(167,139,250,0.6)]'
+              )}
+            >
+              {activeSkill ? (
+                <>
+                  {/* art banner */}
+                  <div className="relative h-32 sm:h-40">
+                    <Artwork spec={activeSkill.art} seed={activeSkill.id} className="absolute inset-0 h-full w-full" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0d0d14] to-transparent" />
+                    <div className="absolute bottom-4 left-5 flex items-center gap-3">
+                      <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-cyan-400/30 bg-black/40 text-cyan-200 backdrop-blur">
+                        {(() => {
+                          const Icon = resolveIcon(activeSkill.icon);
+                          return <Icon size={17} />;
+                        })()}
+                      </span>
+                      <div>
+                        <h3 className="font-serif text-xl font-medium text-white sm:text-2xl">{activeSkill.title}</h3>
+                        <p className="text-[10px] uppercase tracking-[0.2em] text-slate-400">
+                          {activeSkill.index} / {String(coreSkills.length).padStart(2, '0')} · skill
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="px-5 py-5 sm:px-6">
+                    {/* tagline */}
+                    <p className="font-serif text-[15px] italic leading-relaxed text-violet-200/90">
+                      <PrismText>{activeSkill.tagline}</PrismText>
                     </p>
+
+                    {/* narrative */}
+                    <div className="mt-4 space-y-3.5">
+                      {activeSkill.paragraphs.map((p, j) => (
+                        <p key={j} className={cn('text-sm leading-relaxed', j === 0 ? 'text-slate-200' : 'text-slate-400')}>
+                          {p}
+                        </p>
+                      ))}
+                    </div>
+
+                    {/* proof points */}
+                    <div className="mt-5 grid gap-2.5 md:grid-cols-3">
+                      {activeSkill.proofPoints.map((proof, j) => (
+                        <div
+                          key={j}
+                          className="flex items-start gap-2 rounded-xl border border-white/[0.06] bg-white/[0.03] px-3.5 py-3"
+                        >
+                          <CheckCircle2 size={14} className="mt-0.5 shrink-0 text-emerald-300/90" />
+                          <span className="text-xs leading-relaxed text-slate-300">{proof}</span>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* click-through evidence */}
+                    {(activeSkill.experiences.length > 0 || activeSkill.projects.length > 0) && (
+                      <div className="mt-5 border-t border-white/[0.07] pt-4">
+                        <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+                          Where this shows up
+                        </p>
+                        <div className="flex flex-wrap gap-2">
+                          {activeSkill.experiences.map((exp) => (
+                            <button
+                              key={exp.id}
+                              onClick={() => onNavigate?.('experience', exp.id)}
+                              className="inline-flex items-center gap-2 rounded-full border border-cyan-400/25 bg-cyan-500/10 px-3.5 py-1.5 text-[11.5px] font-medium text-cyan-200 transition-colors hover:border-cyan-400/50 hover:bg-cyan-500/20"
+                            >
+                              <Briefcase size={12} />
+                              <span>{exp.label}</span>
+                              <span className="font-mono text-[10px] text-cyan-300/60">{exp.sublabel}</span>
+                            </button>
+                          ))}
+                          {activeSkill.projects.map((proj) => (
+                            <button
+                              key={proj.id}
+                              onClick={() => onNavigate?.('projects', proj.id)}
+                              className="inline-flex items-center gap-2 rounded-full border border-pink-400/25 bg-pink-500/10 px-3.5 py-1.5 text-[11.5px] font-medium text-pink-200 transition-colors hover:border-pink-400/50 hover:bg-pink-500/20"
+                            >
+                              <FolderGit2 size={12} />
+                              <span>{proj.label}</span>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </>
+              ) : (
+                /* ── Other: the long tail ── */
+                <div className="px-5 py-6 sm:px-6">
+                  <div className="flex flex-wrap items-center gap-3">
+                    <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-violet-400/30 bg-gradient-to-br from-cyan-500/25 via-violet-500/20 to-pink-500/15 text-violet-200">
+                      {(() => {
+                        const OIcon = resolveIcon(otherSkills.icon);
+                        return <OIcon size={17} />;
+                      })()}
+                    </span>
+                    <h3 className="font-serif text-xl font-medium text-slate-50 sm:text-2xl">{otherSkills.title}</h3>
+                  </div>
+                  <p className="mt-4 max-w-2xl text-sm leading-relaxed text-slate-400">{otherSkills.description}</p>
+                  <div className="mt-6 grid gap-x-10 gap-y-5 md:grid-cols-2">
+                    {otherSkills.items.map((s, i) => (
+                      <LevelBar
+                        key={s.name}
+                        name={s.name}
+                        level={s.level}
+                        years={yearsOf(s)}
+                        badge={s.badge}
+                        delay={i * 0.04}
+                      />
+                    ))}
                   </div>
                 </div>
-              </div>
-              <p className="px-5 py-4 text-sm leading-relaxed text-slate-400">{active.description}</p>
-            </Panel>
-
-            <Panel className="space-y-5 px-5 py-6">
-              {active.items.map((s, i) => (
-                <LevelBar key={s.name} name={s.name} level={s.level} badge={s.badge} delay={i * 0.06} />
-              ))}
-            </Panel>
-
-            <Panel className="px-5 py-5">
-              <h4 className="mb-3 flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">
-                <Award size={12} className="text-cyan-300" />
-                <span>
-                  Highlights — <PrismText className="italic">top of the stack</PrismText>
-                </span>
-              </h4>
-              <AnimatedList
-                items={highlights}
-                enableArrowNavigation={false}
-                showGradients={false}
-                displayScrollbar={false}
-                className="max-w-full"
-                itemClassName="!rounded-xl !bg-white/[0.045] border border-white/[0.08]"
-              />
+              )}
             </Panel>
           </motion.div>
         </AnimatePresence>

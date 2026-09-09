@@ -10,7 +10,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { GradualBlur } from '@/sites/shared/bits';
 
-import { siteTabs, profile, type TabId } from '@/sites/shared/content';
+import { siteTabs, profile, type TabId, type TabFocus } from '@/sites/shared/content';
 import { cn } from '@/demo/helpers';
 import Hero from './tabs/Hero';
 import Experience from './tabs/Experience';
@@ -19,9 +19,15 @@ import Projects from './tabs/Projects';
 import About from './tabs/About';
 import Contact from './tabs/Contact';
 
-export type TabNavigate = (tab: TabId) => void;
+export type TabNavigate = (tab: TabId, focusId?: string) => void;
 
-const TAB_VIEWS: Record<TabId, React.ComponentType<{ onNavigate?: TabNavigate }>> = {
+export interface TabProps {
+  onNavigate?: TabNavigate;
+  /** Cross-tab focus (e.g. a skill id from Experience) — undefined unless targeted. */
+  focus?: TabFocus;
+}
+
+const TAB_VIEWS: Record<TabId, React.ComponentType<TabProps>> = {
   home: Hero,
   experience: Experience,
   skills: Skills,
@@ -32,6 +38,7 @@ const TAB_VIEWS: Record<TabId, React.ComponentType<{ onNavigate?: TabNavigate }>
 
 const Site: React.FC = () => {
   const [tab, setTab] = useState<TabId>('home');
+  const [focus, setFocus] = useState<({ tab: TabId } & TabFocus) | null>(null);
   const ActiveView = TAB_VIEWS[tab];
 
   // Each tab is its own page: reset the scroll position when it changes.
@@ -46,7 +53,8 @@ const Site: React.FC = () => {
   // ignore tab clicks until the running exit has fully completed. (Clicks
   // during the enter phase are fine — that exit runs to completion normally.)
   const swapLockRef = useRef(false);
-  const navigate = (next: TabId) => {
+  const navigate = (next: TabId, focusId?: string) => {
+    if (focusId) setFocus({ tab: next, id: focusId, nonce: Date.now() });
     if (swapLockRef.current || next === tab) return;
     swapLockRef.current = true;
     setTab(next);
@@ -129,7 +137,7 @@ const Site: React.FC = () => {
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }}
           >
-            <ActiveView onNavigate={navigate} />
+            <ActiveView onNavigate={navigate} focus={focus && focus.tab === tab ? focus : undefined} />
           </motion.div>
         </AnimatePresence>
       </main>

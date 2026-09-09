@@ -1,17 +1,19 @@
 /**
- * Prism Ribbons — Home / Hero.
+ * Prism Ribbons — Home / "Holo Stage".
  *
- * DecryptedText headline over a PlasmaWave band, RotatingText roles,
- * CountUp stats, an Artwork strip and a playful BounceCards fan.
+ * Full-bleed stage hero: PlasmaWave runs unmasked behind the lower half, the
+ * name locks to the bottom-left, a vertical mono rail rides the right edge
+ * and stats render as inline gradient lines (no boxes). The playful
+ * BounceCards fan and the project tile strip stay below the stage.
  */
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowDown, MapPin } from 'lucide-react';
 import { BounceCards, CountUp, DecryptedText, PlasmaWave, RotatingText, TextType } from '@/sites/shared/bits';
 
-import { profile, experiences, projects, rotatingRoles, type TabId } from '@/sites/shared/content';
+import { profile, experiences, projects, rotatingRoles } from '@/sites/shared/content';
 import Artwork from '@/sites/shared/Artwork';
-import { artDataUri, Chip, PrismText, SectionHeading } from '../ui';
+import { artDataUri, PrismText, SectionHeading } from '../ui';
 import type { TabNavigate } from '../Site';
 
 const fadeUp = {
@@ -34,13 +36,10 @@ const Home: React.FC<{ onNavigate?: TabNavigate }> = ({ onNavigate }) => {
 
   return (
     <div>
-      {/* ── Hero ── */}
-      <section className="relative mx-auto flex min-h-[92vh] max-w-5xl flex-col items-center justify-center px-5 pb-24 pt-32 text-center">
-        {/* PlasmaWave band flowing under the headline */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-x-0 bottom-0 top-[38%] opacity-90 [mask-image:radial-gradient(72%_60%_at_50%_52%,black_28%,transparent_76%)]"
-        >
+      {/* ── Holo stage ── */}
+      <section className="relative flex min-h-[92vh] flex-col justify-end overflow-hidden pb-12 pt-32">
+        {/* PlasmaWave flowing unmasked behind the lower half */}
+        <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-[55%] opacity-90">
           <PlasmaWave
             colors={['#22d3ee', '#a78bfa']}
             focalLength={0.9}
@@ -50,16 +49,47 @@ const Home: React.FC<{ onNavigate?: TabNavigate }> = ({ onNavigate }) => {
             bend2={0.55}
           />
         </div>
+        {/* soft fade where the wave meets the page background */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 bottom-[42%] h-[26%] bg-gradient-to-b from-transparent via-[#07080d]/40 to-[#07080d]/85"
+        />
 
-        <div className="relative z-10 flex w-full flex-col items-center">
-          <motion.div {...fadeUp} transition={{ duration: 0.5 }}>
-            <Chip className="mb-7">
-              <span className="mr-1.5 inline-block h-1.5 w-1.5 rounded-full bg-cyan-300 shadow-[0_0_8px_rgba(34,211,238,0.9)]" />
-              Available for new challenges · <MapPin className="mx-0.5 inline -mt-0.5" size={11} /> {profile.location}
-            </Chip>
-          </motion.div>
+        {/* vertical mono rail — right edge */}
+        <div
+          aria-hidden
+          className="absolute right-5 top-1/2 hidden -translate-y-1/2 flex-col items-center gap-4 lg:flex"
+        >
+          <span className="h-16 w-px bg-gradient-to-b from-transparent to-cyan-400/60" />
+          <span
+            className="font-mono text-[10px] uppercase tracking-[0.32em] text-slate-500"
+            style={{ writingMode: 'vertical-rl' }}
+          >
+            Available for new challenges — {profile.location} — {profile.title}
+          </span>
+          <span className="h-16 w-px bg-gradient-to-t from-transparent to-pink-400/60" />
+        </div>
 
-          <motion.h1 {...fadeUp} transition={{ duration: 0.55, delay: 0.06 }} className="font-serif leading-[1.02]">
+        <div className="relative z-10 mx-auto w-full max-w-5xl px-5">
+          {/* kicker */}
+          <motion.p
+            {...fadeUp}
+            transition={{ duration: 0.5 }}
+            className="flex items-center gap-2.5 font-mono text-[11px] uppercase tracking-[0.28em] text-cyan-300/80"
+          >
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-400 opacity-70" />
+              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-cyan-300" />
+            </span>
+            Available for new challenges · <MapPin size={11} className="inline -mt-0.5" /> {profile.location}
+          </motion.p>
+
+          {/* name — left-locked over the wave */}
+          <motion.h1
+            {...fadeUp}
+            transition={{ duration: 0.55, delay: 0.06 }}
+            className="mt-5 font-serif leading-[1.02]"
+          >
             <DecryptedText
               text={profile.name}
               animateOn="view"
@@ -69,14 +99,14 @@ const Home: React.FC<{ onNavigate?: TabNavigate }> = ({ onNavigate }) => {
               characters="!<>-_\\/[]{}=+*^?#PRISM01"
               className="text-slate-50 [text-shadow:0_0_44px_rgba(34,211,238,0.35)]"
               encryptedClassName="text-cyan-300/70"
-              parentClassName="block text-[clamp(2.6rem,8vw,5.4rem)] font-medium tracking-tight"
+              parentClassName="block text-left text-[clamp(2.8rem,8.5vw,6.2rem)] font-medium tracking-tight"
             />
           </motion.h1>
 
           <motion.div
             {...fadeUp}
             transition={{ duration: 0.55, delay: 0.14 }}
-            className="mt-6 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-xl text-slate-300 sm:text-2xl"
+            className="mt-5 flex flex-wrap items-baseline gap-x-3 gap-y-2 text-xl text-slate-300 sm:text-2xl"
           >
             <span className="text-slate-400">Specialist in</span>
             <RotatingText
@@ -87,7 +117,7 @@ const Home: React.FC<{ onNavigate?: TabNavigate }> = ({ onNavigate }) => {
             />
           </motion.div>
 
-          <motion.div {...fadeUp} transition={{ duration: 0.55, delay: 0.22 }} className="mt-7 max-w-2xl">
+          <motion.div {...fadeUp} transition={{ duration: 0.55, delay: 0.22 }} className="mt-6 max-w-xl">
             <TextType
               text={[profile.tagline]}
               typingSpeed={34}
@@ -100,11 +130,7 @@ const Home: React.FC<{ onNavigate?: TabNavigate }> = ({ onNavigate }) => {
             />
           </motion.div>
 
-          <motion.div
-            {...fadeUp}
-            transition={{ duration: 0.55, delay: 0.3 }}
-            className="mt-9 flex flex-wrap items-center justify-center gap-3"
-          >
+          <motion.div {...fadeUp} transition={{ duration: 0.55, delay: 0.3 }} className="mt-8 flex flex-wrap items-center gap-3">
             <motion.button
               whileHover={{ scale: 1.04 }}
               whileTap={{ scale: 0.97 }}
@@ -122,11 +148,11 @@ const Home: React.FC<{ onNavigate?: TabNavigate }> = ({ onNavigate }) => {
             </button>
           </motion.div>
 
-          {/* stats */}
+          {/* inline stat lines — no boxes */}
           <motion.div
             {...fadeUp}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="mt-14 grid w-full max-w-3xl grid-cols-2 gap-3 sm:grid-cols-4"
+            className="mt-9 flex flex-wrap items-baseline gap-x-8 gap-y-3"
           >
             {profile.stats.map((s, i) => {
               const numeric = /^\d+/.test(s.value);
@@ -135,12 +161,12 @@ const Home: React.FC<{ onNavigate?: TabNavigate }> = ({ onNavigate }) => {
               return (
                 <motion.div
                   key={s.label}
-                  initial={{ opacity: 0, y: 16 }}
+                  initial={{ opacity: 0, y: 14 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.46 + i * 0.07 }}
-                  className="rounded-2xl border border-white/[0.07] bg-[#0a0c14]/70 px-4 py-4 backdrop-blur-md"
+                  className="flex items-baseline gap-2"
                 >
-                  <div className="bg-gradient-to-r from-cyan-300 via-violet-300 to-pink-300 bg-clip-text font-serif text-2xl font-semibold text-transparent">
+                  <span className="bg-gradient-to-r from-cyan-300 via-violet-300 to-pink-300 bg-clip-text font-serif text-2xl font-semibold text-transparent">
                     {numeric ? (
                       <>
                         <CountUp to={parseInt(s.value, 10)} duration={1.8} />
@@ -150,17 +176,17 @@ const Home: React.FC<{ onNavigate?: TabNavigate }> = ({ onNavigate }) => {
                     ) : (
                       s.value
                     )}
-                  </div>
-                  <div className="mt-1 text-[11px] font-medium uppercase tracking-[0.12em] text-slate-500">
+                  </span>
+                  <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-slate-500">
                     {s.label}
-                  </div>
+                  </span>
                 </motion.div>
               );
             })}
           </motion.div>
 
           {/* Artwork strip — one generated tile per project */}
-          <motion.div {...fadeUp} transition={{ duration: 0.6, delay: 0.55 }} className="mt-12 w-full max-w-4xl">
+          <motion.div {...fadeUp} transition={{ duration: 0.6, delay: 0.55 }} className="mt-11 w-full">
             <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
               {projects.map((p, i) => (
                 <motion.button
@@ -188,10 +214,8 @@ const Home: React.FC<{ onNavigate?: TabNavigate }> = ({ onNavigate }) => {
             </div>
           </motion.div>
 
-          <motion.div {...fadeUp} transition={{ delay: 0.8 }} className="mt-12">
-            <span className="flex items-center gap-2 text-[11px] uppercase tracking-[0.3em] text-slate-500">
-              <ArrowDown size={13} className="animate-bounce" /> scroll or use the capsule above
-            </span>
+          <motion.div {...fadeUp} transition={{ delay: 0.8 }} className="mt-10 flex items-center gap-2 text-[11px] uppercase tracking-[0.3em] text-slate-500">
+            <ArrowDown size={13} className="animate-bounce" /> scroll or use the capsule above
           </motion.div>
         </div>
       </section>

@@ -8,8 +8,8 @@ import React, { Suspense } from 'react';
 import { motion } from 'framer-motion';
 import { BookOpen, GraduationCap, Telescope, Users } from 'lucide-react';
 import { MagicRings } from '@/sites/shared/bits';
-import { education, profile, skillGroups } from '@/sites/shared/content';
-import { Chip, Panel, SectionHeading } from '../ui';
+import { education, coreSkills, profile } from '@/sites/shared/content';
+import { Panel, SectionHeading } from '../ui';
 
 const About: React.FC = () => (
   <section className="mx-auto max-w-6xl px-5 pb-28 pt-32">
@@ -43,11 +43,12 @@ const About: React.FC = () => (
           <p className="mb-2.5 font-mono text-[9.5px] uppercase tracking-[0.28em] text-slate-500">
             observed domains
           </p>
-          <div className="flex flex-wrap gap-2">
-            {skillGroups.map((g) => (
-              <Chip key={g.id} className="!bg-white/[0.04] transition-colors hover:!border-cyan-300/30 hover:text-cyan-100">
-                {g.title}
-              </Chip>
+          <div className="space-y-2">
+            {coreSkills.map((s) => (
+              <div key={s.id} className="rounded-xl border border-white/[0.08] bg-white/[0.04] px-3.5 py-2.5">
+                <p className="text-[12.5px] font-medium leading-tight text-slate-200">{s.title}</p>
+                <p className="mt-0.5 text-[11px] leading-relaxed text-slate-500">{s.tagline}</p>
+              </div>
             ))}
           </div>
         </div>

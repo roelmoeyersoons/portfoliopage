@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Briefcase, Table2, LayoutGrid, Filter, CheckCircle2, ArrowRight } from 'lucide-react';
-import { experiencesData } from '../../data/portfolioData';
+import { Briefcase, Table2, LayoutGrid, Filter, CheckCircle2, ArrowRight, Zap } from 'lucide-react';
+import { experiencesData, coreSkillsData } from '../../data/portfolioData';
 import { ExperienceItem } from '../../types/portfolio';
+import { gotoSkill } from '../../lib/skillNav';
 import { SpotlightCard } from '../reactbits/SpotlightCard';
 import { ExperienceTable } from './ExperienceTable';
 import { ExperienceDeepDiveModal } from './ExperienceDeepDiveModal';
@@ -129,9 +130,10 @@ export const ExperienceSection: React.FC = () => {
               {filteredExperiences.map((exp) => (
                 <SpotlightCard
                   key={exp.id}
+                  id={`exp-${exp.id}`}
                   spotlightColor="rgba(0, 242, 254, 0.12)"
                   borderColor="rgba(0, 242, 254, 0.35)"
-                  className="p-6 sm:p-8 lg:p-10 transition-all duration-300 hover:shadow-2xl"
+                  className="p-6 sm:p-8 lg:p-10 transition-all duration-300 hover:shadow-2xl scroll-mt-24"
                 >
                   <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-6 pb-6 border-b border-white/10">
                     <div>
@@ -211,6 +213,30 @@ export const ExperienceSection: React.FC = () => {
                           </div>
                         </div>
                       ))}
+                    </div>
+                  )}
+
+                  {/* Skills demonstrated — click-through to the skills page */}
+                  {exp.skillIds && exp.skillIds.length > 0 && (
+                    <div className="mb-6">
+                      <h5 className="text-xs font-mono uppercase tracking-wider text-slate-400 mb-2.5 flex items-center gap-1.5">
+                        <Zap className="h-3.5 w-3.5 text-cyan-400" />
+                        Skills demonstrated — click to read the story
+                      </h5>
+                      <div className="flex flex-wrap gap-2">
+                        {exp.skillIds
+                          .map((sid) => coreSkillsData.find((s) => s.id === sid))
+                          .filter((s): s is NonNullable<typeof s> => Boolean(s))
+                          .map((skill) => (
+                            <button
+                              key={skill.id}
+                              onClick={() => gotoSkill(skill.id)}
+                              className="rounded-lg border border-cyan-500/25 bg-cyan-500/10 px-2.5 py-1 text-xs font-mono text-cyan-200 transition-all hover:border-cyan-400/60 hover:bg-cyan-500/20 hover:text-cyan-100"
+                            >
+                              {skill.title}
+                            </button>
+                          ))}
+                      </div>
                     </div>
                   )}
 

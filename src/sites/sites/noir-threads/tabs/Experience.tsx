@@ -8,11 +8,16 @@
  */
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { experiences } from '@/sites/shared/content';
+import { coreSkills, experiences, type TabFocus, type TabNavigate } from '@/sites/shared/content';
 import { cn } from '@/demo/helpers';
 import { Art, EASE, Footnote, Kicker, SectionHeading, StatRow, TechPill } from '../ui';
 
-const Experience: React.FC = () => {
+export interface ExperienceTabProps {
+  onNavigate?: TabNavigate;
+  focus?: TabFocus;
+}
+
+const Experience: React.FC<ExperienceTabProps> = ({ onNavigate }) => {
   const [activeId, setActiveId] = useState(experiences[0].id);
   const active = experiences.find((e) => e.id === activeId) ?? experiences[0];
 
@@ -171,6 +176,30 @@ const Experience: React.FC = () => {
                   </div>
                 </div>
               </div>
+
+              {/* skills demonstrated — click-through to the skills page */}
+              {active.skillIds.length > 0 && (
+                <div>
+                  <Kicker>Skills demonstrated</Kicker>
+                  <div className="mt-4 flex flex-wrap gap-3">
+                    {active.skillIds
+                      .map((sid) => coreSkills.find((s) => s.id === sid))
+                      .filter((s): s is NonNullable<typeof s> => Boolean(s))
+                      .map((skill) => (
+                        <button
+                          key={skill.id}
+                          onClick={() => onNavigate?.('skills', skill.id)}
+                          className="group inline-flex items-center gap-3 rounded-full border border-[#262626] py-2 pl-4 pr-3 text-left transition-colors duration-300 hover:border-[#3b82f6]/50 hover:bg-white/[0.03]"
+                        >
+                          <span className="font-serif text-sm text-[#e5e5e5]">{skill.title}</span>
+                          <span className="font-mono text-[9px] uppercase tracking-[0.16em] text-[#525252] group-hover:text-[#3b82f6]">
+                            skill
+                          </span>
+                        </button>
+                      ))}
+                  </div>
+                </div>
+              )}
 
               {/* deep dive — numbered footnotes */}
               <div className="rounded-3xl border border-[#262626] bg-[#0f0f0f] px-6 py-6 sm:px-8 sm:py-8">

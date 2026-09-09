@@ -2,7 +2,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowDown, MapPin } from 'lucide-react';
-import { GradientText, RotatingText, TextType, CountUp, SpecularButton, LogoLoop, ShinyText } from '@/sites/shared/bits';
+import { GradientText, RotatingText, TextType, CountUp, SpecularButton, LogoLoop } from '@/sites/shared/bits';
 
 import { profile, rotatingRoles, techMarquee, type TabId } from '@/sites/shared/content';
 import Artwork from '@/sites/shared/Artwork';
@@ -196,7 +196,13 @@ const Hero: React.FC<{ onNavigate?: TabNavigate }> = ({ onNavigate }) => (
         title="Jump to the next chapter"
         className="group cursor-pointer rounded-full px-5 py-2.5 outline-none transition-transform duration-300 hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-pink-400/60"
       >
-        <ShinyText className="text-[10px] uppercase tracking-[0.32em]" text="scroll to explore" speed={4} />
+        <motion.span
+          animate={{ opacity: [0.45, 1, 0.45] }}
+          transition={{ repeat: Infinity, duration: 2.6, ease: 'easeInOut' }}
+          className="text-[10px] uppercase tracking-[0.32em]"
+        >
+          scroll to explore
+        </motion.span>
         <motion.span
           animate={{ y: [0, 5, 0] }}
           transition={{ repeat: Infinity, duration: 1.8 }}

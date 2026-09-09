@@ -6,7 +6,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Github, Linkedin, Mail, MapPin } from 'lucide-react';
-import { LogoLoop, ShinyText, SpecularButton } from '@/sites/shared/bits';
+import { LogoLoop, SpecularButton } from '@/sites/shared/bits';
 
 import { contact, techMarquee } from '@/sites/shared/content';
 import { Panel } from '../ui';
@@ -136,11 +136,13 @@ const Contact: React.FC = () => (
     </motion.div>
 
     <div className="mt-12">
-      <ShinyText
-        text="signal ends · awaiting your reply"
-        speed={5}
-        className="text-[10.5px] uppercase tracking-[0.28em]"
-      />
+      <motion.span
+        animate={{ opacity: [0.45, 1, 0.45] }}
+        transition={{ repeat: Infinity, duration: 2.6, ease: 'easeInOut' }}
+        className="text-[10.5px] uppercase tracking-[0.28em] text-slate-500"
+      >
+        signal ends · awaiting your reply
+      </motion.span>
     </div>
   </section>
 );

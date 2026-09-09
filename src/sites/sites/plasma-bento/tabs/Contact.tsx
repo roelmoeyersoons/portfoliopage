@@ -2,7 +2,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Github, Linkedin, Mail, MapPin } from 'lucide-react';
-import { SpecularButton, ShinyText } from '@/sites/shared/bits';
+import { SpecularButton } from '@/sites/shared/bits';
 import { contact } from '@/sites/shared/content';
 import { Panel, TEXT_GRADIENT } from '../ui';
 
@@ -92,11 +92,13 @@ const Contact: React.FC = () => (
     </motion.div>
 
     <div className="mt-16">
-      <ShinyText
-        text="designed & engineered with far too much attention to detail"
-        speed={5}
+      <motion.span
+        animate={{ opacity: [0.45, 1, 0.45] }}
+        transition={{ repeat: Infinity, duration: 2.6, ease: 'easeInOut' }}
         className="text-[11px] uppercase tracking-[0.22em]"
-      />
+      >
+        {'designed & engineered with far too much attention to detail'}
+      </motion.span>
     </div>
   </section>
 );

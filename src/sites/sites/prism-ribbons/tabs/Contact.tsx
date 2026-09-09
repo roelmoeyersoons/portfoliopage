@@ -7,7 +7,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Github, Linkedin, Mail, MapPin } from 'lucide-react';
-import { DotGrid, SpecularButton, ShinyText } from '@/sites/shared/bits';
+import { DotGrid, SpecularButton } from '@/sites/shared/bits';
 
 import { contact } from '@/sites/shared/content';
 import { Panel, PrismText } from '../ui';
@@ -127,11 +127,13 @@ const Contact: React.FC = () => (
       transition={{ delay: 0.5 }}
       className="mt-14 text-center"
     >
-      <ShinyText
-        text="designed & engineered with far too much attention to detail"
-        speed={5}
-        className="text-[11px] uppercase tracking-[0.22em]"
-      />
+      <motion.span
+        animate={{ opacity: [0.45, 1, 0.45] }}
+        transition={{ repeat: Infinity, duration: 2.6, ease: 'easeInOut' }}
+        className="text-[11px] uppercase tracking-[0.22em] text-slate-500"
+      >
+        {'designed & engineered with far too much attention to detail'}
+      </motion.span>
     </motion.div>
   </section>
 );

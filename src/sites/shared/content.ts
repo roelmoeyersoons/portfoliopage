@@ -13,7 +13,8 @@ import {
   profileData,
   experiencesData,
   projectsData,
-  skillCategoriesData,
+  coreSkillsData,
+  otherSkillsData,
   educationData,
   marqueeTechList,
 } from '@/data/portfolioData';
@@ -34,6 +35,23 @@ export const siteTabs: TabDef[] = [
   { id: 'about', label: 'About' },
   { id: 'contact', label: 'Contact' },
 ];
+
+/**
+ * Shared navigation signature for all variants: switch tab, optionally
+ * focusing a specific item (skill id, experience id, project id).
+ * Variants re-export/alias this as their own TabNavigate.
+ */
+export type TabNavigate = (tab: TabId, focusId?: string) => void;
+
+/**
+ * Focus payload handed to a tab after cross-tab navigation. `nonce`
+ * changes on every navigation so tabs can react even when the target id
+ * is unchanged (e.g. clicking the same skill link twice).
+ */
+export interface TabFocus {
+  id: string;
+  nonce: number;
+}
 
 // ── Generated artwork specs ───────────────────────────────────────
 export type ArtStyle = 'orbits' | 'mesh' | 'waves' | 'constellation' | 'strata' | 'grid';
@@ -60,6 +78,8 @@ export interface ExperienceEntry {
   bullets: string[];
   tech: string[];
   metrics: { label: string; value: string }[];
+  /** Core skill ids this experience demonstrates — click-through to skills. */
+  skillIds: string[];
   deepDive: {
     challenge: string;
     solution: string;
@@ -91,6 +111,7 @@ export const experiences: ExperienceEntry[] = experiencesData.map((e, i) => ({
   bullets: e.bulletPoints,
   tech: e.techStack,
   metrics: e.metrics ?? [],
+  skillIds: e.skillIds ?? [],
   deepDive: {
     challenge: e.deepDive?.architecturalChallenge ?? '',
     solution: e.deepDive?.solution ?? '',
@@ -100,40 +121,81 @@ export const experiences: ExperienceEntry[] = experiencesData.map((e, i) => ({
 }));
 
 // ── Skills ────────────────────────────────────────────────────────
-export interface SkillGroupEntry {
+/**
+ * The six real skills — each rendered as its own section with narrative
+ * text and click-through links to the experiences/projects that prove it.
+ * No percentages here on purpose: the story is the claim.
+ */
+export interface CoreSkillLink {
+  id: string;
+  /** Experience index label ("01") or project title. */
+  label: string;
+  sublabel: string;
+}
+
+export interface CoreSkillEntry {
   id: string;
   index: string;
   title: string;
   /** Lucide icon name — resolve via shared/iconMap */
   icon: string;
-  description: string;
-  items: { name: string; level: number; years?: string; badge?: string }[];
+  tagline: string;
+  paragraphs: string[];
+  proofPoints: string[];
+  experiences: CoreSkillLink[];
+  projects: CoreSkillLink[];
   art: ArtSpec;
 }
 
-const artForSkillGroup: Record<string, ArtSpec> = {
+export interface OtherSkillsGroup {
+  id: string;
+  title: string;
+  icon: string;
+  description: string;
+  items: { name: string; level: number; years?: string; badge?: string }[];
+}
+
+const artForCoreSkill: Record<string, ArtSpec> = {
   'dynamics-365-power-platform': { style: 'mesh', hue: 330 },
-  'azure-cloud-platform': { style: 'grid', hue: 205 },
-  'languages': { style: 'strata', hue: 262 },
-  'ai-applied-llms': { style: 'constellation', hue: 285 },
-  'other-low-level': { style: 'orbits', hue: 145 },
+  'azure-platform': { style: 'grid', hue: 205 },
+  'applied-ai': { style: 'constellation', hue: 285 },
+  'csharp-dotnet': { style: 'strata', hue: 262 },
+  'devops-cicd-iac': { style: 'waves', hue: 150 },
+  'solution-architecture': { style: 'orbits', hue: 262 },
 };
 
-const skillGroupId = (title: string) =>
-  title
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-|-$/g, '');
-
-export const skillGroups: SkillGroupEntry[] = skillCategoriesData.map((c, i) => ({
-  id: skillGroupId(c.title),
+export const coreSkills: CoreSkillEntry[] = coreSkillsData.map((s, i) => ({
+  id: s.id,
   index: String(i + 1).padStart(2, '0'),
-  title: c.title,
-  icon: c.iconName,
-  description: c.description,
-  items: c.skills,
-  art: artForSkillGroup[skillGroupId(c.title)] ?? { style: 'grid', hue: 220 },
+  title: s.title,
+  icon: s.iconName,
+  tagline: s.tagline,
+  paragraphs: s.paragraphs,
+  proofPoints: s.proofPoints,
+  experiences: s.relatedExperienceIds
+    .map((id) => {
+      const e = experiences.find((x) => x.id === id);
+      return e ? { id: e.id, label: e.shortCompany, sublabel: e.period } : null;
+    })
+    .filter((x): x is CoreSkillLink => x !== null),
+  projects: s.relatedProjectIds
+    .map((id) => {
+      const p = projectsData.find((x) => x.id === id);
+      return p ? { id: p.id, label: p.title, sublabel: p.category } : null;
+    })
+    .filter((x): x is CoreSkillLink => x !== null),
+  art: artForCoreSkill[s.id] ?? { style: 'mesh', hue: 262 },
 }));
+
+/** The long tail: technologies I've used at some point, roughly how central. */
+export const otherSkills: OtherSkillsGroup = {
+  id: 'other-toolbox',
+  title: 'Other — used along the way',
+  icon: 'Cpu',
+  description:
+    'Technologies I have used at some point, with roughly how central each became in my work.',
+  items: otherSkillsData,
+};
 
 // ── Projects ──────────────────────────────────────────────────────
 export interface ProjectEntry {
@@ -147,6 +209,8 @@ export interface ProjectEntry {
   highlights: string[];
   stats: { label: string; value: string }[];
   featured: boolean;
+  /** Core skill ids this project demonstrates — click-through to skills. */
+  skillIds: string[];
   art: ArtSpec;
 }
 
@@ -168,6 +232,7 @@ export const projects: ProjectEntry[] = projectsData.map((p) => ({
   highlights: p.highlights,
   stats: p.stats ?? [],
   featured: Boolean(p.featured),
+  skillIds: p.skillIds ?? [],
   art: artForProject[p.id] ?? { style: 'waves', hue: 250 },
 }));
 

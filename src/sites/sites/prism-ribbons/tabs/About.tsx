@@ -1,43 +1,54 @@
 /**
  * Prism Ribbons — About tab.
  *
- * FlowingMenu "what I do" rows (skill categories with generated art pills),
- * bio with serif-italic lead, education + thesis cards.
+ * Compact "what I do" grid of the six core skills (click-through to their
+ * sections on the Skills tab), bio with serif-italic lead, education +
+ * thesis cards.
  */
 import React from 'react';
 import { motion } from 'framer-motion';
 import { BookOpen, GraduationCap, Users } from 'lucide-react';
-import { FlowingMenu } from '@/sites/shared/bits';
-import { contact, education, profile, skillGroups, techMarquee } from '@/sites/shared/content';
-import { artDataUri, Chip, Panel, SectionHeading } from '../ui';
+import { contact, coreSkills, education, profile, techMarquee, type TabNavigate } from '@/sites/shared/content';
+import { resolveIcon } from '@/sites/shared/iconMap';
+import { Chip, Panel, SectionHeading } from '../ui';
 
-const MENU_ITEMS = skillGroups.map((g) => ({
-  link: '#what-i-do',
-  text: g.title,
-  image: artDataUri(g.art, g.id, 400, 120),
-}));
+export interface AboutTabProps {
+  onNavigate?: TabNavigate;
+}
 
-const About: React.FC = () => (
+const About: React.FC<AboutTabProps> = ({ onNavigate }) => (
   <section className="mx-auto max-w-6xl px-5 pb-28 pt-28">
     <SectionHeading kicker="Profile" title="About, in" accent="technicolor" />
 
-    {/* ── What I do — flowing menu ── */}
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="mb-10 h-[340px] overflow-hidden rounded-3xl border border-white/[0.08] shadow-[0_20px_60px_rgba(0,0,0,0.4)] sm:h-[420px]"
-    >
-      <FlowingMenu
-        items={MENU_ITEMS}
-        speed={14}
-        textColor="#dbe3f4"
-        bgColor="#090b12"
-        marqueeBgColor="#ece9ff"
-        marqueeTextColor="#141126"
-        borderColor="rgba(148,163,184,0.16)"
-      />
-    </motion.div>
+    {/* ── What I do — the six core skills, one click from their story ── */}
+    <div className="mb-10 grid gap-2.5 sm:grid-cols-2 lg:grid-cols-3">
+      {coreSkills.map((skill, i) => {
+        const Icon = resolveIcon(skill.icon);
+        return (
+          <motion.button
+            key={skill.id}
+            onClick={() => onNavigate?.('skills', skill.id)}
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: i * 0.05, duration: 0.45 }}
+            whileHover={{ y: -3 }}
+            className="group rounded-2xl border border-white/[0.08] bg-white/[0.04] p-4 text-left backdrop-blur-xl transition-colors hover:border-cyan-300/30"
+          >
+            <div className="flex items-center gap-3">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-cyan-400/25 bg-gradient-to-br from-cyan-500/20 via-violet-500/15 to-pink-500/10 text-cyan-200">
+                <Icon size={15} />
+              </span>
+              <span className="font-mono text-[10px] text-slate-600">{skill.index}</span>
+              <h3 className="min-w-0 flex-1 truncate font-serif text-[15px] font-medium text-slate-100">
+                {skill.title}
+              </h3>
+            </div>
+            <p className="mt-2.5 text-xs leading-relaxed text-slate-400">{skill.tagline}</p>
+          </motion.button>
+        );
+      })}
+    </div>
 
     <div className="grid gap-5 lg:grid-cols-[1.25fr_1fr]">
       {/* bio */}

@@ -9,9 +9,14 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import { AccordionGallery } from '@/sites/shared/bits';
-import { projects, type ProjectEntry } from '@/sites/shared/content';
+import { coreSkills, projects, type ProjectEntry, type TabFocus, type TabNavigate } from '@/sites/shared/content';
 import { cn } from '@/demo/helpers';
 import { artDataUri, EASE, Kicker, SectionHeading, TechPill } from '../ui';
+
+export interface ProjectsTabProps {
+  onNavigate?: TabNavigate;
+  focus?: TabFocus;
+}
 
 const GALLERY_ITEMS = projects.map((p) => ({
   image: artDataUri(p.art, p.id),
@@ -20,7 +25,11 @@ const GALLERY_ITEMS = projects.map((p) => ({
   link: p.githubUrl,
 }));
 
-const ProjectRow: React.FC<{ project: ProjectEntry; index: number }> = ({ project: p, index: i }) => (
+const ProjectRow: React.FC<{
+  project: ProjectEntry;
+  index: number;
+  onNavigate?: TabNavigate;
+}> = ({ project: p, index: i, onNavigate }) => (
   <motion.li
     initial={{ opacity: 0, y: 14 }}
     whileInView={{ opacity: 1, y: 0 }}
@@ -49,6 +58,27 @@ const ProjectRow: React.FC<{ project: ProjectEntry; index: number }> = ({ projec
             <TechPill key={t}>{t}</TechPill>
           ))}
         </div>
+        {/* skills demonstrated — click-through to the skills page */}
+        {p.skillIds.length > 0 && (
+          <div className="mt-4 flex flex-wrap items-center gap-3">
+            <span className="font-mono text-[9px] uppercase tracking-[0.18em] text-[#525252]">
+              Skills:
+            </span>
+            {p.skillIds
+              .map((sid) => coreSkills.find((s) => s.id === sid))
+              .filter((s): s is NonNullable<typeof s> => Boolean(s))
+              .map((skill) => (
+                <button
+                  key={skill.id}
+                  onClick={() => onNavigate?.('skills', skill.id)}
+                  className="group inline-flex items-center gap-2 rounded-full border border-[#262626] py-1.5 pl-3.5 pr-2.5 transition-colors duration-300 hover:border-[#3b82f6]/50 hover:bg-white/[0.03]"
+                >
+                  <span className="font-serif text-[13px] text-[#e5e5e5]">{skill.title}</span>
+                  <ArrowUpRight size={11} className="text-[#525252] transition-colors group-hover:text-[#3b82f6]" />
+                </button>
+              ))}
+          </div>
+        )}
       </div>
 
       <div className="flex items-center gap-6 md:justify-end md:pt-1">
@@ -84,7 +114,7 @@ const ProjectRow: React.FC<{ project: ProjectEntry; index: number }> = ({ projec
   </motion.li>
 );
 
-const Projects: React.FC = () => (
+const Projects: React.FC<ProjectsTabProps> = ({ onNavigate }) => (
   <section className="mx-auto max-w-6xl px-5 pb-28 pt-32 md:pt-36">
     <SectionHeading index="03" kicker="Selected work" title="Projects & research, filed in mono." />
 
@@ -124,7 +154,7 @@ const Projects: React.FC = () => (
       <Kicker>Project index</Kicker>
       <ul className={cn('mt-4')}>
         {projects.map((p, i) => (
-          <ProjectRow key={p.id} project={p} index={i} />
+          <ProjectRow key={p.id} project={p} index={i} onNavigate={onNavigate} />
         ))}
       </ul>
     </div>

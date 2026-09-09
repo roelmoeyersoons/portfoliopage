@@ -8,14 +8,19 @@
  */
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown, MapPin, Radar, Satellite, Sparkles } from 'lucide-react';
-import { experiences } from '@/sites/shared/content';
+import { ChevronDown, MapPin, Radar, Satellite, Sparkles, Zap } from 'lucide-react';
+import { coreSkills, experiences, type TabFocus, type TabNavigate } from '@/sites/shared/content';
 import Artwork from '@/sites/shared/Artwork';
 import { DecryptedText } from '@/sites/shared/bits';
 import { ACTIVE_GLOW, Chip, Metric, Panel, SectionHeading, TechPill } from '../ui';
 import { cn } from '@/demo/helpers';
 
-const Experience: React.FC = () => {
+export interface ExperienceTabProps {
+  onNavigate?: TabNavigate;
+  focus?: TabFocus;
+}
+
+const Experience: React.FC<ExperienceTabProps> = ({ onNavigate }) => {
   const [activeId, setActiveId] = useState(experiences[0].id);
   const [openDeepDive, setOpenDeepDive] = useState(false);
   const active = experiences.find((e) => e.id === activeId) ?? experiences[0];
@@ -164,6 +169,29 @@ const Experience: React.FC = () => {
                   </Panel>
                 </div>
               </div>
+
+              {/* skills demonstrated — click-through to the skills page */}
+              {active.skillIds.length > 0 && (
+                <Panel className="px-5 py-5">
+                  <h4 className="mb-3 flex items-center gap-2 font-mono text-[10.5px] font-medium uppercase tracking-[0.22em] text-slate-400">
+                    <Zap size={12} className="text-cyan-300" /> Skills demonstrated
+                  </h4>
+                  <div className="flex flex-wrap gap-2">
+                    {active.skillIds
+                      .map((sid) => coreSkills.find((s) => s.id === sid))
+                      .filter((s): s is NonNullable<typeof s> => Boolean(s))
+                      .map((skill) => (
+                        <button
+                          key={skill.id}
+                          onClick={() => onNavigate?.('skills', skill.id)}
+                          className="rounded-full border border-cyan-300/25 bg-cyan-400/10 px-3 py-1.5 text-[11.5px] font-medium text-cyan-200 transition-colors hover:border-cyan-300/50 hover:bg-cyan-400/20"
+                        >
+                          {skill.title}
+                        </button>
+                      ))}
+                  </div>
+                </Panel>
+              )}
 
               {/* deep dive */}
               <Panel className="overflow-hidden">
