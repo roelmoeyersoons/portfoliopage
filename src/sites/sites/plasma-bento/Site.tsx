@@ -6,11 +6,11 @@
  * rest of the page is solid with slow drifting glow blobs. Chunky rounded-3xl
  * bento surfaces, Space Grotesk display type, gooey tab nav.
  */
-import React, { useEffect, useRef, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React from 'react';
 import { GradientBlinds, GradualBlur } from '@/sites/shared/bits';
 
 import { profile, siteTabs, type TabFocus, type TabId } from '@/sites/shared/content';
+import { useTabVeil } from '@/sites/shared/useTabVeil';
 import GooeyTabs from './ui/GooeyTabs';
 import './ui/plasma.css';
 import Hero from './tabs/Hero';
@@ -38,31 +38,10 @@ const TAB_VIEWS: Record<TabId, React.ComponentType<TabProps>> = {
 };
 
 const Site: React.FC = () => {
-  const [tab, setTab] = useState<TabId>('home');
-  const [focus, setFocus] = useState<({ tab: TabId } & TabFocus) | null>(null);
+  // Tab swaps run through the shared fade-through-dark veil: the page dims
+  // to the stage color, content swaps while covered, then the veil lifts.
+  const { tab, focus, navigate, veil } = useTabVeil({ color: '#0d0a12' });
   const ActiveView = TAB_VIEWS[tab];
-
-  // Each tab is its own page: reset the scroll position when it changes.
-  // Without this, the viewport can stay parked past the new tab's content
-  // (concept switches already reset scroll in Showcase — tab switches must too).
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [tab]);
-
-  // AnimatePresence mode="wait" can strand <main> (blank view) when the tab
-  // key changes while an exit animation is still running. Serialize swaps:
-  // ignore tab clicks until the running exit has fully completed. (Clicks
-  // during the enter phase are fine — that exit runs to completion normally.)
-  const swapLockRef = useRef(false);
-  const navigate = (next: TabId, focusId?: string) => {
-    if (focusId) setFocus({ tab: next, id: focusId, nonce: Date.now() });
-    if (swapLockRef.current || next === tab) return;
-    swapLockRef.current = true;
-    setTab(next);
-  };
-  const settleSwap = () => {
-    swapLockRef.current = false;
-  };
 
   return (
     <div className="relative min-h-screen overflow-x-hidden bg-[#0d0a12] font-sans text-white selection:bg-pink-500/30">
@@ -118,17 +97,10 @@ const Site: React.FC = () => {
 
       {/* ── Active tab view ── */}
       <main className="relative z-10">
-        <AnimatePresence mode="wait" onExitComplete={settleSwap}>
-          <motion.div
-            key={tab}
-            initial={{ opacity: 0, y: 18, filter: 'blur(6px)' }}
-            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-            exit={{ opacity: 0, y: -14, filter: 'blur(6px)' }}
-            transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <ActiveView onNavigate={navigate} focus={focus && focus.tab === tab ? focus : undefined} />
-          </motion.div>
-        </AnimatePresence>
+        {/* Content swaps under the veil — the veil lift IS the transition. */}
+        <div key={tab}>
+          <ActiveView onNavigate={navigate} focus={focus && focus.tab === tab ? focus : undefined} />
+        </div>
 
         {/* ── Footer ── */}
         <footer className="relative z-10 mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2 border-t border-white/[0.06] px-5 pb-10 pt-6 font-mono text-[10.5px] uppercase tracking-[0.2em] text-white/30">
@@ -152,6 +124,9 @@ const Site: React.FC = () => {
         opacity={0.9}
         zIndex={30}
       />
+
+      {/* ── Tab-swap veil ── */}
+      {veil}
     </div>
   );
 };

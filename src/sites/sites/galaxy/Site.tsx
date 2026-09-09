@@ -9,12 +9,12 @@
  * Navigation is a ReactBits `Dock` pinned top-center (macOS-style
  * magnification) with a wordmark on the left.
  */
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useMemo } from 'react';
 import { Briefcase, Cpu, FolderGit2, Home, Mail, User } from 'lucide-react';
 import { Dock, Galaxy, GradualBlur } from '@/sites/shared/bits';
 
 import { profile, siteTabs, type TabFocus, type TabId } from '@/sites/shared/content';
+import { useTabVeil } from '@/sites/shared/useTabVeil';
 import { cn } from '@/demo/helpers';
 import Hero from './tabs/Hero';
 import Experience from './tabs/Experience';
@@ -48,31 +48,10 @@ const GALAXY_ROTATION: [number, number] = [1.0, 0.0];
 const TAB_ICONS = { home: Home, experience: Briefcase, skills: Cpu, projects: FolderGit2, about: User, contact: Mail } as const;
 
 const Site: React.FC = () => {
-  const [tab, setTab] = useState<TabId>('home');
-  const [focus, setFocus] = useState<({ tab: TabId } & TabFocus) | null>(null);
+  // Tab swaps run through the shared fade-through-dark veil: the page dims
+  // to the stage color, content swaps while covered, then the veil lifts.
+  const { tab, focus, navigate, veil } = useTabVeil({ color: '#05060d' });
   const ActiveView = TAB_VIEWS[tab];
-
-  // Each tab is its own page: reset the scroll position when it changes.
-  // Without this, the viewport can stay parked past the new tab's content
-  // (concept switches already reset scroll in Showcase — tab switches must too).
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [tab]);
-
-  // AnimatePresence mode="wait" can strand <main> (blank view) when the tab
-  // key changes while an exit animation is still running. Serialize swaps:
-  // ignore tab clicks until the running exit has fully completed. (Clicks
-  // during the enter phase are fine — that exit runs to completion normally.)
-  const swapLockRef = useRef(false);
-  const navigate = (next: TabId, focusId?: string) => {
-    if (focusId) setFocus({ tab: next, id: focusId, nonce: Date.now() });
-    if (swapLockRef.current || next === tab) return;
-    swapLockRef.current = true;
-    setTab(next);
-  };
-  const settleSwap = () => {
-    swapLockRef.current = false;
-  };
 
   const dockItems = useMemo(
     () =>
@@ -166,17 +145,10 @@ const Site: React.FC = () => {
 
       {/* ── Active tab view ── */}
       <main className="relative z-10">
-        <AnimatePresence mode="wait" onExitComplete={settleSwap}>
-          <motion.div
-            key={tab}
-            initial={{ opacity: 0, y: 18, filter: 'blur(6px)' }}
-            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-            exit={{ opacity: 0, y: -14, filter: 'blur(6px)' }}
-            transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <ActiveView onNavigate={navigate} focus={focus && focus.tab === tab ? focus : undefined} />
-          </motion.div>
-        </AnimatePresence>
+        {/* Content swaps under the veil — the veil lift IS the transition. */}
+        <div key={tab}>
+          <ActiveView onNavigate={navigate} focus={focus && focus.tab === tab ? focus : undefined} />
+        </div>
       </main>
 
       {/* ── Footer ── */}
@@ -198,6 +170,9 @@ const Site: React.FC = () => {
         opacity={0.9}
         zIndex={30}
       />
+
+      {/* ── Tab-swap veil ── */}
+      {veil}
     </div>
   );
 };
