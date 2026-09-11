@@ -14,6 +14,7 @@ import {
   Bot,
   Compass,
   GitBranch,
+  TerminalSquare,
   type LucideIcon,
 } from 'lucide-react';
 
@@ -30,6 +31,7 @@ export const iconMap: Record<string, LucideIcon> = {
   Bot,
   Compass,
   GitBranch,
+  TerminalSquare,
 };
 
 export function resolveIcon(name: string): LucideIcon {

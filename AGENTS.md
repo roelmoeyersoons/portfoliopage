@@ -8,7 +8,8 @@ Deeper detail lives in `docs/architecture.md`.
 Roel Moeyersoons' personal portfolio: **one single website, "Bento Galaxy"** —
 Plasma Bento's layout (chunky bento grids with cursor-spotlight cards, gooey
 pill tabs, veil tab-swaps, tab structure `home · experience · skills ·
-projects · about · contact`) fully re-skinned in Galaxy Drift's deep-space
+projects · about · contact` plus a hidden icon-only `terminal` easter-egg
+tab) fully re-skinned in Galaxy Drift's deep-space
 observatory theme (#05060d stage, indigo/violet/cyan accents, WebGL starfield,
 mono telemetry chrome). `src/main.tsx` mounts the site directly — there is no
 shell, switcher or hash routing anymore.
@@ -59,10 +60,13 @@ src/
       ui/GooeyTabs.tsx          → gooey pill tab nav (controlled fork of GooeyNav)
       ui/bento.css              → card surfaces/glows           (gx- prefix)
       ui/gooey.css              → gooey nav effect            (gx- prefix)
-      ui/station.css            → stepper re-theme + ping dot (gx- prefix)
-      tabs/Hero.tsx             → telemetry bar, identity, scan-station card, stats, marquee
-      tabs/About.tsx            → bio + education + career stepper + Terminal (bottom)
+      ui/station.css            → pulsing availability dot (gx-ping; gx- prefix)
+      tabs/Hero.tsx             → telemetry bar, identity + certification chips, scan-station
+                                  card, stats, marquee
+      tabs/About.tsx            → bio + education + honors/certifications cards + vertical
+                                  career timeline (newest first)
       tabs/Terminal.tsx         → interactive CLI (from original v1; content-module-driven)
+      tabs/TerminalTab.tsx      → the hidden 'terminal' tab page: icon-only nav pill + CLI
       tabs/Skills.tsx           → selector tiles + stage dossier, OrbitRing toolbox
       tabs/Experience.tsx       → left menu + bento detail pane
       tabs/Projects.tsx         → expandable signal slabs
@@ -110,16 +114,21 @@ git worktree remove ../landingpage-showcase-v1            # when done
   TextType). To add one back: drop the file(s) in and add a typed export to
   `bits/index.ts`.
 - Local primitives/classes use the `gx-` prefix (`gx-bento-card`,
-  `gx-gooey`, `gx-stepper`, `gx-ping`, `gx-spotlight`…).
+  `gx-gooey`, `gx-ping`, `gx-spotlight`…).
 - Deps in use: `ogl` (Galaxy, SpecularButton), `gsap` + InertiaPlugin
   (BentoCard, DotGrid, TextType), `motion` (ReactBits bits),
   `framer-motion` (site tabs), `clsx` + `tailwind-merge` (cn),
   `lucide-react`. `three` and `@gsap/react` were removed in the
   consolidation — don't re-add without a reason.
 - `base: './'` in vite.config.ts → the build works on any static host.
-- The terminal lives at the bottom of About; its commands read from
+- The terminal lives on its own hidden tab: an icon-only pill (TerminalSquare,
+  no label) at the end of the nav — an easter egg. Its commands read from
   `shared/content.ts` (the ASCII `table` is hand-kept — update it when
   experiences change).
+- Certifications are NOT education data: they live in `certificationsData` /
+  `honorsData` (portfolioData.ts → content.ts) and render on the About
+  "Honors & certifications" card plus the hero chip strip — never inside the
+  Education card or the education experience entry.
 
 ## Docs
 

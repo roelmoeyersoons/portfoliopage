@@ -3,7 +3,8 @@
  *
  * The bento structure's controlled fork of the ReactBits GooeyNav:
  *   - controlled: activeId comes from the parent, onSelect(id) reports
- *     clicks so it can drive the 6 top tabs,
+ *     clicks so it can drive the top tabs (incl. the icon-only terminal
+ *     easter-egg pill),
  *   - real <button> elements (keyboard + focus rings for free),
  *   - re-positioning on font-load and container resize,
  *   - re-coloured to the indigo/violet/cyan observatory palette.
@@ -14,11 +15,16 @@
  */
 import React, { useCallback, useEffect, useRef } from 'react';
 import { cn } from '@/sites/shared/cn';
+import { resolveIcon } from '@/sites/shared/iconMap';
 import './gooey.css';
 
 export interface GooeyTabItem {
   id: string;
   label: string;
+  /** Icon-only tab (easter egg): render this icon instead of the label. */
+  icon?: string;
+  /** Accessible name for icon-only tabs. */
+  ariaLabel?: string;
 }
 
 interface GooeyTabsProps {
@@ -189,18 +195,22 @@ const GooeyTabs: React.FC<GooeyTabsProps> = ({
         <div className={cn('gx-gooey', className)} ref={containerRef}>
           <nav>
             <ul ref={navRef} role="tablist" aria-label="Site sections">
-              {items.map((item, index) => (
-                <li key={item.id} className={activeIndex === index ? 'active' : ''}>
-                  <button
-                    type="button"
-                    role="tab"
-                    aria-selected={activeIndex === index}
-                    onClick={(e) => handleClick(e, index)}
-                  >
-                    {item.label}
-                  </button>
-                </li>
-              ))}
+              {items.map((item, index) => {
+                const Icon = item.icon ? resolveIcon(item.icon) : null;
+                return (
+                  <li key={item.id} className={activeIndex === index ? 'active' : ''}>
+                    <button
+                      type="button"
+                      role="tab"
+                      aria-selected={activeIndex === index}
+                      aria-label={item.ariaLabel ?? (item.label || undefined)}
+                      onClick={(e) => handleClick(e, index)}
+                    >
+                      {Icon ? <Icon size={14} aria-hidden="true" /> : item.label}
+                    </button>
+                  </li>
+                );
+              })}
             </ul>
           </nav>
           <span className="effect filter" ref={filterRef} aria-hidden="true" />

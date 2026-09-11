@@ -7,8 +7,10 @@
  * chrome is re-skinned to the deep-space observatory palette. The outer
  * section/header was dropped — the About tab provides the panel framing.
  *
- * Commands: help · about · experience · table · projects · skills ·
- * education · contact · clear. Command history with ↑/↓.
+ * Lives on its own hidden 'terminal' tab (icon-only nav pill, easter egg);
+ * that tab provides the panel framing. Commands: help · about ·
+ * experience · table · projects · skills · education · contact · clear.
+ * Command history with ↑/↓.
  */
 import React, { useState, useRef, useEffect } from 'react';
 import { CornerDownLeft, RotateCcw } from 'lucide-react';

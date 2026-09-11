@@ -31,10 +31,11 @@ one site. The pre-consolidation app is preserved at git tag `showcase-v1`.
 | `ui/GooeyTabs.tsx` | Controlled gooey pill nav (local fork of ReactBits GooeyNav: buttons, onSelect, resize/font-load repositioning) |
 | `ui/bento.css` | Card surfaces + glow masks (gx- prefix, deep-space navy glass) |
 | `ui/gooey.css` | Gooey filter/pill/particle effect (indigo/violet/cyan palette vars) |
-| `ui/station.css` | Stepper re-theme (indigo→cyan) + pulsing availability dot |
-| `tabs/Hero.tsx` | SIG/LOC/EXP/SYS telemetry bar · identity (availability chip, gradient name, "> tracking ::" roles, "sys.log>" tagline) · scan-station card (DotGrid + radar sweep + locked marker + observatory captions) · stat bento row · LogoLoop marquee · scroll cue |
-| `tabs/About.tsx` | Bio + education/thesis bento cards → career Stepper → interactive Terminal panel (bottom) |
+| `ui/station.css` | Pulsing availability dot (`gx-ping`) — used by the hero chip and the About timeline's current-role node |
+| `tabs/Hero.tsx` | SIG/LOC/EXP/SYS telemetry bar · identity (availability chip, gradient name, "> tracking ::" roles, "sys.log>" tagline, Microsoft-certified chip strip) · scan-station card (DotGrid + radar sweep + locked marker + observatory captions) · stat bento row · LogoLoop marquee |
+| `tabs/About.tsx` | Bio + education/thesis + honors & certifications bento cards → vertical career timeline (rail nodes, newest first, links into Experience) |
 | `tabs/Terminal.tsx` | CLI carried from original v1: help/about/experience/table/projects/skills/education/contact/clear, ↑/↓ history; reads shared content |
+| `tabs/TerminalTab.tsx` | Hidden `terminal` tab page — icon-only nav pill (easter egg); minimal framing around the CLI |
 | `tabs/Skills.tsx` | 6 selector tiles + "Other" slim bar → stage dossier (banner, narrative, proof points, click-through evidence); OrbitRings for the toolbox |
 | `tabs/Experience.tsx` | Left role menu (glowing active rows) + bento detail pane (story 2×2, contributions, artwork, metrics, stack, skills links, deep dive) |
 | `tabs/Projects.tsx` | Full-width expandable slabs: collapsed row → two-column dossier with generated artwork |
@@ -55,7 +56,9 @@ one site. The pre-consolidation app is preserved at git tag `showcase-v1`.
 
 `src/data/portfolioData.ts` is the single raw content file (typed by
 `src/types/portfolio.ts`): `profileData`, `experiencesData`, `projectsData`,
-`coreSkillsData`, `otherSkillsData`, `educationData`, `marqueeTechList`.
+`coreSkillsData`, `otherSkillsData`, `educationData`, `certificationsData`,
+`honorsData`, `marqueeTechList`. Certifications and honors are deliberately
+NOT part of the education data (credentials ≠ schooling).
 Editing it updates the site (via content.ts).
 
 ## Data flow
@@ -80,7 +83,8 @@ Key content.ts exports:
 - `coreSkills` / `otherSkills` — the 6-core-skills + Other model (owner
   decision M-0004). **No percentage levels on core skills**; the Other toolbox
   keeps usage-centrality rings.
-- `projects`, `profile`, `education`, `contact`, `techMarquee`, `rotatingRoles`.
+- `projects`, `profile`, `education`, `certifications`, `honors`, `contact`,
+  `techMarquee`, `rotatingRoles`.
 
 ## Design tokens
 

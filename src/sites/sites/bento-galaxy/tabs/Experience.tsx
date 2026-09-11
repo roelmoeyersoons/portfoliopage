@@ -13,7 +13,7 @@
  *   row 4   deep dive (full row; shrinks to cols 2–4 when the role has no
  *           linked skills and the panel above is omitted)
  */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence, type Variants } from 'framer-motion';
 import { ChevronDown, MapPin, Sparkles, Zap } from 'lucide-react';
 import { coreSkills, experiences, type TabFocus, type TabNavigate } from '@/sites/shared/content';
@@ -44,11 +44,21 @@ export interface ExperienceTabProps {
   focus?: TabFocus;
 }
 
-const Experience: React.FC<ExperienceTabProps> = ({ onNavigate }) => {
+const Experience: React.FC<ExperienceTabProps> = ({ onNavigate, focus }) => {
   const [activeId, setActiveId] = useState(experiences[0].id);
   const [openDeepDive, setOpenDeepDive] = useState(false);
   const active = experiences.find((e) => e.id === activeId) ?? experiences[0];
   const hasSkills = active.skillIds.length > 0;
+
+  // Cross-tab focus (e.g. "open in experience" from the About timeline):
+  // open the requested role when the payload targets one of ours.
+  useEffect(() => {
+    if (!focus) return;
+    if (experiences.some((e) => e.id === focus.id)) {
+      setActiveId(focus.id);
+      setOpenDeepDive(false);
+    }
+  }, [focus?.nonce, focus?.id]);
 
   return (
     <section className="mx-auto max-w-6xl px-5 pb-28 pt-28">

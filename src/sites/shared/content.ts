@@ -10,21 +10,29 @@
  * directly) so content stays identical across all sites.
  */
 import {
-  profileData,
+  certificationsData,
+  educationData,
   experiencesData,
+  honorsData,
+  marqueeTechList,
+  otherSkillsData,
+  profileData,
   projectsData,
   coreSkillsData,
-  otherSkillsData,
-  educationData,
-  marqueeTechList,
 } from '@/data/portfolioData';
+import type { CertificationItem, HonorItem } from '@/types/portfolio';
 
 // ── Tabs ──────────────────────────────────────────────────────────
-export type TabId = 'home' | 'experience' | 'skills' | 'projects' | 'about' | 'contact';
+/** 'terminal' is the hidden easter-egg tab — icon-only in the nav. */
+export type TabId = 'home' | 'experience' | 'skills' | 'projects' | 'about' | 'contact' | 'terminal';
 
 export interface TabDef {
   id: TabId;
   label: string;
+  /** Icon-only tab: icon name resolved via shared/iconMap, no label shown. */
+  icon?: string;
+  /** Accessible name for icon-only tabs. */
+  ariaLabel?: string;
 }
 
 export const siteTabs: TabDef[] = [
@@ -34,6 +42,7 @@ export const siteTabs: TabDef[] = [
   { id: 'projects', label: 'Projects' },
   { id: 'about', label: 'About' },
   { id: 'contact', label: 'Contact' },
+  { id: 'terminal', label: '', icon: 'TerminalSquare', ariaLabel: 'Terminal — hidden shell tab' },
 ];
 
 /**
@@ -253,6 +262,13 @@ export const profile = {
 };
 
 export const education = educationData;
+
+/** Vendor certifications — kept out of education on purpose (credentials ≠ schooling). */
+export const certifications: CertificationItem[] = certificationsData;
+export type { CertificationItem, HonorItem };
+
+/** Honors & awards (per LinkedIn) — rendered on the About tab. */
+export const honors: HonorItem[] = honorsData;
 
 export const contact = {
   email: profileData.email,

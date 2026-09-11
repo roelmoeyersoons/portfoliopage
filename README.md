@@ -4,7 +4,8 @@ One single portfolio website: **Plasma Bento's layout** (chunky bento grids
 with cursor-spotlight cards, gooey pill tabs, veil tab-swaps) **fully
 re-skinned in Galaxy Drift's deep-space observatory theme** — #05060d stage,
 indigo/violet/cyan accents, a WebGL starfield, mono telemetry chrome, and the
-interactive terminal from the original site at the bottom of the About page.
+interactive terminal from the original site — tucked away on its own hidden
+`terminal` tab, an icon-only easter egg at the end of the nav.
 
 Built with React 18, TypeScript (strict), Vite 6, Tailwind CSS 3.4, Framer
 Motion, and a pruned set of raw React Bits components. All content is

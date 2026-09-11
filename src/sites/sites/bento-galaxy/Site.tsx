@@ -25,6 +25,7 @@ import Skills from './tabs/Skills';
 import Projects from './tabs/Projects';
 import About from './tabs/About';
 import Contact from './tabs/Contact';
+import TerminalTab from './tabs/TerminalTab';
 
 export type TabNavigate = (tab: TabId, focusId?: string) => void;
 
@@ -41,6 +42,7 @@ const TAB_VIEWS: Record<TabId, React.ComponentType<TabProps>> = {
   projects: Projects,
   about: About,
   contact: Contact,
+  terminal: TerminalTab,
 };
 
 /* Stable array references — Galaxy re-initialises its WebGL context when

@@ -1,4 +1,13 @@
-import { ProfileData, ExperienceItem, ProjectItem, CoreSkill, OtherSkill, EducationItem } from '../types/portfolio';
+import {
+  ProfileData,
+  ExperienceItem,
+  ProjectItem,
+  CoreSkill,
+  OtherSkill,
+  EducationItem,
+  CertificationItem,
+  HonorItem,
+} from '../types/portfolio';
 
 export const profileData: ProfileData = {
   name: "Roel Moeyersoons",
@@ -237,15 +246,12 @@ export const experiencesData: ExperienceItem[] = [
     paragraphs: [
       "Four years at Ghent University gave me broad theoretical and practical knowledge across the whole IT domain: software engineering, networking, electronics, operating systems, databases and information security. That breadth is exactly what lets me learn any new skill quickly and see beyond the boundaries of a single technology stack — the foundation everything above is built on.",
       "The master's thesis, written at IDLab under Prof. Dr. Ir. Eli De Poorter and Prof. Dr. Ir. Jeroen Hoebeke, designed a distributed multi-radio MAC protocol combining sub-GHz and Ultra-Wideband radios for sub-decimeter distance determination between triathletes. It was my first end-to-end experience owning a system from protocol design to hardware validation — and it still shapes how I approach architecture today.",
-      "I graduated magna cum laude, on both degrees, without any resits throughout the whole program. Along the way I picked up a 2nd place in the .NET Challenge Belgium 2022 (professional category), a 2nd place in the Big Data Challenge Belgium 2022 by De Lijn, and Microsoft certifications spanning Azure (AZ-104, AZ-305) and Dynamics 365 (Sales, Marketing, Power Apps + D365 Developer)."
+      "I graduated magna cum laude, on both degrees, without any resits throughout the whole program."
     ],
     bulletPoints: [
       "Magna cum laude on both degrees — zero resits across the entire program",
       "Master thesis: distributed multi-radio MAC protocol (sub-GHz + UWB) for distance determination",
       "Broad IT-domain foundation: software engineering, networking, electronics, security, databases",
-      "Microsoft certified: AZ-305 Azure Solutions Architect Expert · AZ-104 Azure Administrator Associate",
-      "Dynamics 365 certified: Sales & Marketing Functional Consultant · Power Apps + D365 Developer",
-      "2nd place .NET Challenge Belgium 2022 (professional) · 2nd place Big Data Challenge Belgium 2022"
     ],
     techStack: ["C / C++", "UWB & Sub-GHz Radios", "Python", "MATLAB", "Networking", "Linux"],
     highlights: ["Magna cum laude", "IDLab Master Thesis", "Broad IT Foundation"],
@@ -528,6 +534,61 @@ export const educationData: EducationItem = {
     technologies: ["C", "C++", "UWB Decawave", "Sub-GHz Radios", "Distributed MAC Protocols", "Python", "MATLAB", "Linux Embedded"]
   }
 };
+
+/**
+ * Vendor certifications — deliberately kept OUT of the education data
+ * (they are credentials, not schooling). Rendered on the About tab's
+ * recognition card and as compact chips in the hero.
+ */
+export const certificationsData: CertificationItem[] = [
+  {
+    id: "az-305",
+    code: "AZ-305",
+    name: "Azure Solutions Architect Expert",
+    short: "Azure Solutions Architect",
+  },
+  {
+    id: "az-104",
+    code: "AZ-104",
+    name: "Azure Administrator Associate",
+    short: "Azure Administrator",
+  },
+  {
+    id: "d365-sales",
+    code: "D365",
+    name: "Dynamics 365 Sales Functional Consultant Associate",
+    short: "D365 Sales Consultant",
+  },
+  {
+    id: "d365-marketing",
+    code: "D365",
+    name: "Dynamics 365 Marketing Functional Consultant Associate",
+    short: "D365 Marketing Consultant",
+  },
+  {
+    id: "d365-powerapps-dev",
+    code: "D365",
+    name: "Power Apps + Dynamics 365 Developer Associate",
+    short: "Power Apps + D365 Developer",
+  },
+];
+
+/**
+ * Honors & awards (per LinkedIn). Rendered on the About tab's
+ * recognition card alongside the certifications.
+ */
+export const honorsData: HonorItem[] = [
+  {
+    id: "dotnet-challenge-2022",
+    title: "2nd place — .NET Challenge Belgium",
+    detail: "2022 · professional category",
+  },
+  {
+    id: "big-data-challenge-2022",
+    title: "2nd place — Big Data Challenge Belgium",
+    detail: "2022 · by De Lijn",
+  },
+];
 
 export const marqueeTechList = [
   "C# / .NET", "Dynamics 365", "Azure", "TypeScript", "Power Platform",

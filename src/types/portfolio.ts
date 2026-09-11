@@ -107,6 +107,30 @@ export interface EducationItem {
   };
 }
 
+/**
+ * Vendor certification. Deliberately NOT part of EducationItem: they are
+ * credentials, not schooling. About renders them in the recognition card,
+ * the hero lists them as compact chips, and Skills references them in
+ * proof points.
+ */
+export interface CertificationItem {
+  id: string;
+  /** Official exam / credential code, e.g. "AZ-305". */
+  code: string;
+  /** Clean certification name (without the "Microsoft Certified:" prefix). */
+  name: string;
+  /** Extra-short label for compact chip rows (hero). */
+  short: string;
+}
+
+/** Honors & awards (competition results etc.) shown on the About tab. */
+export interface HonorItem {
+  id: string;
+  title: string;
+  /** One-line context: year, category, organizer. */
+  detail: string;
+}
+
 export interface ProfileData {
   name: string;
   title: string;

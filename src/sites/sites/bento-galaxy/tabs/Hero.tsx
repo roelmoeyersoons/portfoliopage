@@ -2,7 +2,9 @@
  * Bento Galaxy — Home / Hero
  *
  * Bento's hero skeleton: identity column left, a feature card right, the
- * stat bento row, the tech marquee and the scroll cue — in that order.
+ * stat bento row and the tech marquee — in that order. The identity column
+ * carries a compact "Microsoft certified ::" chip strip (certifications
+ * surfaced on the hero per feedback); the old scroll cue was removed.
  * The feature card is the Galaxy Drift scan station: a DotGrid field with
  * a rotating radar sweep, reference rings, a locked marker and observatory
  * captions. Galaxy's telemetry tidbits ride along: the SIG/LOC/EXP/SYS
@@ -11,10 +13,10 @@
  */
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ArrowDown, Crosshair, MapPin } from 'lucide-react';
+import { ArrowDown, BadgeCheck, Crosshair, MapPin } from 'lucide-react';
 import { CountUp, DotGrid, GradientText, LogoLoop, RotatingText, SpecularButton, TextType } from '@/sites/shared/bits';
 
-import { profile, rotatingRoles, techMarquee } from '@/sites/shared/content';
+import { certifications, profile, rotatingRoles, techMarquee } from '@/sites/shared/content';
 import { BentoCard, BentoGrid } from '../ui/BentoCard';
 import { Chip, GLOW, TEXT_GRADIENT } from '../ui';
 import '../ui/station.css';
@@ -170,6 +172,28 @@ const Hero: React.FC<{ onNavigate?: TabNavigate }> = ({ onNavigate }) => (
             Transmit a message
           </button>
         </motion.div>
+
+        {/* ── certification chip strip ── */}
+        <motion.div
+          {...fadeUp}
+          transition={{ duration: 0.55, delay: 0.38 }}
+          className="mt-7 flex flex-wrap items-center justify-center gap-2 lg:justify-start"
+        >
+          <span className="mr-1 inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.22em] text-slate-500">
+            <BadgeCheck size={13} className="text-cyan-300" />
+            Microsoft certified ::
+          </span>
+          {certifications.map((c) => (
+            <span
+              key={c.id}
+              title={c.name}
+              className="inline-flex items-center gap-1.5 rounded-full border border-white/[0.08] bg-white/[0.03] px-2.5 py-1 font-mono text-[10.5px] text-slate-400 transition-colors hover:border-cyan-300/30 hover:text-cyan-100"
+            >
+              <span className="font-semibold text-cyan-300/90">{c.code}</span>
+              {c.short}
+            </span>
+          ))}
+        </motion.div>
       </div>
 
       {/* ── Right: the scan station (bento card, galaxy scan) ── */}
@@ -254,30 +278,6 @@ const Hero: React.FC<{ onNavigate?: TabNavigate }> = ({ onNavigate }) => (
       />
     </motion.div>
 
-    <motion.div {...fadeUp} transition={{ delay: 0.8 }} className="mt-10 flex justify-center">
-      <button
-        type="button"
-        onClick={() => onNavigate?.('experience')}
-        aria-label="Go to the next chapter — Experience"
-        title="Jump to the next chapter"
-        className="group cursor-pointer rounded-full px-5 py-2.5 outline-none transition-transform duration-300 hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-cyan-300/60"
-      >
-        <motion.span
-          animate={{ opacity: [0.45, 1, 0.45] }}
-          transition={{ repeat: Infinity, duration: 2.6, ease: 'easeInOut' }}
-          className="text-[10px] uppercase tracking-[0.32em]"
-        >
-          scroll to explore
-        </motion.span>
-        <motion.span
-          animate={{ y: [0, 5, 0] }}
-          transition={{ repeat: Infinity, duration: 1.8 }}
-          className="mt-1.5 flex justify-center text-slate-400 transition-colors group-hover:text-cyan-300"
-        >
-          <ArrowDown size={14} />
-        </motion.span>
-      </button>
-    </motion.div>
   </section>
 );
 

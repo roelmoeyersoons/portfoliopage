@@ -1,66 +1,9 @@
 /* ────────────────────────────────────────────────────────────────
    Bento Galaxy — misc local styles.
-   Re-themes the shared ReactBits Stepper (default ReactBits purple)
-   to the observatory indigo→violet→cyan palette, and provides the
-   pulsing availability dot used by the hero chip.
+   Provides the pulsing availability dot used by the hero chip and the
+   About timeline's "current role" node. (The old gx-stepper re-theme
+   was removed together with the stepper itself.)
    ──────────────────────────────────────────────────────────────── */
-
-/* ── Stepper (About tab timeline) ── */
-.gx-stepper .outer-container {
-  aspect-ratio: auto;
-  min-height: 0;
-  padding: 0;
-}
-
-.gx-stepper .step-circle-container {
-  max-width: none;
-  border-radius: 24px;
-  background: transparent;
-  box-shadow: none;
-}
-
-.gx-stepper .step-indicator-row {
-  padding: 1.5rem 1.6rem 0.6rem;
-}
-
-.gx-stepper .step-default {
-  padding-left: 1.6rem;
-  padding-right: 1.6rem;
-}
-
-.gx-stepper .footer-container {
-  padding: 0.4rem 1.6rem 1.6rem;
-}
-
-.gx-stepper .step-connector {
-  height: 3px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.09);
-}
-
-/* !important is required to beat the inline style framer-motion animates */
-.gx-stepper .step-connector-inner {
-  border-radius: 999px;
-  background: linear-gradient(90deg, #818cf8, #67e8f9) !important;
-}
-
-.gx-stepper .next-button {
-  background: linear-gradient(92deg, #818cf8, #67e8f9);
-  box-shadow: 0 10px 22px -10px rgba(103, 232, 249, 0.55);
-}
-
-.gx-stepper .next-button:hover,
-.gx-stepper .next-button:active {
-  background: linear-gradient(92deg, #a5b4fc, #7dd3fc);
-}
-
-.gx-stepper .back-button {
-  color: rgba(255, 255, 255, 0.45);
-}
-
-.gx-stepper .back-button:hover {
-  color: rgba(255, 255, 255, 0.85);
-}
 
 /* ── Pulsing availability dot ── */
 @keyframes gx-ping {

@@ -1,62 +1,104 @@
 /**
  * Bento Galaxy — About tab
  *
- * Bento's About skeleton: bio card + education/thesis card in the bento
- * grid, then the career timeline Stepper ("The road so far") — all wearing
- * the observatory palette. At the bottom sits the interactive terminal
- * carried over from the original v1 site, re-skinned to the same palette.
+ * Bento's About skeleton, re-skinned: bio card, education/thesis card and
+ * an honors & certifications card in the bento grid, then the career
+ * timeline as a vertical rail — newest role at the top, oldest at the
+ * bottom. (The old numbered stepper was retired: it started on an empty
+ * step and only revealed history one "Next" at a time, which read
+ * backwards.) The interactive terminal moved to its own icon-only
+ * 'terminal' tab — an easter egg in the nav.
  */
 import React from 'react';
 import { motion } from 'framer-motion';
-import { BookOpen, Check, GraduationCap, TerminalSquare, Users } from 'lucide-react';
-import { Stepper } from '@/sites/shared/bits';
-import { education, experiences, profile, type TabId } from '@/sites/shared/content';
+import {
+  ArrowUpRight,
+  Award,
+  BadgeCheck,
+  BookOpen,
+  GraduationCap,
+  Trophy,
+  Users,
+} from 'lucide-react';
+import {
+  certifications,
+  education,
+  experiences,
+  honors,
+  profile,
+  type ExperienceEntry,
+} from '@/sites/shared/content';
 import { BentoCard, BentoGrid } from '../ui/BentoCard';
-import { Chip, GLOW, Panel, SectionHeading, TEXT_GRADIENT } from '../ui';
+import { Chip, GLOW, Panel, SectionHeading, TechPill, TEXT_GRADIENT } from '../ui';
 import '../ui/station.css';
-import Terminal from './Terminal';
+import type { TabNavigate } from '../Site';
 
 const fadeUp = {
   initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 },
 };
 
-/** Observatory-styled step indicator replacing the Stepper default */
-const GxStepIndicator: React.FC<{
-  step: number;
-  currentStep: number;
-  onStepClick: (step: number) => void;
-}> = ({ step, currentStep, onStepClick }) => {
-  const status = currentStep === step ? 'active' : currentStep < step ? 'inactive' : 'complete';
-  return (
-    <motion.button
-      type="button"
-      onClick={() => step !== currentStep && onStepClick(step)}
-      whileTap={{ scale: 0.9 }}
-      className="relative flex h-9 w-9 items-center justify-center rounded-full outline-none transition-shadow focus-visible:ring-2 focus-visible:ring-cyan-300/70"
-      aria-label={`Step ${step}`}
-    >
-      {status === 'complete' ? (
-        <span className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-indigo-400 to-cyan-400 text-[#071018] shadow-[0_8px_20px_-8px_rgba(103,232,249,0.7)]">
-          <Check size={15} strokeWidth={3} />
-        </span>
-      ) : status === 'active' ? (
-        <>
-          <span className="absolute inset-0 animate-pulse rounded-full bg-gradient-to-br from-indigo-400 to-cyan-400 opacity-30" />
-          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-indigo-400 to-cyan-400 font-display text-[13px] font-bold text-[#071018] shadow-[0_8px_20px_-8px_rgba(103,232,249,0.7)]">
-            {step}
-          </span>
-        </>
-      ) : (
-        <span className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/[0.05] font-display text-[13px] font-semibold text-slate-400">
-          {step}
-        </span>
-      )}
-    </motion.button>
-  );
-};
+/** One vertical-timeline row: rail node + role summary. Newest first. */
+const TimelineRow: React.FC<{
+  entry: ExperienceEntry;
+  index: number;
+  current: boolean;
+  onNavigate?: TabNavigate;
+}> = ({ entry, index, current, onNavigate }) => (
+  <motion.article
+    initial={{ opacity: 0, y: 16 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ delay: 0.12 + index * 0.07, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+    className="group relative pb-9 pl-9 last:pb-1"
+  >
+    {/* rail node — the current role gets the ping, the rest stay hollow */}
+    <span className="absolute left-0 top-[3px] flex h-[15px] w-[15px] items-center justify-center">
+      {current && <span className="gx-ping text-cyan-300/80" aria-hidden="true" />}
+      <span
+        className={
+          current
+            ? 'relative block h-2.5 w-2.5 rounded-full bg-cyan-300 shadow-[0_0_10px_rgba(103,232,249,0.95)]'
+            : 'relative block h-2.5 w-2.5 rounded-full border border-cyan-300/40 bg-[#0a0f1e] shadow-[inset_0_0_0_1.5px_rgba(129,140,248,0.5)]'
+        }
+      />
+    </span>
 
-const About: React.FC<{ onNavigate?: (tab: TabId) => void }> = ({ onNavigate }) => (
+    <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+      <span className="font-mono text-[11px] font-semibold text-cyan-300/90">{entry.period}</span>
+      <span className="font-mono text-[10.5px] text-slate-500">{entry.location}</span>
+    </div>
+    <h4 className="mt-1.5 font-display text-lg font-bold tracking-tight text-slate-50">{entry.role}</h4>
+    <p className="mt-0.5 font-mono text-[11px] text-slate-400">{entry.company}</p>
+    <p className="mt-2.5 max-w-2xl text-[13.5px] leading-relaxed text-slate-400">{entry.summary}</p>
+
+    {entry.metrics.length > 0 && (
+      <div className="mt-3.5 flex flex-wrap gap-2">
+        {entry.metrics.map((m) => (
+          <Chip key={m.label} className="!border-cyan-300/20 !bg-cyan-400/[0.08] !text-[10.5px] text-cyan-100/85">
+            <span className="font-display font-bold">{m.value}</span>
+            <span className="ml-1.5 text-slate-400">{m.label}</span>
+          </Chip>
+        ))}
+      </div>
+    )}
+    {entry.tech.length > 0 && (
+      <div className="mt-2.5 flex flex-wrap gap-1.5">
+        {entry.tech.slice(0, 6).map((t) => (
+          <TechPill key={t}>{t}</TechPill>
+        ))}
+      </div>
+    )}
+    <button
+      type="button"
+      onClick={() => onNavigate?.('experience', entry.id)}
+      className="mt-4 inline-flex items-center gap-1.5 rounded-full px-1 font-mono text-[10.5px] uppercase tracking-[0.2em] text-slate-500 transition-colors hover:text-cyan-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60"
+    >
+      open in experience <ArrowUpRight size={12} />
+    </button>
+  </motion.article>
+);
+
+const About: React.FC<{ onNavigate?: TabNavigate }> = ({ onNavigate }) => (
   <section className="mx-auto max-w-6xl px-5 pb-28 pt-28">
     <SectionHeading kicker="Profile" title="About me" />
 
@@ -131,64 +173,67 @@ const About: React.FC<{ onNavigate?: (tab: TabId) => void }> = ({ onNavigate }) 
           </div>
         </div>
       </BentoCard>
+
+      {/* honors & certifications — kept apart from education on purpose */}
+      <BentoCard glowColor={GLOW.violet} className="px-6 py-6">
+        <div className="mb-4 flex items-center gap-3">
+          <span className="flex h-11 w-11 items-center justify-center rounded-2xl border border-violet-300/25 bg-gradient-to-br from-violet-500/20 to-indigo-500/10 text-violet-200">
+            <Award size={18} />
+          </span>
+          <div>
+            <h3 className="font-display text-lg font-bold text-slate-50">Honors &amp; certifications</h3>
+            <p className="font-mono text-[11px] text-violet-300/90">external recognition</p>
+          </div>
+        </div>
+
+        <ul className="space-y-2">
+          {honors.map((h) => (
+            <li
+              key={h.id}
+              className="flex items-start gap-2.5 rounded-2xl border border-white/[0.07] bg-white/[0.03] px-3.5 py-2.5"
+            >
+              <Trophy size={13} className="mt-1 shrink-0 text-amber-300/90" />
+              <div>
+                <p className="text-[13px] font-medium leading-snug text-slate-100">{h.title}</p>
+                <p className="mt-0.5 font-mono text-[10.5px] text-slate-500">{h.detail}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
+
+        <div className="mt-5 border-t border-white/[0.08] pt-4">
+          <p className="mb-3 flex items-center gap-2 font-mono text-[10px] font-semibold uppercase tracking-[0.26em] text-slate-300">
+            <BadgeCheck size={12} className="text-cyan-300" /> Microsoft certifications
+          </p>
+          <ul className="space-y-2">
+            {certifications.map((c) => (
+              <li key={c.id} className="flex items-center gap-2.5">
+                <span className="shrink-0 rounded-md border border-cyan-300/25 bg-cyan-400/10 px-1.5 py-0.5 font-mono text-[9.5px] font-bold tracking-wide text-cyan-200">
+                  {c.code}
+                </span>
+                <span className="text-[12.5px] leading-snug text-slate-300">{c.name}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </BentoCard>
     </BentoGrid>
 
-    {/* ── Career timeline stepper ── */}
+    {/* ── Career timeline — vertical rail, newest first ── */}
     <Panel className="mt-6 px-4 py-6 sm:px-6">
-      <div className="mb-2 flex items-baseline justify-between px-2">
+      <div className="mb-6 flex items-baseline justify-between px-2">
         <h3 className="font-display text-lg font-bold text-slate-50">The road so far</h3>
-        <span className="font-mono text-[10px] uppercase tracking-[0.24em] text-slate-500">timeline</span>
+        <span className="font-mono text-[10px] uppercase tracking-[0.24em] text-slate-500">timeline · newest first</span>
       </div>
-      <div className="gx-stepper">
-        <Stepper
-          initialStep={1}
-          backButtonText="Back"
-          nextButtonText="Next"
-          onFinalStepCompleted={() => onNavigate?.('contact')}
-          renderStepIndicator={GxStepIndicator}
-        >
-          {experiences.map((e) => (
-            <div key={e.id} className="pb-2 pt-1">
-              <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                <span className="bg-gradient-to-r from-indigo-300 to-cyan-300 bg-clip-text font-mono text-xs font-bold text-transparent">
-                  {e.index}
-                </span>
-                <h4 className="font-display text-xl font-bold text-slate-50">{e.role}</h4>
-              </div>
-              <p className="mt-1 font-mono text-[11px] text-slate-400">
-                {e.company} · {e.period}
-              </p>
-              <p className="mt-3 max-w-2xl text-[13.5px] leading-relaxed text-slate-400">{e.summary}</p>
-              {e.metrics.length > 0 && (
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {e.metrics.slice(0, 3).map((m) => (
-                    <Chip key={m.label} className="!border-cyan-300/20 !bg-cyan-400/[0.08] !text-[10.5px] text-cyan-100/85">
-                      <span className="font-display font-bold">{m.value}</span>
-                      <span className="ml-1.5 text-slate-400">{m.label}</span>
-                    </Chip>
-                  ))}
-                </div>
-              )}
-            </div>
-          ))}
-        </Stepper>
+      <div className="relative ml-1 sm:ml-3">
+        <span
+          aria-hidden="true"
+          className="absolute bottom-3 left-[7px] top-2 w-px bg-gradient-to-b from-cyan-300/60 via-white/15 to-transparent"
+        />
+        {experiences.map((e, i) => (
+          <TimelineRow key={e.id} entry={e} index={i} current={i === 0} onNavigate={onNavigate} />
+        ))}
       </div>
-    </Panel>
-
-    {/* ── Interactive terminal (carried over from original v1) ── */}
-    <Panel className="mt-6 p-4 sm:p-6">
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-3 px-2">
-        <div className="flex items-center gap-2.5">
-          <TerminalSquare size={15} className="text-cyan-300" />
-          <h3 className="font-display text-lg font-bold text-slate-50">Terminal sandbox</h3>
-          <span className="font-mono text-[10px] uppercase tracking-[0.24em] text-slate-500">sys · interactive</span>
-        </div>
-        <p className="font-mono text-[10px] text-slate-500">
-          try <span className="text-cyan-300/90">help</span> · <span className="text-indigo-300/90">table</span> ·{' '}
-          <span className="text-violet-300/90">projects</span>
-        </p>
-      </div>
-      <Terminal />
     </Panel>
   </section>
 );
