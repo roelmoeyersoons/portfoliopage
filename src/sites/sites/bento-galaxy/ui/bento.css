@@ -1,0 +1,127 @@
+/* ────────────────────────────────────────────────────────────────
+   Bento Galaxy — the bento card effect (local fork of the ReactBits
+   MagicBento pattern), re-skinned to the deep-space observatory.
+
+   Every value derives from a --glow-color "R, G, B" custom property
+   set per card, so indigo / violet / cyan cards can coexist in one
+   grid. Card faces are deep-space navy glass instead of plasma plum.
+   ──────────────────────────────────────────────────────────────── */
+
+/* Cursor spotlight that floats over the whole grid (portal to body) */
+.gx-spotlight {
+  position: fixed;
+  left: -1200px;
+  top: -1200px;
+  width: 800px;
+  height: 800px;
+  border-radius: 50%;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  z-index: 30;
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  will-change: left, top, opacity;
+}
+
+.gx-bento-section {
+  position: relative;
+}
+
+/* ── The card ── */
+.gx-bento-card {
+  --glow-x: 50%;
+  --glow-y: 50%;
+  --glow-intensity: 0;
+  --glow-radius: 300px;
+  --glow-color: 129, 140, 248;
+
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 26px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background:
+    radial-gradient(120% 90% at 12% 0%, rgba(129, 140, 248, 0.05) 0%, transparent 55%),
+    linear-gradient(160deg, #0d1526 0%, #0a101e 55%, #070c18 100%);
+  box-shadow: 0 22px 45px -24px rgba(0, 0, 0, 0.65);
+  transition:
+    border-color 0.35s ease,
+    box-shadow 0.35s ease;
+  will-change: transform;
+}
+
+.gx-bento-card:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow:
+    0 28px 60px -26px rgba(0, 0, 0, 0.72),
+    0 0 40px -10px rgba(var(--glow-color), 0.3);
+}
+
+/* Face glow — radial wash that follows the cursor inside the card */
+.gx-bento-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1; /* above the card background, below the content */
+  background: radial-gradient(
+    var(--glow-radius) circle at var(--glow-x) var(--glow-y),
+    rgba(var(--glow-color), calc(var(--glow-intensity) * 0.16)) 0%,
+    rgba(var(--glow-color), calc(var(--glow-intensity) * 0.06)) 38%,
+    transparent 68%
+  );
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+/* Border glow — masked ring lit up nearest to the cursor */
+.gx-bento-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 1.5px;
+  border-radius: inherit;
+  background: radial-gradient(
+    var(--glow-radius) circle at var(--glow-x) var(--glow-y),
+    rgba(var(--glow-color), calc(var(--glow-intensity) * 0.9)) 0%,
+    rgba(var(--glow-color), calc(var(--glow-intensity) * 0.35)) 32%,
+    transparent 62%
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 4;
+}
+
+/* Spark dots that drift while the card is hovered */
+.gx-spark {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 5;
+  background: rgba(var(--glow-color), 1);
+  box-shadow: 0 0 6px rgba(var(--glow-color), 0.6);
+}
+
+/* Click burst ripple */
+.gx-ripple {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 6;
+  background: radial-gradient(
+    circle,
+    rgba(var(--glow-color), 0.4) 0%,
+    rgba(var(--glow-color), 0.18) 32%,
+    transparent 70%
+  );
+}
