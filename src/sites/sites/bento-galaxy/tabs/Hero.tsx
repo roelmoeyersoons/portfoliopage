@@ -101,7 +101,7 @@ const Hero: React.FC<{ onNavigate?: TabNavigate }> = ({ onNavigate }) => (
               <span className="gx-ping" />
               <span className="relative inline-block h-2 w-2 rounded-full bg-current" />
             </span>
-            Open for new challenges
+            Available for engagements
             <MapPin className="mx-1.5 inline -mt-0.5" size={11} /> {profile.location}
           </Chip>
         </motion.div>
@@ -183,16 +183,25 @@ const Hero: React.FC<{ onNavigate?: TabNavigate }> = ({ onNavigate }) => (
             <BadgeCheck size={13} className="text-cyan-300" />
             Microsoft certified ::
           </span>
-          {certifications.map((c) => (
-            <span
-              key={c.id}
-              title={c.name}
-              className="inline-flex items-center gap-1.5 rounded-full border border-white/[0.08] bg-white/[0.03] px-2.5 py-1 font-mono text-[10.5px] text-slate-400 transition-colors hover:border-cyan-300/30 hover:text-cyan-100"
-            >
-              <span className="font-semibold text-cyan-300/90">{c.code}</span>
-              {c.short}
-            </span>
-          ))}
+          {certifications.map((c) => {
+            const chipClass =
+              'inline-flex items-center gap-1.5 rounded-full border border-white/[0.08] bg-white/[0.03] px-2.5 py-1 font-mono text-[10.5px] text-slate-400 transition-colors hover:border-cyan-300/30 hover:text-cyan-100';
+            const chipContent = (
+              <>
+                <span className="font-semibold text-cyan-300/90">{c.code}</span>
+                {c.short}
+              </>
+            );
+            return c.verifyUrl ? (
+              <a key={c.id} href={c.verifyUrl} target="_blank" rel="noreferrer" title={`${c.name} — official credential page`} className={chipClass}>
+                {chipContent}
+              </a>
+            ) : (
+              <span key={c.id} title={c.name} className={chipClass}>
+                {chipContent}
+              </span>
+            );
+          })}
         </motion.div>
       </div>
 

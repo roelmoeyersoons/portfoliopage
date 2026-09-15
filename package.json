@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "og": "node scripts/generate-og.mjs",
     "build": "tsc && vite build && npm run ship",
     "ship": "mkdir -p /mnt/d/Users/daroe/Desktop/projecten/AI/landingpage-dist && cp -r dist/* /mnt/d/Users/daroe/Desktop/projecten/AI/landingpage-dist/",
     "preview": "vite preview"
@@ -27,6 +28,7 @@
     "@vitejs/plugin-react": "^4.3.4",
     "autoprefixer": "^10.4.20",
     "postcss": "^8.5.2",
+    "sharp": "^0.35.4",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.7.3",
     "vite": "^6.1.0"

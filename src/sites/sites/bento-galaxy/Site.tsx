@@ -82,6 +82,14 @@ const Site: React.FC = () => {
 
       {/* ── Top bar with gooey tabs (bento layout) ── */}
       <header className="fixed inset-x-0 top-7 z-40">
+        {/* Scrim: content scrolling under the transparent bar dims + blurs
+            into deep space instead of colliding with the title/tabs. Full
+            strength across the bar, then a short (~32px) fade below it so
+            section headings become legible again soon after passing under. */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 -top-7 -bottom-8 -z-10 bg-[#05060d]/85 backdrop-blur-xl [mask-image:linear-gradient(to_bottom,black_70%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,black_70%,transparent_100%)]"
+        />
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-5 py-4 sm:flex-row sm:gap-4">
           <button onClick={() => navigate('home')} className="group flex items-baseline gap-2" aria-label="Home">
             <span className="font-display text-xl font-bold tracking-tight text-slate-50">

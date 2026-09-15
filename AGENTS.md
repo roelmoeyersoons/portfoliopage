@@ -69,8 +69,10 @@ src/
       tabs/TerminalTab.tsx      → the hidden 'terminal' tab page: icon-only nav pill + CLI
       tabs/Skills.tsx           → selector tiles + stage dossier, OrbitRing toolbox
       tabs/Experience.tsx       → left menu + bento detail pane
-      tabs/Projects.tsx         → expandable signal slabs
-      tabs/Contact.tsx          → transmission console, "signal ends · awaiting your reply"
+      tabs/Projects.tsx         → case studies (always visible, on top) + "Lab" divider +
+                                  expandable signal slabs (hobby/research, below)
+      tabs/Contact.tsx          → transmission console, testimonial slots (render only when
+                                  filled), "signal ends · awaiting your reply"
     shared/
       content.ts                → THE content API (wraps portfolioData)
       Artwork.tsx               → deterministic SVG art per item (6 styles, hue-driven)
@@ -88,6 +90,7 @@ src/
 |---|---|
 | `npm run dev` | Vite dev server → http://localhost:5173 (HMR) |
 | `npx tsc --noEmit` | Type check — **must pass before finishing any change** |
+| `npm run og` | Regenerate `public/og.png` from `scripts/generate-og.mjs` (run after changing OG copy) |
 | `npm run build` | tsc + vite build + **ships dist to `/mnt/d/Users/daroe/Desktop/projecten/AI/landingpage-dist`** — fails when that Windows path is not mounted; use `npx vite build` instead |
 | `npm run ship` | Copy an existing `dist/` to the Windows dir |
 | `npm run preview` | Preview the production build |
@@ -105,6 +108,20 @@ git worktree remove ../landingpage-showcase-v1            # when done
 
 ## Gotchas
 
+- `/home/roel/.npm` is **read-only** on this machine: plain `npm install`
+  fails. Use `npm install <pkg> --cache /tmp/npm-cache-fresh` (sharp was
+  installed this way; it is a devDep used only by the OG script).
+- `index.html` OG/Twitter tags + JSON-LD use a **relative** `/og.png` —
+  once the final domain is live, switch to absolute URLs + canonical +
+  `og:url` (TODO comment in the file marks the spot). The contact email in
+  `portfolioData.ts` is still the `xyz@xyz.com` placeholder (owner fills it
+  later) — nothing goes live to clients until that is real.
+- Case studies (`caseStudiesData`) use real client names by owner decision;
+  testimonials (`testimonialsData`) are owner-supplied texts (one real quote
+  translated to EN, the rest the owner's paraphrases of recurring feedback —
+  never invent quotes); companies are shown and link to their Experience
+  entries via `experienceId` (M-0010). Entries with an empty `quote` never
+  render.
 - React **StrictMode double-mounts** effects in dev: every canvas / RAF /
   event-listener effect must return a cleanup function.
 - `@` is the path alias for `src/` (vite.config.ts + tsconfig.json). Prefer it.

@@ -211,7 +211,23 @@ const About: React.FC<{ onNavigate?: TabNavigate }> = ({ onNavigate }) => (
                 <span className="shrink-0 rounded-md border border-cyan-300/25 bg-cyan-400/10 px-1.5 py-0.5 font-mono text-[9.5px] font-bold tracking-wide text-cyan-200">
                   {c.code}
                 </span>
-                <span className="text-[12.5px] leading-snug text-slate-300">{c.name}</span>
+                {c.verifyUrl ? (
+                  <a
+                    href={c.verifyUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="group/verify flex items-center gap-1.5 text-[12.5px] leading-snug text-slate-300 transition-colors hover:text-cyan-200"
+                  >
+                    {c.name}
+                    <ArrowUpRight
+                      size={11}
+                      aria-label={`${c.name} — official Microsoft credential page`}
+                      className="shrink-0 text-slate-600 transition-colors group-hover/verify:text-cyan-300"
+                    />
+                  </a>
+                ) : (
+                  <span className="text-[12.5px] leading-snug text-slate-300">{c.name}</span>
+                )}
               </li>
             ))}
           </ul>

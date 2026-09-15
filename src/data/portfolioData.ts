@@ -7,6 +7,8 @@ import {
   EducationItem,
   CertificationItem,
   HonorItem,
+  CaseStudyItem,
+  TestimonialItem,
 } from '../types/portfolio';
 
 export const profileData: ProfileData = {
@@ -19,7 +21,7 @@ export const profileData: ProfileData = {
     "Thanks to my engineering degree I can branch into any corner of IT — networking, cybersecurity, low-level systems — and learning new skills is what keeps me going. Lately I'm deep into AI: LLM integrations, local models, and agentic coding tools like Claude Code used as a genuine productivity multiplier. Off-screen you'll find me dancing, training, and reading up on finance, history and geology."
   ],
   location: "Ghent, Belgium",
-  email: "xyz@xyz.com",
+  email: "moeyersoonsroel@gmail.com",
   linkedinUrl: "https://www.linkedin.com/in/roel-moeyersoons/",
   githubUrl: "https://github.com/roelmoeyersoons",
   stats: [
@@ -42,10 +44,10 @@ export const profileData: ProfileData = {
       description: "CRM, Power Platform & Dataverse"
     },
     {
-      label: "Graduation",
-      value: "Magna",
-      suffix: " cum laude",
-      description: "UGent M.Sc. — zero resits"
+      label: "Microsoft Certified",
+      value: "5×",
+      suffix: "",
+      description: "AZ-305 · AZ-104 · 3× D365"
     }
   ]
 };
@@ -341,10 +343,9 @@ export const projectsData: ProjectItem[] = [
       "Strict SOLID and Clean Architecture compliance"
     ],
     techHighlights: ["C# .NET", "Discord.Net", "Async/Await", "Cryptographic Hashing"],
-    stats: [
-      { label: "Design Pattern", value: "SOLID/OGP" },
-      { label: "Async Flow", value: "100%" }
-    ]
+    // No stat chips on purpose: "Async Flow 100%" / "SOLID/OGP" were filler,
+    // and this project's honest proof is the repo + highlights themselves.
+    stats: []
   },
   {
     id: "archconfig",
@@ -546,30 +547,40 @@ export const certificationsData: CertificationItem[] = [
     code: "AZ-305",
     name: "Azure Solutions Architect Expert",
     short: "Azure Solutions Architect",
+    verifyUrl: "https://learn.microsoft.com/en-us/credentials/certifications/azure-solutions-architect/",
   },
   {
     id: "az-104",
     code: "AZ-104",
     name: "Azure Administrator Associate",
     short: "Azure Administrator",
+    verifyUrl: "https://learn.microsoft.com/en-us/credentials/certifications/azure-administrator/",
   },
   {
     id: "d365-sales",
     code: "D365",
     name: "Dynamics 365 Sales Functional Consultant Associate",
     short: "D365 Sales Consultant",
+    // Credential retired by Microsoft (Nov 2024) — this page remains the
+    // official reference for what was earned.
+    verifyUrl: "https://learn.microsoft.com/en-us/credentials/certifications/d365-functional-consultant-sales-v3/",
   },
   {
     id: "d365-marketing",
     code: "D365",
     name: "Dynamics 365 Marketing Functional Consultant Associate",
     short: "D365 Marketing Consultant",
+    // Credential renamed by Microsoft to "Customer Insights (Journeys)" —
+    // this is its current official credential page (MB-220 lineage).
+    verifyUrl: "https://learn.microsoft.com/en-us/credentials/certifications/d365-customer-insights-journeys-functional-consultant/",
   },
   {
     id: "d365-powerapps-dev",
     code: "D365",
     name: "Power Apps + Dynamics 365 Developer Associate",
     short: "Power Apps + D365 Developer",
+    // Credential retired by Microsoft — official page still live.
+    verifyUrl: "https://learn.microsoft.com/en-us/credentials/certifications/power-apps-and-d365-developer-associate/",
   },
 ];
 
@@ -595,4 +606,86 @@ export const marqueeTechList = [
   "Terraform", "Azure DevOps", "APIM / APIOps", "Dataverse", "Docker",
   "Python", "Azure OpenAI", "Claude Code", "React", "SQL", "Kubernetes",
   "Linux", "Playwright"
+];
+
+/**
+ * Client case studies — the professional proof shelf, rendered ABOVE the
+ * hobby "Lab" projects on the Projects tab (owner decision: real engagement
+ * names; both are already public on this site and LinkedIn). Content is
+ * distilled from the matching experience deep-dives, not invented.
+ */
+export const caseStudiesData: CaseStudyItem[] = [
+  {
+    id: "case-baloise-azure-governance",
+    client: "Baloise BE",
+    industry: "Insurance",
+    period: "Aug 2025 — Present",
+    role: "Independent IT Consultant — Azure Platform & Dynamics 365",
+    title: "A governed Azure estate & centralized API management",
+    challenge:
+      "Years of organically grown, unmanaged Azure resources: inconsistent governance, secret-based authentication, manual deployments, and third-party tooling and packages introducing supply-chain risk into business-critical applications.",
+    approach:
+      "Rebuilt the estate on Azure Landing Zones with a full Infrastructure-as-Code setup in Terraform built from scratch; centralized Azure API Management through APIOps (policies, OpenAPI specs, API versioning, backends, monitoring); swapped secrets for managed identities across APIM, Function Apps and Logic Apps; and enforced first-party coding standards team-wide (.editorconfig, .NET analysers, SDK-style migrations) plus a Claude Code development environment with strict validation pipelines.",
+    outcomes: [
+      "Full Terraform IaC estate — the environment is reproducible, not tribal knowledge",
+      "Centralized APIM via APIOps: policies, OpenAPI specs, versioning, monitoring",
+      "An entire class of credential risk removed (managed identities everywhere the platform allows)",
+      "Supply-chain attack surface reduced by cutting third-party nuget packages and reviewing the team's git setup",
+    ],
+    techStack: ["Azure", "Terraform", "Azure APIM", "APIOps", "Managed Identities", "Logic Apps", "Dynamics 365", "Dataverse", "Claude Code"],
+    skillIds: ["azure-platform", "devops-cicd-iac", "applied-ai", "csharp-dotnet"],
+  },
+  {
+    id: "case-mutualites-crm-transformation",
+    client: "Mutualités Libres · delivered via Net IT nv",
+    industry: "Health insurance",
+    period: "Sep 2020 — Oct 2023",
+    role: "Lead Developer & SCRUM Master",
+    title: "CRM transformation for 1,000+ end-users, mid-operation",
+    challenge:
+      "Modernize the tooling of 1,000+ end-users while the customer service team kept working: a new CRM, its integrations and public-website communication flows had to roll out across 600+ users without breaking daily operation.",
+    approach:
+      "Monthly SCRUM delivery with a cross-functional team of ten; a code architecture designed for low technical debt; automated testing frameworks (xUnit, Playwright) wired into an enhanced CI/CD pipeline; mentoring developers into shared standards while acting as the main contact between the technical team and stakeholders.",
+    outcomes: [
+      "600+ users migrated to the new CRM — auditable and reversible, not heroic",
+      "1,000+ mandays enterprise project led within two years of starting as a junior consultant",
+      "Customer service team empowered to manage public-website communications and support tickets themselves",
+      "The codebase stayed healthy after hand-over — shared standards, not personal heroics",
+    ],
+    techStack: ["Dynamics 365", "Power Platform", "Dataverse", "C# / .NET", "TypeScript", "xUnit", "Playwright", "Azure DevOps"],
+    skillIds: ["dynamics-365-power-platform", "solution-architecture", "csharp-dotnet", "devops-cicd-iac"],
+  },
+];
+
+/**
+ * Testimonials on the Contact tab (owner-supplied, 2026-09). The Kaan quote
+ * is a real recommendation, translated to English; the other two are the
+ * owner's paraphrases of feedback he received repeatedly — never invent
+ * quotes. Companies are shown and cross-link to their Experience entries.
+ */
+export const testimonialsData: TestimonialItem[] = [
+  {
+    id: "testimonial-kaan-netit",
+    quote:
+      "Roel is a versatile tech professional who, as Team Leader, excels at both development and leadership. As an experienced programmer he masters modern CI/CD processes and works efficiently with Dynamics and Azure solutions. Whether he's developing, advising or informally taking over project tasks, he always combines technical expertise with a results-driven attitude.",
+    attribution: "Kaan",
+    company: "Net IT",
+    experienceId: "netit-dynamics-consultant",
+  },
+  {
+    id: "testimonial-netit-expert",
+    quote:
+      "We are very satisfied with Roel. We've made him part of our .NET expert team to share knowledge across the team.",
+    attribution: "Technical expert",
+    company: "Net IT",
+    experienceId: "netit-dynamics-consultant",
+  },
+  {
+    id: "testimonial-baloise-mgmt",
+    quote:
+      "Roel doesn't necessarily do what he likes best — he does what needs to be done. Without fuss. You can count on Roel.",
+    attribution: "Management & HR",
+    company: "Baloise",
+    experienceId: "baloise-azure-dynamics",
+  },
 ];

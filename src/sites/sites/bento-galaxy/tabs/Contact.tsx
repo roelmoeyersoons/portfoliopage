@@ -9,10 +9,10 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Github, Linkedin, Mail, MapPin } from 'lucide-react';
 import { SpecularButton } from '@/sites/shared/bits';
-import { contact } from '@/sites/shared/content';
+import { contact, testimonials, type TabNavigate } from '@/sites/shared/content';
 import { Panel, TEXT_GRADIENT } from '../ui';
 
-const Contact: React.FC = () => (
+const Contact: React.FC<{ onNavigate?: TabNavigate }> = ({ onNavigate }) => (
   <section className="mx-auto flex min-h-[86vh] max-w-4xl flex-col items-center justify-center px-5 pb-28 pt-32 text-center">
     <motion.p
       initial={{ opacity: 0, y: 10 }}
@@ -97,6 +97,39 @@ const Contact: React.FC = () => (
         </span>
       </Panel>
     </motion.div>
+
+    {/* ── Testimonials — rendered only when slots are filled; the company
+        name is highlighted and links to its Experience entry ── */}
+    {testimonials.length > 0 && (
+      <div className="mt-14 w-full max-w-2xl">
+        <p className="mb-3 text-center font-mono text-[9.5px] uppercase tracking-[0.24em] text-slate-500">
+          received transmissions
+        </p>
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+          {testimonials.map((t) => (
+            <Panel key={t.id} className="flex flex-col px-4 py-4">
+              <span aria-hidden className="font-display text-xl leading-none text-cyan-300/60">&ldquo;</span>
+              <p className="mt-1 flex-1 text-left text-[12.5px] leading-relaxed text-slate-300">{t.quote}</p>
+              <span className="mt-3 block text-left font-mono text-[10px] uppercase tracking-[0.14em] text-slate-500">
+                — {t.attribution} ·{' '}
+                {t.experienceId ? (
+                  <button
+                    type="button"
+                    onClick={() => onNavigate?.('experience', t.experienceId)}
+                    aria-label={`View the ${t.company} experience`}
+                    className="text-cyan-300/90 underline-offset-2 transition hover:text-cyan-200 hover:drop-shadow-[0_0_8px_rgba(103,232,249,0.5)] hover:underline focus-visible:outline focus-visible:outline-cyan-300/60"
+                  >
+                    {t.company}
+                  </button>
+                ) : (
+                  <span className="text-cyan-300/80">{t.company}</span>
+                )}
+              </span>
+            </Panel>
+          ))}
+        </div>
+      </div>
+    )}
 
     <div className="mt-16">
       <motion.span

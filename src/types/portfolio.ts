@@ -121,6 +121,59 @@ export interface CertificationItem {
   name: string;
   /** Extra-short label for compact chip rows (hero). */
   short: string;
+  /**
+   * Official Microsoft Learn credential page (verified live URLs — several
+   * of these credentials were later renamed/retired by Microsoft; the page
+   * is still the authoritative reference for what was earned). Rendered as
+   * a "verify" link where certifications appear.
+   */
+  verifyUrl?: string;
+}
+
+/**
+ * Client engagement case study — the professional proof shelf (distinct
+ * from the hobby "Lab" projects). Real engagement names, per owner
+ * decision; content is sourced from the matching experience deep-dives.
+ */
+export interface CaseStudyItem {
+  id: string;
+  /** Client / engagement name as shown publicly. */
+  client: string;
+  /** Client's industry, one or two words. */
+  industry: string;
+  /** Engagement window. */
+  period: string;
+  /** Roel's role on the engagement. */
+  role: string;
+  /** One-line headline of the engagement. */
+  title: string;
+  /** The situation the client was in. */
+  challenge: string;
+  /** What Roel actually did. */
+  approach: string;
+  /** Concrete, checkable outcomes. */
+  outcomes: string[];
+  techStack: string[];
+  /** Core skill ids (coreSkillsData) this study demonstrates. */
+  skillIds: string[];
+}
+
+/**
+ * Testimonial card (Contact tab). Texts are owner-supplied: the first-hand
+ * quote is real (translated), the others are the owner's paraphrases of
+ * recurring feedback — never fabricate quotes. The company is shown and,
+ * when `experienceId` is set, links into the Experience tab.
+ */
+export interface TestimonialItem {
+  id: string;
+  /** The quote itself. Empty string = slot not yet filled → not rendered. */
+  quote: string;
+  /** Person name and/or role, e.g. "Kaan" or "Technical expert". */
+  attribution: string;
+  /** Company the quote relates to — highlighted on the card. */
+  company: string;
+  /** Experience entry id — when set, the company links to that entry. */
+  experienceId?: string;
 }
 
 /** Honors & awards (competition results etc.) shown on the About tab. */

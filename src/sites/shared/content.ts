@@ -19,8 +19,15 @@ import {
   profileData,
   projectsData,
   coreSkillsData,
+  caseStudiesData,
+  testimonialsData,
 } from '@/data/portfolioData';
-import type { CertificationItem, HonorItem } from '@/types/portfolio';
+import type {
+  CertificationItem,
+  HonorItem,
+  CaseStudyItem,
+  TestimonialItem,
+} from '@/types/portfolio';
 
 // ── Tabs ──────────────────────────────────────────────────────────
 /** 'terminal' is the hidden easter-egg tab — icon-only in the nav. */
@@ -244,6 +251,27 @@ export const projects: ProjectEntry[] = projectsData.map((p) => ({
   skillIds: p.skillIds ?? [],
   art: artForProject[p.id] ?? { style: 'waves', hue: 250 },
 }));
+
+// ── Case studies (professional proof shelf) ───────────────────────
+export interface CaseStudyEntry extends CaseStudyItem {
+  art: ArtSpec;
+}
+
+const artForCaseStudy: Record<string, ArtSpec> = {
+  'case-baloise-azure-governance': { style: 'grid', hue: 205 },
+  'case-mutualites-crm-transformation': { style: 'waves', hue: 330 },
+};
+
+export const caseStudies: CaseStudyEntry[] = caseStudiesData.map((c) => ({
+  ...c,
+  art: artForCaseStudy[c.id] ?? { style: 'mesh', hue: 262 },
+}));
+
+/**
+ * Testimonials — only entries with a filled `quote` are returned, so empty
+ * slots never render. Texts are owner-supplied; nothing is fabricated.
+ */
+export const testimonials: TestimonialItem[] = testimonialsData.filter((t) => t.quote.trim().length > 0);
 
 // ── Profile / about / contact ─────────────────────────────────────
 export const profile = {
